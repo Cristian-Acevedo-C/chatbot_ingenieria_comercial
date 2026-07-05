@@ -48,11 +48,24 @@ Manifiestos CSV + PDFs
 
 ```text
 chatbot_ingenieria_comercial/
-|-- app.py                          # Aplicación Streamlit
+|-- app.py                          # Orquestador Streamlit
 |-- ingest.py                       # Pipeline local de ingesta de PDFs
-|-- requirements.txt                # Dependencias utilizadas
+|-- requirements.txt                # Dependencias de ejecución (runtime)
+|-- requirements-dev.txt            # Runtime + herramientas de test
+|-- config/                         # Constantes y esquemas de datos
+|-- utils/                          # Utilidades puras (p. ej. normalización de texto)
+|-- services/                       # Carga de CSV y reglas de prerrequisitos
+|-- rag/                            # Índice TF-IDF, búsqueda y extractores de PDF
+|-- chatbot/                        # Clasificación, contrato tipado y familias de respuesta
+|   |-- intenciones.py              # Clasificación heurística de consultas
+|   |-- contratos.py                # RespuestaChatbot / SeccionRespuesta / Evidencia
+|   |-- conversacion.py             # Estado de sesión y flujo conversacional
+|   `-- respuestas/                 # Enrutador y respuestas por tema
+|-- ui/                             # Componentes, paneles y estilos de Streamlit
+|-- tests/                          # Suite de pytest
 |-- scripts/
 |   |-- extract_prerrequisitos.py   # Genera data/prerrequisitos.csv desde los fragmentos
+|   |-- smoke_streamlit.py          # Script de humo manual de Streamlit
 |   `-- download_programas_udla.ps1 # Descarga auxiliar de programas (opcional)
 |-- data/
 |   |-- alumnos.csv
@@ -103,17 +116,28 @@ Uno de los documentos de malla, `malla_alumno_sistema.pdf`, no posee texto extra
 - Python 3.10 o superior.
 - PowerShell para los ejemplos de Windows.
 
-Dependencias de ejecución: Streamlit, pandas, pypdf y scikit-learn. No se usa `python-dotenv` (la aplicación no consume variables de entorno) ni OpenAI/Claude/LangChain/ChromaDB.
+Dependencias de ejecución (`requirements.txt`): Streamlit, pandas, pypdf y scikit-learn. Las herramientas de desarrollo y test (pytest) se listan aparte en `requirements-dev.txt` para mantener liviano el entorno de ejecución. No se usa `python-dotenv` (la aplicación no consume variables de entorno) ni OpenAI/Claude/LangChain/ChromaDB.
 
 ## Instalación
 
-Desde la carpeta del proyecto:
+Desde la carpeta del proyecto, crea y activa un entorno virtual:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
+```
+
+Para **uso normal** (solo ejecutar la aplicación):
+
+```powershell
 python -m pip install -r requirements.txt
+```
+
+Para **desarrollo** (incluye las herramientas de test):
+
+```powershell
+python -m pip install -r requirements-dev.txt
 ```
 
 ## Regenerar las bases locales (opcional)
@@ -153,6 +177,20 @@ Luego abre [http://localhost:8501](http://localhost:8501). La barra lateral debe
 
 La selección opcional de un ramo inscrito en la barra lateral sirve como contexto cuando la pregunta no menciona explícitamente una asignatura.
 
+## Pruebas y validación
+
+Con las dependencias de desarrollo instaladas (`requirements-dev.txt`):
+
+```powershell
+# Suite de pruebas
+pytest -q
+
+# Validación de sintaxis del orquestador
+python -m py_compile app.py
+```
+
+La suite cubre clasificación de intención, búsqueda documental, extractores de programas, reglas de prerrequisitos y el contrato tipado de respuestas.
+
 ## Limitaciones actuales
 
 - No se usa un modelo generativo: las respuestas son extractivas y estructuradas a partir del PDF y los CSV, no una síntesis semántica avanzada.
@@ -173,4 +211,4 @@ La selección opcional de un ramo inscrito en la barra lateral sirve como contex
 
 ## Uso académico responsable
 
-Este repositorio es un prototipo demostrativo con datos sintéticos. Toda recomendación debe contrastarse con los programas completos, la malla oficial y la orientación académica institucional. La aplicación no inventa información: cuando un dato no puede extraerse con seguridad, lo declara explícitamente.
+Este repositorio es un prototipo demostrativo que opera **solo con datos sintéticos y archivos locales**. **No reemplaza la información oficial de la coordinación académica ni del sistema de registro académico de la universidad.** Toda recomendación debe contrastarse con los programas completos, la malla oficial y la orientación académica institucional. La aplicación no inventa información: cuando un dato no puede extraerse con seguridad, lo declara explícitamente.
