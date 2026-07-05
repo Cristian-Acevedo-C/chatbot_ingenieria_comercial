@@ -1,0 +1,2 @@
+"""Configuración central del proyecto."""
+

@@ -1,4 +1,5 @@
-﻿streamlit
+streamlit>=1.48.0
 pandas
 pypdf
 scikit-learn
+pytest
