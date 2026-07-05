@@ -4,6 +4,7 @@ import streamlit as st
 
 from chatbot.conversacion import limpiar_estado_conversacional
 from config.settings import LOGO_UDLA, LOGO_UDLA_FINE, MENSAJES_SOCIALES
+from services.cobertura import calcular_cobertura_documental
 from services.datos import buscar_alumno, filtrar_por_alumno
 from ui.componentes import render_mensaje
 
@@ -96,6 +97,28 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
             st.success(
                 f"Prerrequisitos disponibles: {metricas_prerrequisitos['relaciones']} relaciones"
             )
+
+        with st.expander("Cobertura documental", expanded=False):
+            cobertura = calcular_cobertura_documental(chunks, ramos_alumno)
+            col_c1, col_c2, col_c3 = st.columns(3)
+            col_c1.metric("Chunks", cobertura["total_chunks"])
+            col_c2.metric("Ramos con doc.", cobertura["ramos_con_documentos"])
+            col_c3.metric("Fuentes", cobertura["fuentes_distintas"])
+            sin_evidencia = cobertura["ramos_inscritos_sin_evidencia"]
+            if sin_evidencia:
+                st.warning(
+                    "Ramos inscritos sin evidencia documental: "
+                    + ", ".join(item["codigo_ramo"] for item in sin_evidencia)
+                )
+            else:
+                st.caption("Todos los ramos inscritos tienen evidencia documental.")
+            if not cobertura["chunks_por_ramo"].empty:
+                st.dataframe(
+                    cobertura["chunks_por_ramo"].head(15),
+                    width="stretch",
+                    hide_index=True,
+                )
+
         st.divider()
         st.subheader("Conversación")
         if st.button("Reiniciar conversación", key="reiniciar_conversacion", width="stretch"):
