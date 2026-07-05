@@ -18,7 +18,6 @@ from chatbot.intenciones import (
 )
 from chatbot.contratos import RespuestaChatbot
 from chatbot.respuestas import responder
-from config.settings import METODO_BUSQUEDA
 from rag.busqueda import buscar_documentos
 from rag.indice import construir_indice_documental, construir_indice_tfidf
 from services.datos import cargar_datos
@@ -39,6 +38,14 @@ from ui.paneles import (
     render_vista_admin,
     render_vista_coordinacion,
 )
+
+# Import defensivo: si el módulo de configuración desplegado no expone la
+# constante (p. ej. un desfase de versión en Streamlit Cloud), se usa el valor
+# por defecto "auto" para no impedir el arranque. No altera la lógica del motor.
+try:
+    from config.settings import METODO_BUSQUEDA
+except ImportError:
+    METODO_BUSQUEDA = "auto"
 
 
 def main():
