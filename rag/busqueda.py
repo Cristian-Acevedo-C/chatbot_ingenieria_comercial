@@ -33,9 +33,12 @@ def buscar_documentos(
         return pd.DataFrame()
 
     consulta = vectorizador.transform([pregunta])
-    terminos_minimos = 1 if codigo_ramo else 2
-    if consulta.nnz < terminos_minimos:
-        return pd.DataFrame()
+    # El guard por vocabulario mínimo aplica solo al índice disperso TF-IDF;
+    # un índice denso de embeddings no expone ``nnz`` y siempre produce vector.
+    if hasattr(consulta, "nnz"):
+        terminos_minimos = 1 if codigo_ramo else 2
+        if consulta.nnz < terminos_minimos:
+            return pd.DataFrame()
 
     similitudes = cosine_similarity(consulta, matriz[posiciones]).ravel()
     orden_local = similitudes.argsort()[::-1]

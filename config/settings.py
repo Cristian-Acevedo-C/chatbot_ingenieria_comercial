@@ -1,5 +1,6 @@
 """Constantes y rutas compartidas por la aplicación."""
 
+import os
 from pathlib import Path
 
 
@@ -10,6 +11,14 @@ LOGO_UDLA = ASSETS_DIR / "logo_udla.png"
 LOGO_UDLA_FINE = ASSETS_DIR / "logo_udla_fine.png"
 UMBRAL_SIMILITUD = 0.05
 TOP_K = 4
+
+# Motor de búsqueda documental: "auto" (embeddings si están disponibles, TF-IDF
+# en caso contrario), "tfidf" (forzar disperso) o "embeddings" (forzar semántico
+# con fallback a TF-IDF). Configurable por variable de entorno CHATBOT_BUSQUEDA.
+_METODOS_BUSQUEDA_VALIDOS = {"auto", "tfidf", "embeddings"}
+METODO_BUSQUEDA = os.environ.get("CHATBOT_BUSQUEDA", "auto").strip().lower()
+if METODO_BUSQUEDA not in _METODOS_BUSQUEDA_VALIDOS:
+    METODO_BUSQUEDA = "auto"
 
 STOPWORDS_ES = {
     "a", "al", "algo", "como", "con", "cual", "cuando", "de", "del", "desde",

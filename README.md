@@ -140,6 +140,28 @@ Para **desarrollo** (incluye las herramientas de test):
 python -m pip install -r requirements-dev.txt
 ```
 
+### Búsqueda semántica opcional (embeddings)
+
+La búsqueda documental usa **TF-IDF** por defecto. De forma opcional puede activarse
+una capa de **embeddings** (modelo local `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`)
+que mejora la recuperación semántica, manteniendo TF-IDF como *fallback* automático.
+
+```powershell
+# Activar: instalar la dependencia opcional
+python -m pip install -r requirements-embeddings.txt
+```
+
+- Con la dependencia instalada, el modo `auto` (por defecto) usa embeddings y, si el
+  modelo no carga, vuelve a TF-IDF sin romper la aplicación.
+- Para **forzar** un motor, define la variable de entorno `CHATBOT_BUSQUEDA` con
+  `tfidf`, `embeddings` o `auto`.
+- La barra lateral indica el motor activo ("Búsqueda semántica activa" o
+  "Modo compatibilidad TF-IDF").
+
+> En Streamlit Community Cloud, **no** incluyas `sentence-transformers` en
+> `requirements.txt` salvo que aceptes la descarga del modelo (~470 MB) y un mayor
+> uso de memoria; el runtime gratuito puede quedar ajustado.
+
 ## Regenerar las bases locales (opcional)
 
 Las bases ya están incluidas en `data/`. Para regenerarlas voluntariamente:

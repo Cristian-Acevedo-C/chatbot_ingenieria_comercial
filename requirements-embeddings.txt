@@ -1,0 +1,6 @@
+# Dependencia OPCIONAL para la busqueda semantica con embeddings.
+# Instala el runtime completo mas sentence-transformers. Si no se instala, la
+# aplicacion sigue funcionando con TF-IDF (fallback obligatorio).
+# Nota: descarga un modelo local (~470 MB) la primera vez que se usa.
+-r requirements.txt
+sentence-transformers>=3,<6

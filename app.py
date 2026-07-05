@@ -17,8 +17,9 @@ from chatbot.intenciones import (
     normalizar,
 )
 from chatbot.respuestas import responder
+from config.settings import METODO_BUSQUEDA
 from rag.busqueda import buscar_documentos
-from rag.indice import construir_indice_tfidf
+from rag.indice import construir_indice_documental, construir_indice_tfidf
 from services.datos import cargar_datos
 from services.prerrequisitos import (
     calcular_metricas_prerrequisitos,
@@ -53,7 +54,14 @@ def main():
         st.stop()
 
     textos_indice = tuple(chunks["texto"].fillna("").astype(str))
-    vectorizador, matriz_tfidf = construir_indice_tfidf(textos_indice)
+    metodo_indice, vectorizador, matriz_tfidf = construir_indice_documental(
+        textos_indice, metodo=METODO_BUSQUEDA
+    )
+    etiqueta_motor = (
+        "Búsqueda semántica activa"
+        if metodo_indice == "embeddings"
+        else "Modo compatibilidad TF-IDF"
+    )
     mapa_prerrequisitos = preparar_mapa_prerrequisitos(prerrequisitos, malla)
     metricas_prerrequisitos = calcular_metricas_prerrequisitos(prerrequisitos)
 
@@ -67,6 +75,7 @@ def main():
         vectorizador,
         metricas_prerrequisitos,
         construir_preguntas_rapidas,
+        etiqueta_motor=etiqueta_motor,
     )
     alumno = contexto["alumno"]
     ramos_alumno = contexto["ramos"]

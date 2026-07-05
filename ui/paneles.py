@@ -38,7 +38,8 @@ def render_encabezado():
 
 
 def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
-                   vectorizador, metricas_prerrequisitos, construir_preguntas_rapidas):
+                   vectorizador, metricas_prerrequisitos, construir_preguntas_rapidas,
+                   etiqueta_motor=None):
     with st.sidebar:
         if LOGO_UDLA_FINE.exists():
             st.image(str(LOGO_UDLA_FINE), width="stretch")
@@ -82,7 +83,7 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
         col_m2.metric("Ramos", len(malla))
         st.metric("Fragmentos documentales", len(chunks))
         if vectorizador is not None:
-            st.success("Índice TF-IDF disponible")
+            st.success(etiqueta_motor or "Índice documental disponible")
         else:
             st.warning("Índice documental no disponible")
         if prerrequisitos.empty:
