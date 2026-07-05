@@ -1,7 +1,7 @@
 """Respuestas de recomendación y solicitud de contexto."""
 
 from chatbot.contratos import RespuestaChatbot, SeccionRespuesta
-from chatbot.intenciones import normalizar
+from utils.texto import normalizar
 
 
 def respuesta_pedir_ramo(opciones_ramos):

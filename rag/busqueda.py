@@ -5,8 +5,8 @@ import re
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
-from chatbot.intenciones import normalizar
 from config.settings import TOP_K, UMBRAL_SIMILITUD
+from utils.texto import normalizar
 
 
 def buscar_documentos(

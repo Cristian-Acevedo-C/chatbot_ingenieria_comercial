@@ -3,7 +3,7 @@
 import pandas as pd
 
 from chatbot.contratos import RespuestaChatbot, SeccionRespuesta
-from chatbot.intenciones import normalizar
+from utils.texto import normalizar
 
 
 def respuesta_ramos(ramos):

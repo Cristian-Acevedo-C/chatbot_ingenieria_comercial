@@ -2,8 +2,8 @@
 
 import pandas as pd
 
-from chatbot.intenciones import normalizar
 from services.datos import valor_texto
+from utils.texto import normalizar
 
 
 def preparar_mapa_prerrequisitos(prerrequisitos, malla):

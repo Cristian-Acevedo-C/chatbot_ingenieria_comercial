@@ -1,16 +1,10 @@
 """Clasificación heurística central de consultas."""
 
 import re
-import unicodedata
 from dataclasses import dataclass
 
 from config.settings import AGRADECIMIENTOS, CONFUSION, HINTS_ACADEMICOS, SALUDOS
-
-
-def normalizar(texto):
-    texto = unicodedata.normalize("NFKD", str(texto).lower())
-    texto = "".join(caracter for caracter in texto if not unicodedata.combining(caracter))
-    return re.sub(r"\s+", " ", texto).strip()
+from utils.texto import normalizar  # reexport de compatibilidad temporal
 
 
 @dataclass(frozen=True)

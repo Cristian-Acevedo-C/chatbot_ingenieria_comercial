@@ -1,7 +1,7 @@
 """Respuestas de alertas académicas."""
 
 from chatbot.contratos import RespuestaChatbot, SeccionRespuesta
-from chatbot.intenciones import normalizar
+from utils.texto import normalizar
 
 
 def respuesta_alertas(historial, prerrequisitos_alumno, prerrequisitos_cargados):

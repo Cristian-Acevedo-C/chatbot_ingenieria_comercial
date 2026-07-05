@@ -4,7 +4,7 @@ import re
 
 import pandas as pd
 
-from chatbot.intenciones import normalizar
+from utils.texto import normalizar
 
 
 def reconstruir_texto_ramo(chunks, codigo_ramo):

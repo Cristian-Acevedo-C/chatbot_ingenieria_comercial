@@ -5,7 +5,8 @@ import random
 import streamlit as st
 
 from chatbot.contratos import adaptar_contrato_respuesta
-from chatbot.intenciones import clasificar_consulta, normalizar
+from chatbot.intenciones import clasificar_consulta
+from utils.texto import normalizar
 from chatbot.respuestas import responder, respuesta_pedir_ramo, respuesta_recomendacion
 from config.settings import (
     APERTURAS,

@@ -1,7 +1,8 @@
 """Enrutador principal de respuestas del chatbot."""
 
 from chatbot.contratos import RespuestaChatbot, normalizar_respuesta
-from chatbot.intenciones import clasificar_consulta, normalizar
+from chatbot.intenciones import clasificar_consulta
+from utils.texto import normalizar
 from chatbot.respuestas.academicas import construir_respuesta_academica
 from chatbot.respuestas.alertas import respuesta_alertas
 from chatbot.respuestas.alumno import respuesta_avance_curricular, respuesta_datos_alumno, respuesta_ramos
