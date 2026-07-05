@@ -20,6 +20,14 @@ chroma_db/
 *_backup*.csv
 _archive/
 
+# Salidas de evaluacion (regenerables)
+eval/resultados_busqueda.csv
+
+# Bases de datos locales (SQLite demo, regenerables)
+*.db
+*.sqlite
+*.sqlite3
+
 # Archivos de editores y sistema operativo
 .vscode/
 .idea/

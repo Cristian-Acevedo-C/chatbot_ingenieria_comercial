@@ -1,11 +1,16 @@
 """Paneles principales de la interfaz Streamlit."""
 
+import pandas as pd
 import streamlit as st
 
 from chatbot.conversacion import limpiar_estado_conversacional
 from config.settings import LOGO_UDLA, LOGO_UDLA_FINE, MENSAJES_SOCIALES
+from services.cobertura import calcular_cobertura_documental
 from services.datos import buscar_alumno, filtrar_por_alumno
+from services.diagnostico import diagnosticar_assets, diagnosticar_datos
 from ui.componentes import render_mensaje
+
+ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]
 
 
 def render_encabezado():
@@ -46,6 +51,15 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
         else:
             st.markdown("### Facultad de Ingeniería y Negocios")
         st.header("Panel académico")
+        st.caption(
+            "🎓 Modo demostración · Datos sintéticos/locales · "
+            "No reemplaza información oficial"
+        )
+        rol = st.selectbox(
+            "Vista (rol simulado)",
+            ROLES_DEMO,
+            help="Roles simulados para la demostración; no hay autenticación real.",
+        )
         id_alumno = st.selectbox(
             "Alumno",
             alumnos["id_alumno"].astype(str).tolist(),
@@ -92,13 +106,56 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
             st.success(
                 f"Prerrequisitos disponibles: {metricas_prerrequisitos['relaciones']} relaciones"
             )
+
+        with st.expander("Cobertura documental", expanded=False):
+            cobertura = calcular_cobertura_documental(chunks, ramos_alumno)
+            col_c1, col_c2, col_c3 = st.columns(3)
+            col_c1.metric("Chunks", cobertura["total_chunks"])
+            col_c2.metric("Ramos con doc.", cobertura["ramos_con_documentos"])
+            col_c3.metric("Fuentes", cobertura["fuentes_distintas"])
+            sin_evidencia = cobertura["ramos_inscritos_sin_evidencia"]
+            if sin_evidencia:
+                st.warning(
+                    "Ramos inscritos sin evidencia documental: "
+                    + ", ".join(item["codigo_ramo"] for item in sin_evidencia)
+                )
+            else:
+                st.caption("Todos los ramos inscritos tienen evidencia documental.")
+            if not cobertura["chunks_por_ramo"].empty:
+                st.dataframe(
+                    cobertura["chunks_por_ramo"].head(15),
+                    width="stretch",
+                    hide_index=True,
+                )
+
         st.divider()
         st.subheader("Conversación")
         if st.button("Reiniciar conversación", key="reiniciar_conversacion", width="stretch"):
             limpiar_estado_conversacional()
             st.success("Conversación reiniciada. Puedes comenzar una nueva consulta.")
 
+        with st.expander("Estado de la sesión", expanded=False):
+            st.caption("Métricas locales de esta sesión (no se guardan).")
+            st.write(
+                f"**Consultas realizadas:** "
+                f"{st.session_state.get('consultas_realizadas', 0)}"
+            )
+            st.write(
+                f"**Última intención:** "
+                f"{st.session_state.get('ultima_intencion') or '—'}"
+            )
+            st.write(
+                f"**Último ramo consultado:** "
+                f"{st.session_state.get('ultimo_ramo_nombre') or '—'}"
+            )
+            st.write(f"**Motor de búsqueda:** {etiqueta_motor or '—'}")
+            st.write(
+                f"**Consultas sin evidencia:** "
+                f"{st.session_state.get('consultas_sin_evidencia', 0)}"
+            )
+
     return {
+        "rol": rol,
         "alumno": alumno,
         "ramos": ramos_alumno,
         "historial": historial_alumno,
@@ -106,6 +163,64 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
         "opciones_ramos": opciones_ramos,
         "ramo_contexto": opciones_ramos[etiqueta_ramo],
     }
+
+
+def render_vista_coordinacion(alumnos, malla, inscritos, historial, chunks,
+                              prerrequisitos, metricas_prerrequisitos):
+    st.info(
+        "Vista **Coordinación demo** · rol simulado, solo lectura, datos sintéticos. "
+        "No reemplaza sistemas oficiales de coordinación o registro académico."
+    )
+    st.subheader("Métricas agregadas de la demostración")
+    cobertura = calcular_cobertura_documental(chunks)
+    alertas = 0
+    if not historial.empty and "estado" in historial.columns:
+        alertas = int(
+            historial["estado"].astype(str).str.lower().eq("reprobado").sum()
+        )
+    fila_a = st.columns(3)
+    fila_a[0].metric("Alumnos disponibles", len(alumnos))
+    fila_a[1].metric("Ramos en malla", len(malla))
+    fila_a[2].metric("Inscripciones", len(inscritos))
+    fila_b = st.columns(3)
+    fila_b[0].metric("Relaciones prerrequisito", metricas_prerrequisitos["relaciones"])
+    fila_b[1].metric("Alertas (reprobados)", alertas)
+    fila_b[2].metric("Chunks documentales", cobertura["total_chunks"])
+    st.caption("Cifras agregadas de la demostración; no representan datos reales.")
+    if not cobertura["chunks_por_ramo"].empty:
+        with st.expander("Cobertura documental por ramo", expanded=False):
+            st.dataframe(
+                cobertura["chunks_por_ramo"], width="stretch", hide_index=True
+            )
+
+
+def render_vista_admin(etiqueta_motor=None):
+    st.info(
+        "Vista **Admin demo** · rol simulado, solo diagnóstico. La edición y la "
+        "carga de archivos no están habilitadas en la demostración."
+    )
+    st.subheader("Diagnóstico de archivos de datos")
+    diagnostico = diagnosticar_datos()
+    tabla = pd.DataFrame(
+        [
+            {
+                "Archivo": item["archivo"],
+                "Presente": "✅" if item["existe"] else "❌",
+                "Filas": item["filas"],
+                "Columnas faltantes": ", ".join(item["columnas_faltantes"]) or "—",
+            }
+            for item in diagnostico
+        ]
+    )
+    st.dataframe(tabla, width="stretch", hide_index=True)
+
+    st.subheader("Assets institucionales")
+    for asset in diagnosticar_assets():
+        mensaje = f"{asset['asset']}: {'encontrado' if asset['existe'] else 'no encontrado'}"
+        (st.success if asset["existe"] else st.warning)(mensaje)
+
+    st.subheader("Motor de búsqueda activo")
+    st.write(etiqueta_motor or "—")
 
 
 def render_ficha_alumno(alumno, ramos_alumno):

@@ -16,6 +16,7 @@ from chatbot.intenciones import (
     detectar_tipo_pregunta,
     normalizar,
 )
+from chatbot.contratos import RespuestaChatbot
 from chatbot.respuestas import responder
 from config.settings import METODO_BUSQUEDA
 from rag.busqueda import buscar_documentos
@@ -35,6 +36,8 @@ from ui.paneles import (
     render_mapa_prerrequisitos,
     render_prerrequisitos_alumno,
     render_sidebar,
+    render_vista_admin,
+    render_vista_coordinacion,
 )
 
 
@@ -52,6 +55,19 @@ def main():
     except (FileNotFoundError, ValueError) as exc:
         st.error(f"No fue posible iniciar la aplicación: {exc}")
         st.stop()
+    except Exception as exc:  # noqa: BLE001 - evita stack trace crudo en la UI
+        st.error(
+            "Ocurrió un error inesperado al cargar los datos locales: "
+            f"{exc}. Revisa la carpeta data/ e inténtalo nuevamente."
+        )
+        st.stop()
+
+    if chunks.empty:
+        st.warning(
+            "La base documental (document_chunks.csv) no tiene registros: la "
+            "búsqueda en programas quedará deshabilitada. Puedes regenerarla con "
+            "`python ingest.py`."
+        )
 
     textos_indice = tuple(chunks["texto"].fillna("").astype(str))
     metodo_indice, vectorizador, matriz_tfidf = construir_indice_documental(
@@ -77,6 +93,18 @@ def main():
         construir_preguntas_rapidas,
         etiqueta_motor=etiqueta_motor,
     )
+
+    rol = contexto.get("rol", "Estudiante")
+    if rol == "Coordinación demo":
+        render_vista_coordinacion(
+            alumnos, malla, inscritos, historial, chunks,
+            prerrequisitos, metricas_prerrequisitos,
+        )
+        return
+    if rol == "Admin demo":
+        render_vista_admin(etiqueta_motor)
+        return
+
     alumno = contexto["alumno"]
     ramos_alumno = contexto["ramos"]
     historial_alumno = contexto["historial"]
@@ -109,6 +137,19 @@ def main():
             )
         mensaje_asistente["rol"] = "assistant"
         st.session_state["historial_conversacion"].append(mensaje_asistente)
+
+        st.session_state["consultas_realizadas"] = (
+            st.session_state.get("consultas_realizadas", 0) + 1
+        )
+        cuerpo = mensaje_asistente.get("cuerpo")
+        if (
+            isinstance(cuerpo, RespuestaChatbot)
+            and cuerpo.tipo == "documental"
+            and not cuerpo.evidencias
+        ):
+            st.session_state["consultas_sin_evidencia"] = (
+                st.session_state.get("consultas_sin_evidencia", 0) + 1
+            )
         st.rerun()
 
     render_mapa_prerrequisitos(

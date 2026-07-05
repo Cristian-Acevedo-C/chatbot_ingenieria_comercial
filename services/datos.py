@@ -11,25 +11,38 @@ def cargar_csv(nombre, columnas_requeridas=(), permitir_vacio=False):
     if not ruta.exists():
         if permitir_vacio:
             return pd.DataFrame()
-        raise FileNotFoundError(f"No se encontró {ruta}")
+        raise FileNotFoundError(
+            f"No se encontró el archivo de datos '{nombre}' en {DATA_DIR}. "
+            "Verifica que la carpeta data/ esté completa o regenera las bases "
+            "locales (ver README: «Regenerar las bases locales»)."
+        )
 
     if ruta.stat().st_size == 0:
         if permitir_vacio:
             return pd.DataFrame()
-        raise ValueError(f"El archivo {nombre} está vacío.")
+        raise ValueError(
+            f"El archivo '{nombre}' está vacío. Restaura una copia válida o "
+            "regenera las bases locales."
+        )
 
     try:
         df = pd.read_csv(ruta)
     except pd.errors.EmptyDataError:
         if permitir_vacio:
             return pd.DataFrame()
-        raise ValueError(f"El archivo {nombre} no contiene columnas ni registros.")
+        raise ValueError(
+            f"El archivo '{nombre}' no contiene columnas ni registros."
+        )
     except Exception as exc:
-        raise ValueError(f"No se pudo leer {nombre}: {exc}") from exc
+        raise ValueError(f"No se pudo leer '{nombre}': {exc}") from exc
 
     faltantes = sorted(set(columnas_requeridas) - set(df.columns))
     if faltantes:
-        raise ValueError(f"{nombre} no contiene las columnas: {', '.join(faltantes)}")
+        raise ValueError(
+            f"El archivo '{nombre}' no contiene las columnas requeridas: "
+            f"{', '.join(faltantes)}. Columnas encontradas: "
+            f"{', '.join(map(str, df.columns)) or '(ninguna)'}."
+        )
     return df
 
 
