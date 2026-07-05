@@ -1,12 +1,16 @@
 """Paneles principales de la interfaz Streamlit."""
 
+import pandas as pd
 import streamlit as st
 
 from chatbot.conversacion import limpiar_estado_conversacional
 from config.settings import LOGO_UDLA, LOGO_UDLA_FINE, MENSAJES_SOCIALES
 from services.cobertura import calcular_cobertura_documental
 from services.datos import buscar_alumno, filtrar_por_alumno
+from services.diagnostico import diagnosticar_assets, diagnosticar_datos
 from ui.componentes import render_mensaje
+
+ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]
 
 
 def render_encabezado():
@@ -50,6 +54,11 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
         st.caption(
             "🎓 Modo demostración · Datos sintéticos/locales · "
             "No reemplaza información oficial"
+        )
+        rol = st.selectbox(
+            "Vista (rol simulado)",
+            ROLES_DEMO,
+            help="Roles simulados para la demostración; no hay autenticación real.",
         )
         id_alumno = st.selectbox(
             "Alumno",
@@ -146,6 +155,7 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
             )
 
     return {
+        "rol": rol,
         "alumno": alumno,
         "ramos": ramos_alumno,
         "historial": historial_alumno,
@@ -153,6 +163,64 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
         "opciones_ramos": opciones_ramos,
         "ramo_contexto": opciones_ramos[etiqueta_ramo],
     }
+
+
+def render_vista_coordinacion(alumnos, malla, inscritos, historial, chunks,
+                              prerrequisitos, metricas_prerrequisitos):
+    st.info(
+        "Vista **Coordinación demo** · rol simulado, solo lectura, datos sintéticos. "
+        "No reemplaza sistemas oficiales de coordinación o registro académico."
+    )
+    st.subheader("Métricas agregadas de la demostración")
+    cobertura = calcular_cobertura_documental(chunks)
+    alertas = 0
+    if not historial.empty and "estado" in historial.columns:
+        alertas = int(
+            historial["estado"].astype(str).str.lower().eq("reprobado").sum()
+        )
+    fila_a = st.columns(3)
+    fila_a[0].metric("Alumnos disponibles", len(alumnos))
+    fila_a[1].metric("Ramos en malla", len(malla))
+    fila_a[2].metric("Inscripciones", len(inscritos))
+    fila_b = st.columns(3)
+    fila_b[0].metric("Relaciones prerrequisito", metricas_prerrequisitos["relaciones"])
+    fila_b[1].metric("Alertas (reprobados)", alertas)
+    fila_b[2].metric("Chunks documentales", cobertura["total_chunks"])
+    st.caption("Cifras agregadas de la demostración; no representan datos reales.")
+    if not cobertura["chunks_por_ramo"].empty:
+        with st.expander("Cobertura documental por ramo", expanded=False):
+            st.dataframe(
+                cobertura["chunks_por_ramo"], width="stretch", hide_index=True
+            )
+
+
+def render_vista_admin(etiqueta_motor=None):
+    st.info(
+        "Vista **Admin demo** · rol simulado, solo diagnóstico. La edición y la "
+        "carga de archivos no están habilitadas en la demostración."
+    )
+    st.subheader("Diagnóstico de archivos de datos")
+    diagnostico = diagnosticar_datos()
+    tabla = pd.DataFrame(
+        [
+            {
+                "Archivo": item["archivo"],
+                "Presente": "✅" if item["existe"] else "❌",
+                "Filas": item["filas"],
+                "Columnas faltantes": ", ".join(item["columnas_faltantes"]) or "—",
+            }
+            for item in diagnostico
+        ]
+    )
+    st.dataframe(tabla, width="stretch", hide_index=True)
+
+    st.subheader("Assets institucionales")
+    for asset in diagnosticar_assets():
+        mensaje = f"{asset['asset']}: {'encontrado' if asset['existe'] else 'no encontrado'}"
+        (st.success if asset["existe"] else st.warning)(mensaje)
+
+    st.subheader("Motor de búsqueda activo")
+    st.write(etiqueta_motor or "—")
 
 
 def render_ficha_alumno(alumno, ramos_alumno):

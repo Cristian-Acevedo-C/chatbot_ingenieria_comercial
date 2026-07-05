@@ -36,6 +36,8 @@ from ui.paneles import (
     render_mapa_prerrequisitos,
     render_prerrequisitos_alumno,
     render_sidebar,
+    render_vista_admin,
+    render_vista_coordinacion,
 )
 
 
@@ -91,6 +93,18 @@ def main():
         construir_preguntas_rapidas,
         etiqueta_motor=etiqueta_motor,
     )
+
+    rol = contexto.get("rol", "Estudiante")
+    if rol == "Coordinación demo":
+        render_vista_coordinacion(
+            alumnos, malla, inscritos, historial, chunks,
+            prerrequisitos, metricas_prerrequisitos,
+        )
+        return
+    if rol == "Admin demo":
+        render_vista_admin(etiqueta_motor)
+        return
+
     alumno = contexto["alumno"]
     ramos_alumno = contexto["ramos"]
     historial_alumno = contexto["historial"]
