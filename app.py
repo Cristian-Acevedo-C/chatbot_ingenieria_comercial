@@ -53,6 +53,19 @@ def main():
     except (FileNotFoundError, ValueError) as exc:
         st.error(f"No fue posible iniciar la aplicación: {exc}")
         st.stop()
+    except Exception as exc:  # noqa: BLE001 - evita stack trace crudo en la UI
+        st.error(
+            "Ocurrió un error inesperado al cargar los datos locales: "
+            f"{exc}. Revisa la carpeta data/ e inténtalo nuevamente."
+        )
+        st.stop()
+
+    if chunks.empty:
+        st.warning(
+            "La base documental (document_chunks.csv) no tiene registros: la "
+            "búsqueda en programas quedará deshabilitada. Puedes regenerarla con "
+            "`python ingest.py`."
+        )
 
     textos_indice = tuple(chunks["texto"].fillna("").astype(str))
     metodo_indice, vectorizador, matriz_tfidf = construir_indice_documental(
