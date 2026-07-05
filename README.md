@@ -191,6 +191,18 @@ python -m py_compile app.py
 
 La suite cubre clasificación de intención, búsqueda documental, extractores de programas, reglas de prerrequisitos y el contrato tipado de respuestas.
 
+## Despliegue en Streamlit Community Cloud
+
+La aplicación puede publicarse sin cambios en [Streamlit Community Cloud](https://streamlit.io/cloud):
+
+1. Sube el repositorio a GitHub y entra a *Community Cloud* → **New app**.
+2. Selecciona el repositorio y la rama `main`.
+3. Indica `app.py` como archivo principal (*Main file path*).
+4. Community Cloud instala automáticamente las dependencias desde `requirements.txt`.
+5. La configuración base (`.streamlit/config.toml`) ya está versionada; no requiere ajustes.
+
+La demo usa exclusivamente datos sintéticos incluidos en `data/`. **No subas datos personales ni información académica real a un despliegue público.** Los secretos, si alguna vez se necesitan, se cargan desde `.streamlit/secrets.toml` (ignorado por git, con plantilla en `.streamlit/secrets.toml.example`) y nunca se comitean.
+
 ## Limitaciones actuales
 
 - No se usa un modelo generativo: las respuestas son extractivas y estructuradas a partir del PDF y los CSV, no una síntesis semántica avanzada.

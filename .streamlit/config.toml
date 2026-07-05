@@ -1,0 +1,12 @@
+# Configuracion base de Streamlit para el Asistente Academico.
+# Valores minimos y seguros; NO contiene secretos.
+# Los secretos reales (si alguna vez se necesitan) van en
+# .streamlit/secrets.toml, que esta ignorado por git.
+
+[server]
+# El watcher de archivos no aporta en produccion / Community Cloud.
+fileWatcherType = "none"
+
+[browser]
+# No enviar estadisticas de uso a Streamlit.
+gatherUsageStats = false
