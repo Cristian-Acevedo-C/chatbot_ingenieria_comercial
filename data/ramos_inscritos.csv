@@ -1,0 +1,43 @@
+﻿id_alumno,codigo_ramo,nombre_ramo,estado
+1001,AUD100,Contabilidad I,Inscrito
+1001,TDE400,Tec. Comunicación y Habilidades,Inscrito
+1001,ACI107,Tecnol. de la Información I,Inscrito
+1001,AEA011,Introducción a los Negocios,Inscrito
+1001,MAT100,Matemática General,Inscrito
+1002,AEA220,Economía,Inscrito
+1002,MAT140,Álgebra I,Inscrito
+1002,LCE001,Inglés I,Inscrito
+1002,AEA240,Emprendimiento y Negocios,Inscrito
+1002,AUD222,Contabilidad para la Gestión,Inscrito
+1003,MAT170,Cálculo Diferencial,Inscrito
+1003,AEA320,Fundamentos de Estrategia,Inscrito
+1003,AUD444,Costos,Inscrito
+1003,ACI309,Datos y Decisiones,Inscrito
+1003,ING103,Economía Circular y Desarrollo Sostenible,Inscrito
+1003,LCE002,Inglés II,Inscrito
+1004,AEA503,Marketing Estratégico,Inscrito
+1004,AEA420,Taller de Liderazgo y Desarrollo Personal,Inscrito
+1004,LCE003,Inglés III,Inscrito
+1004,AEA504,Introducción a las Finanzas,Inscrito
+1004,AES500,Probabilidad y Estadística,Inscrito
+1004,AEA214,Microeconomía I,Inscrito
+1005,AEA316,Macroeconomía I,Inscrito
+1005,AES510,Inferencia Estadística,Inscrito
+1005,EIN810,Gestión de la Calidad,Inscrito
+1005,DER700,Derecho Empresarial,Inscrito
+1005,AEA364,Marketing Operacional,Inscrito
+1006,AEA315,Microeconomía II,Inscrito
+1006,AEA605,Dirección Estratégica de RRHH,Inscrito
+1006,AUD814,Planificación y Gestión Tributaria,Inscrito
+1006,AEA425,Econometría,Inscrito
+1006,AEA513,Marketing de Servicios,Inscrito
+1007,AEA982,Gestión del Cambio Organizacional,Inscrito
+1007,AEA325,Dirección Estratégica,Inscrito
+1007,AEA417,Macroeconomía II,Inscrito
+1007,AEA555,Preparación y Evaluación de Proyectos,Inscrito
+1007,AEA891,Comercio Internacional,Inscrito
+1008,AEA893,Investigación de Mercados,Inscrito
+1008,AEA530,Negociación y Resolución de Conflictos,Inscrito
+1008,AEA790,Control de Gestión,Inscrito
+1008,EIN813,Administración de la Producción,Inscrito
+1008,AEA694,Finanzas Corporativas,Inscrito

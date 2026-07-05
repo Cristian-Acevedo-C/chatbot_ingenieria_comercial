@@ -1,0 +1,53 @@
+﻿orden,semestre,codigo,nombre,creditos
+1,1,AUD100,"Contabilidad I",6
+2,1,TDE400,"Tec. Comunicación y Habilidades",5
+3,1,ACI107,"Tecnol. de la Información I",2
+4,1,AEA011,"Introducción a los Negocios",6
+5,1,MAT100,"Matemática General",6
+6,2,AEA220,"Economía",6
+7,2,MAT140,"Álgebra I",6
+8,2,LCE001,"Inglés I",4
+9,2,AEA240,"Emprendimiento y Negocios",6
+10,2,AUD222,"Contabilidad para la Gestión",6
+11,3,MAT170,"Cálculo Diferencial",6
+12,3,AEA320,"Fundamentos de Estrategia",5
+13,3,AUD444,"Costos",4
+14,3,ACI309,"Datos y Decisiones",6
+15,3,ING103,"Economía Circular y Desarrollo Sostenible",5
+16,3,LCE002,"Inglés II",4
+17,4,AEA503,"Marketing Estratégico",5
+18,4,AEA420,"Taller de Liderazgo y Desarrollo Personal",4
+19,4,LCE003,"Inglés III",4
+20,4,AEA504,"Introducción a las Finanzas",5
+21,4,AES500,"Probabilidad y Estadística",4
+22,4,AEA214,"Microeconomía I",6
+23,5,AEA316,"Macroeconomía I",6
+24,5,AES510,"Inferencia Estadística",4
+25,5,EIN810,"Gestión de la Calidad",5
+26,5,DER700,"Derecho Empresarial",5
+27,5,AEA364,"Marketing Operacional",5
+28,6,AEA315,"Microeconomía II",6
+29,6,AEA605,"Dirección Estratégica de RRHH",4
+30,6,AUD814,"Planificación y Gestión Tributaria",6
+31,6,AEA425,"Econometría",6
+32,6,AEA513,"Marketing de Servicios",6
+33,7,AEA982,"Gestión del Cambio Organizacional",6
+34,7,AEA325,"Dirección Estratégica",6
+35,7,AEA417,"Macroeconomía II",6
+36,7,AEA555,"Preparación y Evaluación de Proyectos",6
+37,7,AEA891,"Comercio Internacional",6
+38,8,AEA893,"Investigación de Mercados",6
+39,8,AEA530,"Negociación y Resolución de Conflictos",6
+40,8,AEA790,"Control de Gestión",6
+41,8,EIN813,"Administración de la Producción",6
+42,8,AEA694,"Finanzas Corporativas",6
+43,9,AEA940,"Economía para Políticas Públicas",5
+44,9,AEA980,"Taller de Consultoría",7
+45,9,AEA920,"Gestión de Empresas de Nuevos Negocios",6
+46,9,AEA783,"Gestión de Marcas",6
+47,9,AEA394,"Instrumentos de Inversión",6
+48,9,AEA988,"Taller de Desarrollo de Carrera",6
+49,10,AEA404,"Financiamiento de Inversiones",6
+50,10,AEA520,"Responsabilidad Social Corporativa",6
+51,10,AEA540,"Decisiones y Simulación",6
+52,10,AEA040,"Taller Aplicado a Administración",7

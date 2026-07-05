@@ -1,0 +1,25 @@
+﻿id_alumno,codigo_ramo,nombre_ramo,estado,nota
+1001,AUD100,Contabilidad I,Cursando,
+1001,MAT100,Matemática General,Cursando,
+1002,AUD100,Contabilidad I,Aprobado,5.6
+1002,MAT100,Matemática General,Aprobado,5.2
+1002,AEA011,Introducción a los Negocios,Aprobado,6.0
+1003,AUD100,Contabilidad I,Aprobado,5.8
+1003,MAT100,Matemática General,Aprobado,4.9
+1003,MAT140,Álgebra I,Reprobado,3.6
+1003,AEA220,Economía,Aprobado,5.1
+1004,AUD100,Contabilidad I,Aprobado,5.9
+1004,AEA220,Economía,Aprobado,5.4
+1004,AUD222,Contabilidad para la Gestión,Aprobado,5.0
+1004,AES500,Probabilidad y Estadística,Cursando,
+1005,AEA214,Microeconomía I,Reprobado,3.7
+1005,AEA503,Marketing Estratégico,Aprobado,6.1
+1005,AUD444,Costos,Aprobado,5.2
+1006,AEA316,Macroeconomía I,Aprobado,5.0
+1006,AEA425,Econometría,Cursando,
+1006,AUD814,Planificación y Gestión Tributaria,Cursando,
+1007,AEA555,Preparación y Evaluación de Proyectos,Cursando,
+1007,AEA325,Dirección Estratégica,Aprobado,5.7
+1008,AEA790,Control de Gestión,Cursando,
+1008,AEA694,Finanzas Corporativas,Cursando,
+1008,AEA893,Investigación de Mercados,Cursando,

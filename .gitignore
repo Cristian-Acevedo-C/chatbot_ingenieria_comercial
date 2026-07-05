@@ -1,0 +1,22 @@
+# Entornos y artefactos de Python
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.pyc
+*$py.class
+
+# Configuracion local y secretos
+.env
+.streamlit/secrets.toml
+
+# Salidas regenerables
+outputs/
+chroma_db/
+
+# Archivos de editores y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

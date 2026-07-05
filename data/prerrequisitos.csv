@@ -1,0 +1,75 @@
+﻿codigo_ramo,nombre_ramo,codigo_prerrequisito,nombre_prerrequisito,tipo,fuente_archivo,evidencia_textual,confianza
+AUD100,Contabilidad I,,,Sin prerrequisito,documentos/semestre_01/01_AUD100_contabilidad_i.pdf,Requisito,Alta
+TDE400,Tec. Comunicación y Habilidades,,,Sin prerrequisito,documentos/semestre_01/01_TDE400_tec_comunicacion_y_habilidades.pdf,Requisito,Alta
+ACI107,Tecnol. de la Información I,,,Sin prerrequisito,documentos/semestre_01/01_ACI107_tecnol_de_la_informacion_i.pdf,Requisito,Alta
+AEA011,Introducción a los Negocios,,,Sin prerrequisito,documentos/semestre_01/01_AEA011_introduccion_a_los_negocios.pdf,Requisito,Alta
+MAT100,Matemática General,,,Sin prerrequisito,documentos/semestre_01/01_MAT100_matematica_general.pdf,Requisito,Alta
+AEA220,Economía,MAT100,Matemática General,Prerrequisito,documentos/semestre_02/02_AEA220_economia.pdf,Requisito: MAT100 o MAT110 o MAT107,Alta
+MAT140,Álgebra I,MAT100,Matemática General,Prerrequisito,documentos/semestre_02/02_MAT140_algebra_i.pdf,Requisito: MAT100 o MAT110 o MAT107,Alta
+LCE001,Inglés I,,,Sin prerrequisito,documentos/semestre_02/02_LCE001_ingles_i.pdf,Requisito,Alta
+AEA240,Emprendimiento y Negocios,,,Sin prerrequisito,documentos/semestre_02/02_AEA240_emprendimiento_y_negocios.pdf,Requisito,Alta
+AUD222,Contabilidad para la Gestión,AUD100,Contabilidad I,Prerrequisito,documentos/semestre_02/02_AUD222_contabilidad_para_la_gestion.pdf,Requisito: AUD100,Alta
+MAT170,Cálculo Diferencial,MAT100,Matemática General,Prerrequisito,documentos/semestre_03/03_MAT170_calculo_diferencial.pdf,Requisito: MAT100 o MAT107,Alta
+AEA320,Fundamentos de Estrategia,,,No detectado,documentos/semestre_03/03_AEA320_fundamentos_de_estrategia.pdf,Requisito: AEA131 o AEA193 o AEA152,No aplica
+AUD444,Costos,AUD100,Contabilidad I,Prerrequisito,documentos/semestre_03/03_AUD444_costos.pdf,Requisito: AUD100 )o ( AUD104 )o ( AUD154,Alta
+ACI309,Datos y Decisiones,ACI107,Tecnol. de la Información I,Prerrequisito,documentos/semestre_03/03_ACI309_datos_y_decisiones.pdf,"Requisito: ACI-107 4,0 o ACI-1077 4,0 )o ( MAT-108 4,0 o MAT-1087 4,0",Alta
+ING103,Economía Circular y Desarrollo Sostenible,,,Sin prerrequisito,documentos/semestre_03/03_ING103_economia_circular_y_desarrollo_sostenible.pdf,Requisito,Alta
+LCE002,Inglés II,LCE001,Inglés I,Prerrequisito,documentos/semestre_03/03_LCE002_ingles_ii.pdf,Requisito: LCE001 o WSI100,Alta
+AEA503,Marketing Estratégico,AEA320,Fundamentos de Estrategia,Prerrequisito,documentos/semestre_04/04_AEA503_marketing_estrategico.pdf,Requisito: AEA320,Alta
+AEA420,Taller de Liderazgo y Desarrollo Personal,AEA011,Introducción a los Negocios,Prerrequisito,documentos/semestre_04/04_AEA420_taller_de_liderazgo_y_desarrollo_personal.pdf,Requisito: AEA131 o AGR124 o AEA193 o AEA152 o MIN211 o PDR110 o ING120 o AEA011 o AEA011,Alta
+LCE003,Inglés III,LCE002,Inglés II,Prerrequisito,documentos/semestre_04/04_LCE003_ingles_iii.pdf,Requisito: LCE002 o WSI200 o EDI105,Alta
+AEA504,Introducción a las Finanzas,AUD100,Contabilidad I,Prerrequisito,documentos/semestre_04/04_AEA504_introduccion_a_las_finanzas.pdf,Requisito: AUD222 o AUD200 o AEA193 o AEA152 o EIN105 o TUR292 o AEA131 o AUD100 )o MAT1007 o MAT1077 )y ( MAT1107,Alta
+AEA504,Introducción a las Finanzas,AUD222,Contabilidad para la Gestión,Prerrequisito,documentos/semestre_04/04_AEA504_introduccion_a_las_finanzas.pdf,Requisito: AUD222 o AUD200 o AEA193 o AEA152 o EIN105 o TUR292 o AEA131 o AUD100 )o MAT1007 o MAT1077 )y ( MAT1107,Alta
+AES500,Probabilidad y Estadística,MAT100,Matemática General,Prerrequisito,documentos/semestre_04/04_AES500_probabilidad_y_estadistica.pdf,Requisito: MAT100 o MAT110 o MAT333 o MAT107,Alta
+AEA214,Microeconomía I,AEA220,Economía,Prerrequisito,documentos/semestre_04/04_AEA214_microeconomia_i.pdf,Requisito: AEA220 y MAT333 )o ( MAT170 y AEA220 )o ( ADP102 y MAT116 )o ( MAT116,Alta
+AEA214,Microeconomía I,MAT170,Cálculo Diferencial,Prerrequisito,documentos/semestre_04/04_AEA214_microeconomia_i.pdf,Requisito: AEA220 y MAT333 )o ( MAT170 y AEA220 )o ( ADP102 y MAT116 )o ( MAT116,Alta
+AEA316,Macroeconomía I,AEA220,Economía,Prerrequisito,documentos/semestre_05/05_AEA316_macroeconomia_i.pdf,Requisito: AEA220 o AEA295 o AEA255 )o ( MAT116,Alta
+AES510,Inferencia Estadística,AES500,Probabilidad y Estadística,Prerrequisito,documentos/semestre_05/05_AES510_inferencia_estadistica.pdf,Requisito: AES500,Alta
+EIN810,Gestión de la Calidad,AES500,Probabilidad y Estadística,Prerrequisito,documentos/semestre_05/05_EIN810_gestion_de_la_calidad.pdf,Requisito: AES500 )o ( AES100 y AES101 )o ( AEA293 y AEA204 )o ( AES100 y AEA204 )o ( AES253 y AES204 )o ( AES293 y AES101 )o ( AES253 y AES101,Alta
+DER700,Derecho Empresarial,,,Sin prerrequisito,documentos/semestre_05/05_DER700_derecho_empresarial.pdf,Requisito,Alta
+AEA364,Marketing Operacional,AEA503,Marketing Estratégico,Prerrequisito,documentos/semestre_05/05_AEA364_marketing_operacional.pdf,Requisito: AUD444 o AEA193 o AEA152 o EIN105 o TUR191 )o ( AEA504 y AEA503,Alta
+AEA364,Marketing Operacional,AEA504,Introducción a las Finanzas,Prerrequisito,documentos/semestre_05/05_AEA364_marketing_operacional.pdf,Requisito: AUD444 o AEA193 o AEA152 o EIN105 o TUR191 )o ( AEA504 y AEA503,Alta
+AEA364,Marketing Operacional,AUD444,Costos,Prerrequisito,documentos/semestre_05/05_AEA364_marketing_operacional.pdf,Requisito: AUD444 o AEA193 o AEA152 o EIN105 o TUR191 )o ( AEA504 y AEA503,Alta
+AEA315,Microeconomía II,AEA214,Microeconomía I,Prerrequisito,documentos/semestre_06/06_AEA315_microeconomia_ii.pdf,Requisito: AEA214,Alta
+AEA605,Dirección Estratégica de RRHH,,,No detectado,documentos/semestre_06/06_AEA605_direccion_estrategica_de_rrhh.pdf,Requisito: AEA131 o EIN105 o MIN511 o TUR191 o AGR910,No aplica
+AUD814,Planificación y Gestión Tributaria,AUD100,Contabilidad I,Prerrequisito,documentos/semestre_06/06_AUD814_planificacion_y_gestion_tributaria.pdf,Requisito: AUD100 o AUD104 o AUD154,Alta
+AEA425,Econometría,AEA214,Microeconomía I,Prerrequisito,documentos/semestre_06/06_AEA425_econometria.pdf,Requisito: AEA214 y AES510 )o ( AES100 y AES101 )o ( AEA293 y AES204 )o ( AEA293,Alta
+AEA425,Econometría,AES510,Inferencia Estadística,Prerrequisito,documentos/semestre_06/06_AEA425_econometria.pdf,Requisito: AEA214 y AES510 )o ( AES100 y AES101 )o ( AEA293 y AES204 )o ( AEA293,Alta
+AEA513,Marketing de Servicios,AEA364,Marketing Operacional,Prerrequisito,documentos/semestre_06/06_AEA513_marketing_de_servicios.pdf,Requisito: AEA503 y AEA364,Alta
+AEA513,Marketing de Servicios,AEA503,Marketing Estratégico,Prerrequisito,documentos/semestre_06/06_AEA513_marketing_de_servicios.pdf,Requisito: AEA503 y AEA364,Alta
+AEA982,Gestión del Cambio Organizacional,AEA605,Dirección Estratégica de RRHH,Prerrequisito,documentos/semestre_07/07_AEA982_gestion_del_cambio_organizacional.pdf,Requisito: AEA602 )o ( AEA605,Alta
+AEA325,Dirección Estratégica,AEA240,Emprendimiento y Negocios,Prerrequisito,documentos/semestre_07/07_AEA325_direccion_estrategica.pdf,Requisito: AEA240 y AEA503 y AEA320 y AEA315 )o ( EIN970,Alta
+AEA325,Dirección Estratégica,AEA315,Microeconomía II,Prerrequisito,documentos/semestre_07/07_AEA325_direccion_estrategica.pdf,Requisito: AEA240 y AEA503 y AEA320 y AEA315 )o ( EIN970,Alta
+AEA325,Dirección Estratégica,AEA320,Fundamentos de Estrategia,Prerrequisito,documentos/semestre_07/07_AEA325_direccion_estrategica.pdf,Requisito: AEA240 y AEA503 y AEA320 y AEA315 )o ( EIN970,Alta
+AEA325,Dirección Estratégica,AEA503,Marketing Estratégico,Prerrequisito,documentos/semestre_07/07_AEA325_direccion_estrategica.pdf,Requisito: AEA240 y AEA503 y AEA320 y AEA315 )o ( EIN970,Alta
+AEA417,Macroeconomía II,AEA316,Macroeconomía I,Prerrequisito,documentos/semestre_07/07_AEA417_macroeconomia_ii.pdf,Requisito: AEA316,Alta
+AEA555,Preparación y Evaluación de Proyectos,AEA214,Microeconomía I,Prerrequisito,documentos/semestre_07/07_AEA555_preparacion_y_evaluacion_de_proyectos.pdf,Requisito: AEA503 y AEA504 )o ( AEA145 o AEA104 o AEA214 o EIN105,Alta
+AEA555,Preparación y Evaluación de Proyectos,AEA503,Marketing Estratégico,Prerrequisito,documentos/semestre_07/07_AEA555_preparacion_y_evaluacion_de_proyectos.pdf,Requisito: AEA503 y AEA504 )o ( AEA145 o AEA104 o AEA214 o EIN105,Alta
+AEA555,Preparación y Evaluación de Proyectos,AEA504,Introducción a las Finanzas,Prerrequisito,documentos/semestre_07/07_AEA555_preparacion_y_evaluacion_de_proyectos.pdf,Requisito: AEA503 y AEA504 )o ( AEA145 o AEA104 o AEA214 o EIN105,Alta
+AEA891,Comercio Internacional,AEA320,Fundamentos de Estrategia,Prerrequisito,documentos/semestre_07/07_AEA891_comercio_internacional.pdf,Requisito: AEA320 o AEA291 o AEA300,Alta
+AEA893,Investigación de Mercados,AEA364,Marketing Operacional,Prerrequisito,documentos/semestre_08/08_AEA893_investigacion_de_mercados.pdf,Requisito: AEA364 y AEA503 y AEA425 )o ( TUR292,Alta
+AEA893,Investigación de Mercados,AEA425,Econometría,Prerrequisito,documentos/semestre_08/08_AEA893_investigacion_de_mercados.pdf,Requisito: AEA364 y AEA503 y AEA425 )o ( TUR292,Alta
+AEA893,Investigación de Mercados,AEA503,Marketing Estratégico,Prerrequisito,documentos/semestre_08/08_AEA893_investigacion_de_mercados.pdf,Requisito: AEA364 y AEA503 y AEA425 )o ( TUR292,Alta
+AEA530,Negociación y Resolución de Conflictos,AEA315,Microeconomía II,Prerrequisito,documentos/semestre_08/08_AEA530_negociacion_y_resolucion_de_conflictos.pdf,Requisito: AEA315,Alta
+AEA790,Control de Gestión,AEA320,Fundamentos de Estrategia,Prerrequisito,documentos/semestre_08/08_AEA790_control_de_gestion.pdf,Requisito: AEA320 y AEA605 )o ( AEA225,Alta
+AEA790,Control de Gestión,AEA605,Dirección Estratégica de RRHH,Prerrequisito,documentos/semestre_08/08_AEA790_control_de_gestion.pdf,Requisito: AEA320 y AEA605 )o ( AEA225,Alta
+EIN813,Administración de la Producción,AEA325,Dirección Estratégica,Prerrequisito,documentos/semestre_08/08_EIN813_administracion_de_la_produccion.pdf,Requisito: MAT333 )o ( AEA325 )o ( EIN810 )o ( MIN815,Alta
+EIN813,Administración de la Producción,EIN810,Gestión de la Calidad,Prerrequisito,documentos/semestre_08/08_EIN813_administracion_de_la_produccion.pdf,Requisito: MAT333 )o ( AEA325 )o ( EIN810 )o ( MIN815,Alta
+AEA694,Finanzas Corporativas,AEA504,Introducción a las Finanzas,Prerrequisito,documentos/semestre_08/08_AEA694_finanzas_corporativas.pdf,Requisito: AEA504,Alta
+AEA940,Economía para Políticas Públicas,AEA316,Macroeconomía I,Prerrequisito,documentos/semestre_09/09_AEA940_economia_para_politicas_publicas.pdf,Requisito: AEA316,Alta
+AEA980,Taller de Consultoría,AEA503,Marketing Estratégico,Prerrequisito,documentos/semestre_09/09_AEA980_taller_de_consultoria.pdf,Requisito: AEA504 y AEA555 y AEA503,Alta
+AEA980,Taller de Consultoría,AEA504,Introducción a las Finanzas,Prerrequisito,documentos/semestre_09/09_AEA980_taller_de_consultoria.pdf,Requisito: AEA504 y AEA555 y AEA503,Alta
+AEA980,Taller de Consultoría,AEA555,Preparación y Evaluación de Proyectos,Prerrequisito,documentos/semestre_09/09_AEA980_taller_de_consultoria.pdf,Requisito: AEA504 y AEA555 y AEA503,Alta
+AEA920,Gestión de Empresas de Nuevos Negocios,AEA240,Emprendimiento y Negocios,Prerrequisito,documentos/semestre_09/09_AEA920_gestion_de_empresas_de_nuevos_negocios.pdf,Requisito: AEA240,Alta
+AEA783,Gestión de Marcas,AEA364,Marketing Operacional,Prerrequisito,documentos/semestre_09/09_AEA783_gestion_de_marcas.pdf,Requisito: AEA503 y AEA364,Alta
+AEA783,Gestión de Marcas,AEA503,Marketing Estratégico,Prerrequisito,documentos/semestre_09/09_AEA783_gestion_de_marcas.pdf,Requisito: AEA503 y AEA364,Alta
+AEA394,Instrumentos de Inversión,AEA694,Finanzas Corporativas,Prerrequisito,documentos/semestre_09/09_AEA394_instrumentos_de_inversion.pdf,Requisito: AEA694 )o ( AEA145 )o ( AEA104,Alta
+AEA988,Taller de Desarrollo de Carrera,,,Sin prerrequisito,documentos/semestre_09/09_AEA988_taller_de_desarrollo_de_carrera.pdf,Requisito,Alta
+AEA404,Financiamiento de Inversiones,AEA555,Preparación y Evaluación de Proyectos,Prerrequisito,documentos/semestre_10/10_AEA404_financiamiento_de_inversiones.pdf,Requisito: AEA694 y AEA555,Alta
+AEA404,Financiamiento de Inversiones,AEA694,Finanzas Corporativas,Prerrequisito,documentos/semestre_10/10_AEA404_financiamiento_de_inversiones.pdf,Requisito: AEA694 y AEA555,Alta
+AEA520,Responsabilidad Social Corporativa,,,No detectado,documentos/semestre_10/10_AEA520_responsabilidad_social_corporativa.pdf,Requisito: AEA131 )o ( AEA550,No aplica
+AEA540,Decisiones y Simulación,AEA425,Econometría,Prerrequisito,documentos/semestre_10/10_AEA540_decisiones_y_simulacion.pdf,Requisito: AEA792 y AES500 )o ( AEA425 )o ( MIN211,Alta
+AEA540,Decisiones y Simulación,AES500,Probabilidad y Estadística,Prerrequisito,documentos/semestre_10/10_AEA540_decisiones_y_simulacion.pdf,Requisito: AEA792 y AES500 )o ( AEA425 )o ( MIN211,Alta
+AEA040,Taller Aplicado a Administración,AEA325,Dirección Estratégica,Prerrequisito,documentos/semestre_10/10_AEA040_taller_aplicado_a_administracion.pdf,Requisito: AEA555 y AEA325 y AEA790,Alta
+AEA040,Taller Aplicado a Administración,AEA555,Preparación y Evaluación de Proyectos,Prerrequisito,documentos/semestre_10/10_AEA040_taller_aplicado_a_administracion.pdf,Requisito: AEA555 y AEA325 y AEA790,Alta
+AEA040,Taller Aplicado a Administración,AEA790,Control de Gestión,Prerrequisito,documentos/semestre_10/10_AEA040_taller_aplicado_a_administracion.pdf,Requisito: AEA555 y AEA325 y AEA790,Alta
