@@ -229,6 +229,23 @@ El script escribe el detalle en `eval/resultados_busqueda.csv` (ignorado por git
 regenerable) e imprime la precisión de ramo en el top-1. Si se pide `embeddings`/`auto`
 y la dependencia no está disponible, avisa y continúa con el fallback TF-IDF.
 
+## Modo demostración y roles
+
+La aplicación está pensada como **demo institucional** con datos sintéticos/locales.
+La barra lateral incluye un selector de **rol simulado** (no hay autenticación real):
+
+- **Estudiante**: flujo académico completo (chat, ficha, prerrequisitos, evidencia).
+- **Coordinación demo**: métricas agregadas (alumnos, ramos, inscripciones,
+  relaciones de prerrequisitos, alertas, cobertura documental).
+- **Admin demo**: diagnóstico de solo lectura de los archivos de datos (CSV
+  presentes, filas, columnas faltantes), assets y motor de búsqueda activo. No
+  permite editar ni subir archivos.
+
+Además, el sidebar muestra un indicador de **modo demostración**, un expander
+**«Estado de la sesión»** con métricas locales (consultas realizadas, última
+intención/ramo, motor activo, consultas sin evidencia) y un expander
+**«Cobertura documental»**. Ninguna métrica se persiste: viven solo en la sesión.
+
 ## Despliegue en Streamlit Community Cloud
 
 La aplicación puede publicarse sin cambios en [Streamlit Community Cloud](https://streamlit.io/cloud):
@@ -258,6 +275,13 @@ La demo usa exclusivamente datos sintéticos incluidos en `data/`. **No subas da
 - dividir documentos por secciones académicas y no solo por longitud;
 - crear un conjunto de evaluación para medir precisión de recuperación;
 - añadir pruebas automatizadas de datos, reglas e interfaz.
+
+## Roadmap
+
+Las etapas futuras (piloto anonimizado, panel de carga de programas, base de datos
+real, roles reales, integración WhatsApp y analítica institucional) están descritas
+en [`docs/roadmap.md`](docs/roadmap.md). La propuesta de modelo de datos para una
+migración a SQLite/PostgreSQL está en [`docs/arquitectura_datos.md`](docs/arquitectura_datos.md).
 
 ## Uso académico responsable
 
