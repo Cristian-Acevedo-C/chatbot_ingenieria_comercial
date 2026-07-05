@@ -1,5 +1,8 @@
-streamlit>=1.48.0
-pandas
-pypdf
-scikit-learn
-pytest
+# Dependencias de ejecucion (runtime) del Asistente Academico.
+# Rangos acotados por version mayor: permiten parches/minors sin arrastrar
+# un cambio de major no probado. Validado con streamlit 1.58, pandas 3.0.3,
+# scikit-learn 1.9.0 y pypdf 6.14.2.
+streamlit>=1.48,<2
+pandas>=2.2,<4
+scikit-learn>=1.5,<2
+pypdf>=5,<7
