@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from chatbot.contratos import RespuestaChatbot
+from chatbot.contratos import RespuestaChatbot, SeccionRespuesta
 from chatbot.respuestas import (
     construir_respuesta_academica,
     respuesta_alertas,
@@ -218,3 +218,39 @@ def test_respuesta_academica_es_contrato_renderizable(programa_academico, tipo):
     afirmar_contrato(respuesta, tipo)
     assert respuesta.metadata["formato_original"] == "academico"
     assert all(seccion.formato == "tabla" for seccion in respuesta.secciones)
+    # El flujo académico activo ya no arrastra el dict legacy duplicado.
+    assert "payload_original" not in respuesta.metadata
+
+
+def test_respuesta_estudio_arma_secciones_tipadas(programa_academico):
+    respuesta = construir_respuesta_academica(
+        "estudio",
+        "AEA100",
+        "Microeconomía I",
+        programa_academico,
+        pd.DataFrame(),
+        pd.DataFrame(),
+        pd.DataFrame(),
+    )
+    titulos = [seccion.titulo for seccion in respuesta.secciones]
+    assert "Qué estudiar" in titulos
+    assert respuesta.secciones
+    assert all(isinstance(seccion, SeccionRespuesta) for seccion in respuesta.secciones)
+
+
+def test_renderer_no_depende_de_metadata_legacy(programa_academico):
+    respuesta = construir_respuesta_academica(
+        "contenidos",
+        "AEA100",
+        "Microeconomía I",
+        programa_academico,
+        pd.DataFrame(),
+        pd.DataFrame(),
+        pd.DataFrame(),
+    )
+    # Vaciar metadata simula un contrato sin rastros legacy: aún debe renderizar.
+    respuesta.metadata = {}
+    bloques = construir_bloques_render(respuesta)
+    tipos = [bloque["tipo"] for bloque in bloques]
+    assert "resumen" in tipos
+    assert "tabla" in tipos

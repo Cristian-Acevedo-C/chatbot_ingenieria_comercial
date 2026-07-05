@@ -7,113 +7,14 @@ from chatbot.contratos import normalizar_respuesta
 from chatbot.respuestas.render_contract import construir_bloques_render
 
 
-def _render_payload_academico(respuesta):
-    if not isinstance(respuesta, dict):
-        st.markdown(respuesta)
-        return
-    if respuesta.get("formato") == "legacy":
-        for seccion in respuesta.get("secciones", []):
-            if seccion.get("tipo") == "markdown":
-                st.markdown(seccion.get("contenido", ""))
-        return
-    if respuesta.get("formato") != "academico":
-        st.markdown(str(respuesta))
-        return
-
-    st.markdown("### Respuesta breve")
-    st.markdown(respuesta["resumen"])
-    tipo = respuesta["tipo"]
-
-    if tipo in {"estudio", "contenidos"}:
-        titulo = "Qué estudiar" if tipo == "estudio" else "Unidades y contenidos"
-        st.markdown(f"### {titulo}")
-        if respuesta["contenidos"]:
-            st.dataframe(
-                pd.DataFrame(respuesta["contenidos"]),
-                width="stretch",
-                hide_index=True,
-            )
-        else:
-            st.info("No fue posible formar una tabla limpia; consulta la evidencia del PDF.")
-
-    if tipo == "estudio":
-        st.markdown("### Plan sugerido")
-        if respuesta["plan"]:
-            st.dataframe(
-                pd.DataFrame(respuesta["plan"]),
-                width="stretch",
-                hide_index=True,
-            )
-        else:
-            st.info("No se propone un plan porque no se detectaron contenidos estructurados.")
-
-        st.markdown("### Prerrequisitos académicos")
-        st.caption(
-            "Los prerrequisitos ayudan a identificar qué conocimientos previos conviene "
-            "reforzar antes de estudiar este ramo."
-        )
-        if respuesta["prerrequisitos"]:
-            tabla_prerrequisitos = pd.DataFrame(respuesta["prerrequisitos"])[
-                [
-                    "codigo_prerrequisito",
-                    "nombre_prerrequisito",
-                    "tipo",
-                    "estado_prerrequisito",
-                    "alerta",
-                ]
-            ].rename(
-                columns={
-                    "codigo_prerrequisito": "Código",
-                    "nombre_prerrequisito": "Ramo previo",
-                    "tipo": "Tipo",
-                    "estado_prerrequisito": "Estado",
-                    "alerta": "Alerta",
-                }
-            )
-            st.dataframe(tabla_prerrequisitos, width="stretch", hide_index=True)
-        else:
-            st.info("No hay prerrequisitos cargados para mostrar.")
-
-    if respuesta["bibliografia"]:
-        st.markdown("### Bibliografía")
-        st.dataframe(
-            pd.DataFrame(respuesta["bibliografia"]),
-            width="stretch",
-            hide_index=True,
-        )
-    elif tipo == "bibliografia":
-        st.info("No fue posible formar una tabla bibliográfica limpia.")
-
-    if tipo == "evaluaciones":
-        st.markdown("### Evaluaciones detectadas")
-        if respuesta["evaluaciones"]:
-            st.dataframe(
-                pd.DataFrame(respuesta["evaluaciones"]),
-                width="stretch",
-                hide_index=True,
-            )
-        else:
-            st.info("No fue posible formar una tabla limpia de evaluaciones.")
-
-    with st.expander("Ver evidencia del PDF"):
-        if respuesta["evidencias"]:
-            for indice, evidencia in enumerate(respuesta["evidencias"], start=1):
-                st.markdown(f"**Evidencia {indice}**")
-                st.write(evidencia["texto"][:500])
-                st.caption(evidencia["fuente"])
-        else:
-            st.info("No se encontraron extractos breves para mostrar.")
-
-
 def render_respuesta_academica(respuesta):
+    """Renderiza cualquier respuesta compatible desde el contrato tipado.
+
+    Acepta ``RespuestaChatbot``, string legacy o dict legacy: todos se
+    normalizan al contrato y se renderizan por bloques, sin depender de
+    ``metadata['payload_original']``.
+    """
     contrato = normalizar_respuesta(respuesta)
-    payload_original = contrato.metadata.get("payload_original")
-    if (
-        contrato.metadata.get("formato_original") == "academico"
-        and isinstance(payload_original, dict)
-    ):
-        _render_payload_academico(payload_original)
-        return
 
     for bloque in construir_bloques_render(contrato):
         tipo = bloque["tipo"]

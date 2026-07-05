@@ -71,9 +71,31 @@ def construir_respuesta_academica(
         ramo_objetivo = pd.DataFrame(
             [{"codigo_ramo": codigo, "nombre_ramo": nombre}]
         )
-        vista_prerrequisitos = construir_prerrequisitos_alumno(
+        tabla_prerrequisitos = construir_prerrequisitos_alumno(
             ramo_objetivo, historial, prerrequisitos
-        ).to_dict("records")
+        )
+        if not tabla_prerrequisitos.empty:
+            vista_prerrequisitos = (
+                tabla_prerrequisitos[
+                    [
+                        "codigo_prerrequisito",
+                        "nombre_prerrequisito",
+                        "tipo",
+                        "estado_prerrequisito",
+                        "alerta",
+                    ]
+                ]
+                .rename(
+                    columns={
+                        "codigo_prerrequisito": "Código",
+                        "nombre_prerrequisito": "Ramo previo",
+                        "tipo": "Tipo",
+                        "estado_prerrequisito": "Estado",
+                        "alerta": "Alerta",
+                    }
+                )
+                .to_dict("records")
+            )
 
     contenidos_visibles = contenidos if tipo in {"estudio", "contenidos"} else []
     plan = construir_plan_estudio(contenidos) if tipo == "estudio" else []
@@ -127,19 +149,6 @@ def construir_respuesta_academica(
             )
         )
 
-    payload_compatible = {
-        "formato": "academico",
-        "tipo": tipo,
-        "codigo": codigo,
-        "nombre": nombre,
-        "resumen": resumen,
-        "contenidos": contenidos_visibles,
-        "plan": plan,
-        "prerrequisitos": vista_prerrequisitos,
-        "bibliografia": bibliografia_visible,
-        "evaluaciones": evaluaciones_visibles,
-        "evidencias": evidencias,
-    }
     return RespuestaChatbot(
         tipo=tipo,
         resumen=resumen,
@@ -155,6 +164,5 @@ def construir_respuesta_academica(
             "codigo": codigo,
             "nombre": nombre,
             "formato_original": "academico",
-            "payload_original": payload_compatible,
         },
     )
