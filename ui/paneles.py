@@ -46,6 +46,10 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
         else:
             st.markdown("### Facultad de Ingeniería y Negocios")
         st.header("Panel académico")
+        st.caption(
+            "🎓 Modo demostración · Datos sintéticos/locales · "
+            "No reemplaza información oficial"
+        )
         id_alumno = st.selectbox(
             "Alumno",
             alumnos["id_alumno"].astype(str).tolist(),
@@ -97,6 +101,26 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
         if st.button("Reiniciar conversación", key="reiniciar_conversacion", width="stretch"):
             limpiar_estado_conversacional()
             st.success("Conversación reiniciada. Puedes comenzar una nueva consulta.")
+
+        with st.expander("Estado de la sesión", expanded=False):
+            st.caption("Métricas locales de esta sesión (no se guardan).")
+            st.write(
+                f"**Consultas realizadas:** "
+                f"{st.session_state.get('consultas_realizadas', 0)}"
+            )
+            st.write(
+                f"**Última intención:** "
+                f"{st.session_state.get('ultima_intencion') or '—'}"
+            )
+            st.write(
+                f"**Último ramo consultado:** "
+                f"{st.session_state.get('ultimo_ramo_nombre') or '—'}"
+            )
+            st.write(f"**Motor de búsqueda:** {etiqueta_motor or '—'}")
+            st.write(
+                f"**Consultas sin evidencia:** "
+                f"{st.session_state.get('consultas_sin_evidencia', 0)}"
+            )
 
     return {
         "alumno": alumno,

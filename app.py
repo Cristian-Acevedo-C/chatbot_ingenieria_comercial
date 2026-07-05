@@ -16,6 +16,7 @@ from chatbot.intenciones import (
     detectar_tipo_pregunta,
     normalizar,
 )
+from chatbot.contratos import RespuestaChatbot
 from chatbot.respuestas import responder
 from config.settings import METODO_BUSQUEDA
 from rag.busqueda import buscar_documentos
@@ -109,6 +110,19 @@ def main():
             )
         mensaje_asistente["rol"] = "assistant"
         st.session_state["historial_conversacion"].append(mensaje_asistente)
+
+        st.session_state["consultas_realizadas"] = (
+            st.session_state.get("consultas_realizadas", 0) + 1
+        )
+        cuerpo = mensaje_asistente.get("cuerpo")
+        if (
+            isinstance(cuerpo, RespuestaChatbot)
+            and cuerpo.tipo == "documental"
+            and not cuerpo.evidencias
+        ):
+            st.session_state["consultas_sin_evidencia"] = (
+                st.session_state.get("consultas_sin_evidencia", 0) + 1
+            )
         st.rerun()
 
     render_mapa_prerrequisitos(
