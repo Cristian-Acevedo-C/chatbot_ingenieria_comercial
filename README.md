@@ -213,6 +213,22 @@ python -m py_compile app.py
 
 La suite cubre clasificación de intención, búsqueda documental, extractores de programas, reglas de prerrequisitos y el contrato tipado de respuestas.
 
+## Evaluación offline de búsqueda documental
+
+Para comparar los motores de recuperación de forma reproducible (sin abrir la app)
+hay un conjunto de consultas representativas en `eval/consultas_busqueda.csv` y un
+script que mide si el primer resultado corresponde al ramo esperado:
+
+```powershell
+python scripts/evaluar_busqueda.py --metodo tfidf
+python scripts/evaluar_busqueda.py --metodo auto
+python scripts/evaluar_busqueda.py --metodo embeddings
+```
+
+El script escribe el detalle en `eval/resultados_busqueda.csv` (ignorado por git,
+regenerable) e imprime la precisión de ramo en el top-1. Si se pide `embeddings`/`auto`
+y la dependencia no está disponible, avisa y continúa con el fallback TF-IDF.
+
 ## Despliegue en Streamlit Community Cloud
 
 La aplicación puede publicarse sin cambios en [Streamlit Community Cloud](https://streamlit.io/cloud):
