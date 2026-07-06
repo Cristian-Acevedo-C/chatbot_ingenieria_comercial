@@ -49,12 +49,17 @@ def construir_respuesta_academica(
                 "la sección de contenidos en una tabla confiable."
             )
     elif tipo == "contenidos":
-        resumen = (
-            f"El programa de **{codigo} — {nombre}** contiene "
-            f"**{len(contenidos)} unidades estructuradas**."
-            if contenidos
-            else f"No pude extraer una tabla limpia de contenidos para **{codigo} — {nombre}**."
-        )
+        if contenidos:
+            temas_destacados = ", ".join(
+                contenido["Tema principal"] for contenido in contenidos[:3]
+            )
+            resumen = (
+                f"**{codigo} — {nombre}** aborda contenidos como {temas_destacados}, según "
+                f"la evidencia disponible en el programa cargado "
+                f"({len(contenidos)} unidad(es) estructurada(s) detectada(s))."
+            )
+        else:
+            resumen = f"No pude extraer una tabla limpia de contenidos para **{codigo} — {nombre}**."
     elif tipo == "bibliografia":
         resumen = (
             f"Detecté **{len(bibliografia)} referencias bibliográficas** en el programa de "
@@ -177,6 +182,41 @@ def construir_respuesta_academica(
                 formato="tabla",
             )
         )
+
+    # La consulta general "qué contenidos tiene X" (el punto de entrada más común
+    # al preguntar por un ramo) también asoma evaluación y bibliografía cuando hay
+    # evidencia, o lo dice explícitamente cuando no la hay; nunca se inventa.
+    if tipo == "contenidos":
+        if evaluaciones:
+            secciones.append(
+                SeccionRespuesta(titulo="Evaluación", contenido=evaluaciones, formato="tabla")
+            )
+        else:
+            secciones.append(
+                SeccionRespuesta(
+                    titulo="Evaluación",
+                    contenido=(
+                        "No encontré evidencia suficiente sobre evaluación en los "
+                        "fragmentos consultados."
+                    ),
+                    formato="markdown",
+                )
+            )
+        if bibliografia:
+            secciones.append(
+                SeccionRespuesta(titulo="Bibliografía", contenido=bibliografia, formato="tabla")
+            )
+        else:
+            secciones.append(
+                SeccionRespuesta(
+                    titulo="Bibliografía",
+                    contenido=(
+                        "No encontré evidencia suficiente sobre bibliografía en los "
+                        "fragmentos consultados."
+                    ),
+                    formato="markdown",
+                )
+            )
 
     return RespuestaChatbot(
         tipo=tipo,

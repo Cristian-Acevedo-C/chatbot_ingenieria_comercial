@@ -12,6 +12,7 @@ from chatbot.respuestas.documental import (
     respuesta_documental,
     respuesta_sin_evidencia,
 )
+from chatbot.respuestas.orientacion import responder_orientacion_academica
 from chatbot.respuestas.orquestador import responder
 from chatbot.respuestas.prerrequisitos import (
     respuesta_prerrequisitos_no_cargados,
@@ -44,4 +45,5 @@ __all__ = [
     "respuesta_sin_evidencia",
     "respuesta_todos_prerrequisitos",
     "responder_basica",
+    "responder_orientacion_academica",
 ]

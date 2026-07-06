@@ -5,7 +5,7 @@ Todas las cifras se calculan a partir de los datos ya cargados y filtrados por
 """
 
 from services.cobertura import calcular_cobertura_documental
-from services.datos import obtener_programas_pendientes
+from services.datos import obtener_fecha_metadata, obtener_programas_pendientes
 from utils.texto import normalizar
 
 
@@ -73,3 +73,100 @@ def calcular_semaforo_academico(historial_alumno, prerrequisitos_alumno):
         "riesgo_alto": riesgo_alto,
         "riesgo_medio": riesgo_medio,
     }
+
+
+def calcular_metricas_sistema(
+    carrera,
+    alumnos_carrera,
+    historial_carrera,
+    chunks_carrera,
+    malla_carrera,
+    prerrequisitos_carrera,
+    etiqueta_motor=None,
+):
+    """Métricas reales del sistema para la carrera activa (panel Admin demo).
+
+    Todo se calcula desde los datos ya cargados y filtrados; lo que no puede
+    calcularse (p. ej. no hay manifiesto de metadata para la carrera) se
+    declara explícitamente "No disponible" en vez de omitirse o inventarse.
+    """
+    resumen_documental = calcular_resumen_documental(
+        carrera, chunks_carrera, malla_carrera, prerrequisitos_carrera
+    )
+    fecha_metadata = obtener_fecha_metadata(carrera)
+    return {
+        "carrera": carrera,
+        "documentos_disponibles": resumen_documental["programas_disponibles"],
+        "programas_pendientes": len(resumen_documental["programas_pendientes"]),
+        "ramos_en_malla": resumen_documental["ramos_en_malla"],
+        "prerrequisitos_cargados": resumen_documental["prerrequisitos_extraidos"],
+        "fragmentos_indexados": int(len(chunks_carrera)) if chunks_carrera is not None else 0,
+        "alumnos_demo": int(len(alumnos_carrera)) if alumnos_carrera is not None else 0,
+        "registros_historial": int(len(historial_carrera)) if historial_carrera is not None else 0,
+        "ultima_actualizacion_metadata": fecha_metadata or "No disponible",
+        "motor_busqueda": etiqueta_motor or "No disponible",
+        "estado_general": "Operativo demo",
+    }
+
+
+def construir_guion_demo(carrera, alumno, chunks_carrera, resumen_documental, carreras_disponibles):
+    """Guion de demo guiada: preguntas reales (basadas en datos cargados) y qué
+    demuestra cada una. No hardcodea ningún ramo, alumno ni carrera: usa lo que
+    esté efectivamente disponible en la sesión activa."""
+    guion = [
+        (
+            "hola cómo estás",
+            "Respuesta básica inmediata, sin activar el buscador documental (RAG).",
+        ),
+        (
+            "qué puedes hacer",
+            "Orientación conversacional: qué temas puede responder el asistente.",
+        ),
+    ]
+
+    nombre_alumno = str(alumno["nombre"]) if alumno is not None else None
+    if nombre_alumno:
+        guion.append((
+            "qué avance tengo",
+            f"Usa el historial académico sintético del alumno demo activo ({nombre_alumno}).",
+        ))
+        guion.append((
+            "qué significa el semáforo de este alumno",
+            "Explica el semáforo académico calculado desde historial y prerrequisitos.",
+        ))
+
+    ramo_con_evidencia = None
+    if (
+        chunks_carrera is not None
+        and not chunks_carrera.empty
+        and "codigo_ramo" in chunks_carrera.columns
+    ):
+        codigos = chunks_carrera["codigo_ramo"].dropna().astype(str)
+        if not codigos.empty:
+            ramo_con_evidencia = codigos.iloc[0]
+    if ramo_con_evidencia:
+        guion.append((
+            f"qué contenidos tiene {ramo_con_evidencia}",
+            "Búsqueda documental (RAG) con fuente y evidencia citada del programa real.",
+        ))
+        guion.append((
+            f"qué prerrequisitos tiene {ramo_con_evidencia}",
+            "Consulta de prerrequisitos extraídos del programa de asignatura.",
+        ))
+
+    pendientes = resumen_documental.get("programas_pendientes") or []
+    if pendientes:
+        guion.append((
+            f"qué contenidos tiene {pendientes[0]}",
+            f"{pendientes[0]} está registrado como pendiente (sin PDF cargado): el asistente "
+            "debe decir que no encuentra evidencia, sin inventar contenido.",
+        ))
+
+    otra_carrera = next((c for c in carreras_disponibles if c != carrera), None)
+    if otra_carrera and ramo_con_evidencia:
+        guion.append((
+            f"(cambia a {otra_carrera} y repite) qué contenidos tiene {ramo_con_evidencia}",
+            f"Demuestra el aislamiento multicarrera: {ramo_con_evidencia} es de {carrera} y no "
+            f"debería reconocerse en {otra_carrera}.",
+        ))
+    return guion

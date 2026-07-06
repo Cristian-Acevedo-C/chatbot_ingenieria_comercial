@@ -105,6 +105,7 @@ PREGUNTAS_CIERRE = {
     "prerrequisitos": "¿Quieres que revise si tienes alguno pendiente según tu historial?",
     "puede_cursar": "¿Quieres que revise si tienes algún prerrequisito pendiente según tu historial?",
     "alertas": "¿Quieres que te muestre qué acción podrías tomar primero?",
+    "orientacion_academica": "¿Quieres que revisemos tus alertas académicas o el mapa de prerrequisitos?",
     "ramos_inscritos": "¿Quieres que te recomiende cuál revisar primero?",
     "datos_alumno": "¿Quieres que revisemos tus ramos inscritos o tus alertas académicas?",
     "avance_curricular": "¿Quieres que revisemos tus ramos inscritos o alguna alerta académica?",
@@ -130,7 +131,8 @@ HINTS_ACADEMICOS = (
     "bibliograf", "contenido", "evaluacion", "evalua", "prerrequisit", "prerequisit",
     "estudiar", "estudio", "ramo", "cursar", "alerta", "riesgo", "inscrit", "sede",
     "jornada", "semestre", "malla", "avance", "ponderacion", "porcentaje", "cuanto vale", "examen",
-    "prueba", "control", "catedra",
+    "prueba", "control", "catedra", "alumno", "priorizar", "critico", "criticos",
+    "desbloquea", "atrasar",
 )
 
 PREGUNTAS_RAPIDAS = PREGUNTAS_GENERALES

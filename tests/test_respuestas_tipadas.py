@@ -45,8 +45,9 @@ def test_respuesta_datos_alumno_es_contrato():
     assert "Santiago" in respuesta.resumen
 
 
-def test_respuesta_documental_sin_evidencia_es_contrato():
-    respuesta = respuesta_sin_evidencia("Econometría")
+def test_respuesta_documental_sin_evidencia_sin_contexto_es_compatible():
+    """Sin nombre/código/carrera, se conserva el mensaje genérico original."""
+    respuesta = respuesta_sin_evidencia()
     afirmar_contrato(respuesta, "documental")
     assert not respuesta.evidencias
     assert respuesta.resumen == (
@@ -55,6 +56,16 @@ def test_respuesta_documental_sin_evidencia_es_contrato():
         "académica."
     )
     assert not respuesta.fuentes
+
+
+def test_respuesta_documental_sin_evidencia_es_contrato():
+    respuesta = respuesta_sin_evidencia("Econometría")
+    afirmar_contrato(respuesta, "documental")
+    assert not respuesta.evidencias
+    assert not respuesta.fuentes
+    assert "Econometría" in respuesta.resumen
+    assert "No encontré evidencia suficiente" in respuesta.resumen
+    assert respuesta.recomendacion
 
 
 def test_respuesta_documental_tipifica_evidencia_score_y_pagina():
@@ -242,6 +253,95 @@ def test_respuesta_estudio_arma_secciones_tipadas(programa_academico):
     assert "Qué estudiar" in titulos
     assert respuesta.secciones
     assert all(isinstance(seccion, SeccionRespuesta) for seccion in respuesta.secciones)
+
+
+@pytest.fixture
+def programa_solo_contenidos():
+    """Programa con unidades pero sin secciones de evaluación ni bibliografía."""
+    texto = (
+        "[Página 1] 5. CONTENIDOS N° Unidad Tema "
+        "1 Microeconomía • Oferta y demanda • Elasticidad "
+        "6. ESTRATEGIAS METODOLÓGICAS "
+    )
+    return pd.DataFrame([{
+        "chunk_id": "AEA999_programa_0",
+        "codigo_ramo": "AEA999",
+        "nombre_ramo": "Ramo Sin Evaluación",
+        "ruta_archivo": "documentos/aea999.pdf",
+        "fuente_legible": "Programa de Ramo Sin Evaluación",
+        "pagina_aproximada": 1,
+        "texto": texto,
+    }])
+
+
+def test_contenidos_estructura_profesional_con_evidencia_completa(programa_academico):
+    """Mejora 1: resumen + contenidos + evaluación + bibliografía + fuente, todo presente."""
+    respuesta = construir_respuesta_academica(
+        "contenidos", "AEA100", "Microeconomía I", programa_academico,
+        pd.DataFrame(), pd.DataFrame(), pd.DataFrame(),
+    )
+    titulos = [seccion.titulo for seccion in respuesta.secciones]
+    assert "Unidades y contenidos" in titulos
+    assert "Evaluación" in titulos
+    assert "Bibliografía" in titulos
+    assert respuesta.fuentes
+    # El resumen usa los temas reales detectados, no una frase genérica fija.
+    assert "Microeconomía" in respuesta.resumen
+
+
+def test_contenidos_sin_evaluacion_no_inventa_evaluacion(programa_solo_contenidos):
+    respuesta = construir_respuesta_academica(
+        "contenidos", "AEA999", "Ramo Sin Evaluación", programa_solo_contenidos,
+        pd.DataFrame(), pd.DataFrame(), pd.DataFrame(),
+    )
+    seccion_evaluacion = next(s for s in respuesta.secciones if s.titulo == "Evaluación")
+    assert seccion_evaluacion.formato == "markdown"
+    assert "No encontré evidencia suficiente" in seccion_evaluacion.contenido
+
+
+def test_contenidos_sin_bibliografia_no_inventa_bibliografia(programa_solo_contenidos):
+    respuesta = construir_respuesta_academica(
+        "contenidos", "AEA999", "Ramo Sin Evaluación", programa_solo_contenidos,
+        pd.DataFrame(), pd.DataFrame(), pd.DataFrame(),
+    )
+    seccion_bibliografia = next(s for s in respuesta.secciones if s.titulo == "Bibliografía")
+    assert seccion_bibliografia.formato == "markdown"
+    assert "No encontré evidencia suficiente" in seccion_bibliografia.contenido
+
+
+def test_fis504_end_to_end_no_inventa_contenido():
+    """FIS504 (ICI, pendiente y sin PDF) debe responder sin evidencia, nunca con
+    una tabla de contenidos inventada, usando los datos reales del proyecto."""
+    from services.datos import (
+        cargar_datos,
+        construir_catalogo_documental,
+        filtrar_chunks_por_carrera,
+        filtrar_por_carrera,
+    )
+    from chatbot.intenciones import clasificar_consulta
+    from chatbot.respuestas import responder
+
+    alumnos, malla, inscritos, historial, chunks, prerrequisitos = cargar_datos()
+    carrera = "Ingeniería Civil Industrial"
+    malla_c = filtrar_por_carrera(malla, carrera)
+    chunks_c = filtrar_chunks_por_carrera(chunks, carrera)
+    prer_c = filtrar_por_carrera(prerrequisitos, carrera)
+    historial_c = filtrar_por_carrera(historial, carrera)
+    catalogo = construir_catalogo_documental(malla_c, chunks_c, carrera)
+    alumno = filtrar_por_carrera(alumnos, carrera).iloc[0]
+
+    clasificacion = clasificar_consulta("qué contenidos tiene FIS504", malla=catalogo)
+    respuesta = responder(
+        "qué contenidos tiene FIS504", alumno, pd.DataFrame(), historial_c,
+        prer_c, malla_c, chunks_c, None, None, None, clasificacion, carrera,
+    )
+    assert not respuesta.secciones or all(
+        seccion.titulo != "Unidades y contenidos" for seccion in respuesta.secciones
+    )
+    assert not respuesta.evidencias
+    assert not respuesta.fuentes
+    assert "FIS504" in respuesta.resumen
+    assert "pendiente" in respuesta.resumen.lower()
 
 
 def test_renderer_no_depende_de_metadata_legacy(programa_academico):

@@ -1,5 +1,7 @@
 """Carga y consulta de los CSV locales."""
 
+from datetime import datetime
+
 import pandas as pd
 import streamlit as st
 
@@ -157,6 +159,25 @@ def obtener_programas_pendientes(carrera):
         ]
         pendientes.extend(filas["codigo_asignatura"].astype(str).tolist())
     return pendientes
+
+
+def obtener_fecha_metadata(carrera):
+    """Fecha de modificación del manifiesto de metadata de la carrera, si existe.
+
+    Es la única fuente real disponible para "última actualización"; si la
+    carrera no tiene manifiesto propio (p. ej. Comercial), devuelve ``None`` en
+    vez de inventar una fecha.
+    """
+    for ruta in sorted(CARRERAS_DIR.glob("*/metadata/*programas*.csv")):
+        try:
+            metadata = pd.read_csv(ruta, usecols=lambda columna: columna == "carrera")
+        except Exception:
+            continue
+        if "carrera" not in metadata.columns:
+            continue
+        if metadata["carrera"].fillna("").astype(str).eq(str(carrera)).any():
+            return datetime.fromtimestamp(ruta.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
+    return None
 
 
 def construir_catalogo_documental(malla, chunks, carrera):

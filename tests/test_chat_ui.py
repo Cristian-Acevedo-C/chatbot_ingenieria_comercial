@@ -121,7 +121,9 @@ def test_fis504_no_inventa_informacion():
     assert not ultimo.expander
     contenido = "\n".join(md.value for md in ultimo.markdown)
     assert "udla-source-chip" not in contenido
-    assert "No encontré evidencia suficiente en los documentos cargados" in contenido
+    assert "No encontré evidencia suficiente" in contenido
+    assert "FIS504" in contenido
+    assert "pendiente" in contenido.lower()
 
 
 def test_saludo_responde_de_inmediato_sin_evidencia():
@@ -135,3 +137,59 @@ def test_saludo_responde_de_inmediato_sin_evidencia():
     assert "Todo bien por acá" in contenido
     assert not ultimo.expander
     assert "udla-source-chip" not in contenido
+
+
+def _cambiar_rol(at, rol):
+    for selectbox in at.sidebar.selectbox:
+        if selectbox.label == "Vista (rol simulado)":
+            selectbox.set_value(rol).run()
+            return
+    raise AssertionError("No se encontró el selector de rol en la barra lateral")
+
+
+def test_demo_guiada_renderiza_sin_excepciones_y_tiene_preguntas_accionables():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    demo = next(e for e in at.expander if "Demo guiada" in e.label)
+    assert not at.exception
+    assert len(demo.button) >= 5
+    preguntas = [md.value for md in demo.markdown if md.value.startswith("**")]
+    assert any("hola" in pregunta.lower() for pregunta in preguntas)
+    assert any("FIS504" in pregunta for pregunta in preguntas)
+
+
+def test_demo_guiada_boton_inserta_la_pregunta_en_el_chat():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    demo = next(e for e in at.expander if "Demo guiada" in e.label)
+    demo.button[0].click().run()
+    assert not at.exception
+    # El primer botón corresponde a "hola cómo estás": debe generar un turno de chat.
+    assert len(at.chat_message) >= 2
+
+
+def test_demo_guiada_no_aparece_ni_rompe_vista_coordinacion():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    _cambiar_rol(at, "Coordinación demo")
+    assert not at.exception
+    assert not [e for e in at.expander if "Demo guiada" in e.label]
+
+
+def test_demo_guiada_no_aparece_ni_rompe_vista_admin():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    _cambiar_rol(at, "Admin demo")
+    assert not at.exception
+    assert not [e for e in at.expander if "Demo guiada" in e.label]
+
+
+def test_metricas_sistema_se_muestran_en_admin_demo():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    _cambiar_rol(at, "Admin demo")
+    assert not at.exception
+    assert any(sub.value == "Métricas del sistema" for sub in at.subheader)
+    assert any("Documentos disponibles" in md.value for md in at.markdown)
+    assert any("Ramos en malla" in md.value for md in at.markdown)
+    assert any("51" in md.value for md in at.markdown if "Documentos disponibles" in md.value)

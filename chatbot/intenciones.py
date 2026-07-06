@@ -76,6 +76,31 @@ def es_consulta_avance(texto):
         for clave in ("malla", "avance curricular", "avance")
     )
 
+
+def es_consulta_orientacion_academica(texto):
+    """Preguntas de orientación (priorizar, ramos críticos, qué desbloquea, etc.).
+
+    Distinto de ``es_consulta_avance``/``es_consulta_alertas``: no pide un dato
+    puntual, sino una lectura combinada de malla + prerrequisitos + historial.
+    Usa palabras clave sueltas (no frases rígidas) para tolerar variaciones
+    naturales como "ramos son críticos" en vez de "ramos críticos".
+    """
+    consulta = normalizar_intencion(texto)
+    if any(
+        clave in consulta
+        for clave in (
+            "priorizar", "critico", "desbloquea", "antes de tomar",
+            "repruebo", "atrasar", "significa el semaforo",
+            "es el semaforo", "mi semaforo",
+        )
+    ):
+        return True
+    if "mejorar" in consulta and "avance" in consulta:
+        return True
+    if "importantes" in consulta and "avanzar" in consulta:
+        return True
+    return False
+
 def detectar_ramo(malla, pregunta):
     if malla.empty:
         return None, None
@@ -201,6 +226,8 @@ def clasificar_consulta(pregunta, malla=None, ramo_contexto=None):
         intencion = "prerrequisitos"
     elif es_consulta_alertas(texto):
         intencion = "alertas"
+    elif es_consulta_orientacion_academica(texto):
+        intencion = "orientacion_academica"
     elif es_consulta_avance(texto):
         intencion = "avance_curricular"
     elif any(palabra in texto for palabra in ("sede", "jornada", "carrera", "semestre")):

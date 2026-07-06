@@ -25,17 +25,24 @@ from services.datos import (
     construir_catalogo_documental,
     filtrar_chunks_por_carrera,
     filtrar_por_carrera,
+    listar_carreras_disponibles,
 )
 from services.prerrequisitos import (
     calcular_metricas_prerrequisitos,
     construir_prerrequisitos_alumno,
     preparar_mapa_prerrequisitos,
 )
-from services.resumen import calcular_resumen_documental, calcular_semaforo_academico
+from services.resumen import (
+    calcular_metricas_sistema,
+    calcular_resumen_documental,
+    calcular_semaforo_academico,
+    construir_guion_demo,
+)
 from ui.estilos import aplicar_estilos
 from ui.paneles import (
     render_chat,
     render_datos_expandibles,
+    render_demo_guiada,
     render_encabezado,
     render_ficha_alumno,
     render_mapa_prerrequisitos,
@@ -151,7 +158,16 @@ def main():
         )
         return
     if rol == "Admin demo":
-        render_vista_admin(etiqueta_motor)
+        metricas_sistema = calcular_metricas_sistema(
+            carrera,
+            alumnos_carrera,
+            historial_carrera,
+            chunks_carrera,
+            malla_carrera,
+            prerrequisitos_carrera,
+            etiqueta_motor=etiqueta_motor,
+        )
+        render_vista_admin(etiqueta_motor, metricas_sistema)
         return
 
     # El chat va inmediatamente después de las tarjetas de resumen, como un
@@ -200,6 +216,15 @@ def main():
 
     st.divider()
     st.caption("Paneles complementarios (no forman parte de la conversación)")
+    with st.expander("🎬 Demo guiada (modo presentación)", expanded=False):
+        guion_demo = construir_guion_demo(
+            carrera,
+            alumno,
+            chunks_carrera,
+            resumen_documental,
+            listar_carreras_disponibles(chunks),
+        )
+        render_demo_guiada(carrera, alumno, semaforo, guion_demo)
     render_ficha_alumno(alumno, ramos_alumno)
     render_prerrequisitos_alumno(prerrequisitos_carrera, prerrequisitos_alumno)
     render_mapa_prerrequisitos(

@@ -7,6 +7,7 @@ from chatbot.respuestas.academicas import construir_respuesta_academica
 from chatbot.respuestas.alertas import respuesta_alertas
 from chatbot.respuestas.alumno import respuesta_avance_curricular, respuesta_datos_alumno, respuesta_ramos
 from chatbot.respuestas.documental import respuesta_documental, respuesta_sin_evidencia
+from chatbot.respuestas.orientacion import responder_orientacion_academica
 from chatbot.respuestas.prerrequisitos import (
     respuesta_prerrequisitos_pendientes,
     respuesta_prerrequisitos_ramo,
@@ -82,6 +83,16 @@ def _responder_sin_normalizar(
         return respuesta_alertas(
             historial, prerrequisitos_alumno, prerrequisitos
         )
+    if intencion == "orientacion_academica":
+        return responder_orientacion_academica(
+            pregunta_normalizada,
+            alumno,
+            historial,
+            prerrequisitos,
+            prerrequisitos_alumno,
+            codigo_ramo=codigo,
+            nombre_ramo=nombre,
+        )
     if intencion == "avance_curricular":
         return respuesta_avance_curricular(alumno, historial, malla)
     if intencion == "datos_alumno":
@@ -114,7 +125,9 @@ def _responder_sin_normalizar(
             chunks["codigo_ramo"].astype(str).eq(str(codigo))
         ]
         if filas_ramo.empty:
-            return respuesta_sin_evidencia(nombre)
+            return respuesta_sin_evidencia(
+                nombre, codigo_ramo=codigo, carrera=carrera_seleccionada or None
+            )
         return construir_respuesta_academica(
             tipo_pregunta,
             codigo,
@@ -124,7 +137,9 @@ def _responder_sin_normalizar(
             prerrequisitos,
             historial,
         )
-    return respuesta_documental(resultados, nombre_ramo=nombre)
+    return respuesta_documental(
+        resultados, nombre_ramo=nombre, codigo_ramo=codigo, carrera=carrera_seleccionada or None
+    )
 
 
 def responder(

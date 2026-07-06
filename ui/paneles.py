@@ -277,11 +277,49 @@ def render_vista_coordinacion(alumnos, malla, inscritos, historial, chunks,
             )
 
 
-def render_vista_admin(etiqueta_motor=None):
+def render_metricas_sistema(metricas):
+    """Tarjetas con métricas reales del sistema para la carrera activa.
+
+    Todas las cifras vienen ya calculadas por ``services.resumen``; esta
+    función solo las presenta (nada se calcula ni se inventa aquí).
+    """
+    st.subheader("Métricas del sistema")
+    tarjetas = [
+        ("🏫", "Carrera", metricas["carrera"]),
+        ("📄", "Documentos disponibles", metricas["documentos_disponibles"]),
+        ("⏳", "Programas pendientes", metricas["programas_pendientes"]),
+        ("📘", "Ramos en malla", metricas["ramos_en_malla"]),
+        ("🔗", "Prerrequisitos cargados", metricas["prerrequisitos_cargados"]),
+        ("🧩", "Fragmentos indexados", metricas["fragmentos_indexados"]),
+        ("🧑‍🎓", "Alumnos demo", metricas["alumnos_demo"]),
+        ("🗂️", "Registros de historial", metricas["registros_historial"]),
+    ]
+    columnas = st.columns(4)
+    for indice, (icono, titulo, valor) in enumerate(tarjetas):
+        with columnas[indice % 4]:
+            st.markdown(
+                f"""
+                <div class="udla-card">
+                    <div class="udla-card__icon">{icono}</div>
+                    <div class="udla-card__titulo">{html.escape(titulo)}</div>
+                    <div class="udla-card__valor">{html.escape(str(valor))}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+    st.caption(
+        f"Última actualización de metadata: {metricas['ultima_actualizacion_metadata']} · "
+        f"Motor de búsqueda: {metricas['motor_busqueda']} · Estado: {metricas['estado_general']}"
+    )
+
+
+def render_vista_admin(etiqueta_motor=None, metricas_sistema=None):
     st.info(
         "Vista **Admin demo** · rol simulado, solo diagnóstico. La edición y la "
         "carga de archivos no están habilitadas en la demostración."
     )
+    if metricas_sistema is not None:
+        render_metricas_sistema(metricas_sistema)
     st.subheader("Diagnóstico de archivos de datos")
     diagnostico = diagnosticar_datos()
     tabla = pd.DataFrame(
@@ -399,6 +437,31 @@ def render_chat(preguntas_rapidas, carrera=None):
             entrada = st.chat_input("Escribe tu consulta académica...")
 
     return entrada or st.session_state.pop("pregunta_pendiente", None)
+
+
+def render_demo_guiada(carrera, alumno, semaforo, guion):
+    """Guion de preguntas listas para mostrar el asistente a un evaluador,
+    sin improvisar. Cada pregunta explica qué capacidad demuestra; el botón
+    "Probar" la inserta directamente en el chat (mismo mecanismo que las
+    preguntas rápidas)."""
+    st.caption(
+        f"Carrera activa: **{carrera}** · Alumno demo: **{alumno['nombre']}** · "
+        f"Estado académico: **{semaforo['etiqueta']}**."
+    )
+    st.write(
+        "Usa estas preguntas para presentar el asistente a un profesor o coordinación. "
+        "Cada una explica qué capacidad demuestra."
+    )
+    for indice, (pregunta, explicacion) in enumerate(guion):
+        accionable = not pregunta.startswith("(")
+        col_pregunta, col_boton = st.columns([3, 1])
+        with col_pregunta:
+            st.markdown(f"**{pregunta}**")
+            st.caption(explicacion)
+        with col_boton:
+            if accionable and st.button("Probar", key=f"demo_{indice}", width="stretch"):
+                st.session_state["pregunta_pendiente"] = pregunta
+                st.rerun()
 
 
 def render_mapa_prerrequisitos(mapa, prerrequisitos, metricas):
