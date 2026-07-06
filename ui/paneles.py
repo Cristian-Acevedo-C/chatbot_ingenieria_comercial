@@ -6,19 +6,11 @@ import pandas as pd
 import streamlit as st
 
 from chatbot.conversacion import limpiar_estado_conversacional
-from config.settings import LOGO_UDLA, LOGO_UDLA_FINE, MENSAJES_SOCIALES
+from config.settings import LOGO_UDLA, LOGO_UDLA_FINE, MENSAJES_SOCIALES, ROLES_DEMO
 from services.cobertura import calcular_cobertura_documental
-from services.datos import buscar_alumno, filtrar_por_alumno
+from services.datos import buscar_alumno, filtrar_por_alumno, listar_carreras_disponibles
 from services.diagnostico import diagnosticar_assets, diagnosticar_datos
 from ui.componentes import render_mensaje
-
-ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]
-CARRERA_COMERCIAL = "Ingeniería Comercial"
-ICONOS_ROL = {
-    "Estudiante": "🧑‍🎓",
-    "Coordinación demo": "🗂️",
-    "Admin demo": "🛠️",
-}
 
 
 def render_encabezado():
@@ -52,16 +44,7 @@ def render_encabezado():
 
 def seleccionar_carrera_documental(chunks):
     """Mantiene la carrera documental activa en la clave exigida de sesión."""
-    carreras = (
-        sorted(chunks["carrera"].dropna().astype(str).unique())
-        if "carrera" in chunks.columns
-        else [CARRERA_COMERCIAL]
-    )
-    if CARRERA_COMERCIAL in carreras:
-        carreras.remove(CARRERA_COMERCIAL)
-        carreras.insert(0, CARRERA_COMERCIAL)
-    if not carreras:
-        carreras = [CARRERA_COMERCIAL]
+    carreras = listar_carreras_disponibles(chunks)
 
     if st.session_state.get("carrera") not in carreras:
         st.session_state["carrera"] = carreras[0]
@@ -367,8 +350,13 @@ def render_prerrequisitos_alumno(prerrequisitos, vista):
 
 
 def render_chat(preguntas_rapidas, carrera=None):
-    st.divider()
-    st.subheader("Conversa con tu asistente académico")
+    """Chat unificado: historial, sugerencias e input en un solo contenedor.
+
+    Todo vive dentro de ``st.container(key="udla_chat_shell")`` para que se
+    vea y se sienta como un único bloque continuo (una "carcasa" de chat),
+    sin líneas divisorias ni paneles intermedios entre la respuesta, las
+    fuentes, las sugerencias y la caja de texto.
+    """
     for clave, valor in (
         ("historial_conversacion", []), ("ultimo_ramo_codigo", None),
         ("ultimo_ramo_nombre", None), ("ultima_intencion", None),
@@ -376,23 +364,40 @@ def render_chat(preguntas_rapidas, carrera=None):
     ):
         st.session_state.setdefault(clave, valor)
 
-    etiqueta_sugerencias = (
-        f"Sugerencias para empezar en {carrera}:" if carrera else "Sugerencias para empezar:"
-    )
-    st.caption(etiqueta_sugerencias)
-    columnas = st.columns(3)
-    for indice, pregunta in enumerate(preguntas_rapidas):
-        if columnas[indice % 3].button(pregunta, key=f"rapida_{indice}", width="stretch"):
-            st.session_state["pregunta_pendiente"] = pregunta
-    if not st.session_state["historial_conversacion"]:
-        with st.chat_message("assistant", avatar="🎓"):
-            st.markdown(
-                f'<div class="udla-apertura">{MENSAJES_SOCIALES["saludo"]}</div>',
-                unsafe_allow_html=True,
-            )
-    for mensaje in st.session_state["historial_conversacion"]:
-        render_mensaje(mensaje)
-    entrada = st.chat_input("Escribe tu consulta académica...")
+    historial = st.session_state["historial_conversacion"]
+    ultimo_indice = len(historial) - 1
+
+    with st.container(key="udla_chat_shell"):
+        st.markdown(
+            '<div class="udla-chat-heading">💬 Conversa con tu asistente académico</div>',
+            unsafe_allow_html=True,
+        )
+
+        with st.container(key="udla_chat_history"):
+            if not historial:
+                with st.chat_message("assistant", avatar="🎓"):
+                    st.markdown(
+                        f'<div class="udla-assistant-message udla-apertura">{MENSAJES_SOCIALES["saludo"]}</div>',
+                        unsafe_allow_html=True,
+                    )
+            for indice, mensaje in enumerate(historial):
+                render_mensaje(mensaje, indice=indice, interactivo=(indice == ultimo_indice))
+
+        etiqueta_sugerencias = (
+            f"Sugerencias para empezar en {carrera}:" if carrera else "Sugerencias para empezar:"
+        )
+        st.markdown(
+            f'<div class="udla-suggestions-label">{etiqueta_sugerencias}</div>',
+            unsafe_allow_html=True,
+        )
+        columnas = st.columns(3)
+        for indice, pregunta in enumerate(preguntas_rapidas):
+            if columnas[indice % 3].button(pregunta, key=f"rapida_{indice}", width="stretch"):
+                st.session_state["pregunta_pendiente"] = pregunta
+
+        with st.container(key="udla_chat_input_zone"):
+            entrada = st.chat_input("Escribe tu consulta académica...")
+
     return entrada or st.session_state.pop("pregunta_pendiente", None)
 
 

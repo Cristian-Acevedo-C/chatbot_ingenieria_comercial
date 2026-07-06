@@ -7,14 +7,21 @@ import streamlit as st
 from chatbot.contratos import adaptar_contrato_respuesta
 from chatbot.intenciones import clasificar_consulta
 from utils.texto import normalizar
-from chatbot.respuestas import responder, respuesta_pedir_ramo, respuesta_recomendacion
+from chatbot.respuestas import (
+    responder,
+    responder_basica,
+    respuesta_pedir_ramo,
+    respuesta_recomendacion,
+)
 from config.settings import (
     APERTURAS,
     CLAVES_ESTADO_CONVERSACIONAL,
     MENSAJES_SOCIALES,
     PREGUNTAS_CIERRE,
     PREGUNTAS_GENERALES,
+    ROLES_DEMO,
 )
+from services.datos import listar_carreras_disponibles
 
 
 def limpiar_estado_conversacional():
@@ -70,6 +77,22 @@ def responder_conversacional(
     carrera=None,
     malla_consulta=None,
 ):
+    respuesta_basica = responder_basica(
+        pregunta,
+        contexto={
+            "carrera": carrera,
+            "carreras_disponibles": listar_carreras_disponibles(chunks),
+            "perfiles_disponibles": ROLES_DEMO,
+        },
+    )
+    if respuesta_basica is not None:
+        st.session_state["ultima_intencion"] = respuesta_basica.tipo
+        return {
+            "apertura": None,
+            "cuerpo": respuesta_basica,
+            "cierre": None,
+        }
+
     contexto_previo = None
     if st.session_state.get("ultimo_ramo_codigo"):
         contexto_previo = {

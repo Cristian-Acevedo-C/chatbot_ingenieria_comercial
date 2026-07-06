@@ -117,6 +117,24 @@ def filtrar_por_carrera(df, carrera):
     )
 
 
+def listar_carreras_disponibles(chunks):
+    """Carreras con base documental cargada, Comercial primero.
+
+    Única fuente de verdad para la lista de carreras: la usan tanto el
+    selector de la barra lateral como la capa conversacional básica, para no
+    duplicar (ni desalinear) la lista en dos lugares distintos.
+    """
+    carreras = (
+        sorted(chunks["carrera"].dropna().astype(str).unique())
+        if chunks is not None and not chunks.empty and "carrera" in chunks.columns
+        else [CARRERA_COMERCIAL]
+    )
+    if CARRERA_COMERCIAL in carreras:
+        carreras.remove(CARRERA_COMERCIAL)
+        carreras.insert(0, CARRERA_COMERCIAL)
+    return carreras or [CARRERA_COMERCIAL]
+
+
 def obtener_programas_pendientes(carrera):
     """Códigos con metadata registrada pero sin PDF/chunks indexados.
 

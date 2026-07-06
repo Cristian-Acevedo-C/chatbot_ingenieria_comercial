@@ -1,0 +1,137 @@
+"""Pruebas de UI del chat unificado usando streamlit.testing.v1.AppTest.
+
+No hay navegador disponible en este entorno de CI, así que estas pruebas
+ejercitan el motor real de Streamlit (sin renderizar píxeles) para verificar
+que el chat se arma como un único flujo: historial, fuentes y evidencia
+quedan dentro del mismo mensaje del asistente, y el input no se separa de la
+conversación por paneles intermedios.
+"""
+
+from pathlib import Path
+
+import pytest
+from streamlit.testing.v1 import AppTest
+
+APP = str(Path(__file__).resolve().parents[1] / "app.py")
+
+
+def _iniciar():
+    at = AppTest.from_file(APP, default_timeout=60)
+    at.run()
+    assert not at.exception
+    return at
+
+
+def _seleccionar_carrera(at, carrera):
+    at.sidebar.selectbox(key="carrera").set_value(carrera).run()
+    assert not at.exception
+    return at
+
+
+def test_chat_renderiza_sin_excepciones():
+    at = _iniciar()
+    assert not at.exception
+    assert len(at.chat_input) == 1
+    assert len(at.chat_message) == 1  # saludo inicial
+
+
+def test_chat_renderiza_sin_excepciones_para_ambas_carreras():
+    for carrera in ("Ingeniería Comercial", "Ingeniería Civil Industrial"):
+        at = _iniciar()
+        _seleccionar_carrera(at, carrera)
+        assert not at.exception
+
+
+def test_input_no_queda_separado_por_paneles_intermedios():
+    """El chat_input debe ir antes de cualquier panel complementario (tablas/expanders)."""
+    at = _iniciar()
+    nodos = list(at.main)
+    indice_input = next(i for i, n in enumerate(nodos) if n.type == "chat_input")
+    indices_paneles = [
+        i for i, n in enumerate(nodos) if n.type in ("dataframe", "expander")
+    ]
+    assert indices_paneles, "se esperaban paneles complementarios (ficha, mapa, datos)"
+    assert indice_input < min(indices_paneles), (
+        "el chat_input debe renderizarse antes que los paneles complementarios, "
+        "no intercalado entre ellos"
+    )
+    indice_ultimo_chat_message = max(
+        i for i, n in enumerate(nodos) if n.type == "chat_message"
+    )
+    assert not any(
+        indice_ultimo_chat_message < i < indice_input for i in indices_paneles
+    ), "no debe haber tablas/expanders entre el último mensaje y el input"
+
+
+def test_fuentes_se_renderizan_dentro_del_mensaje_del_chat():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    at.chat_input[0].set_value("qué contenidos tiene EIN908").run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    contenido = "\n".join(md.value for md in ultimo.markdown)
+    assert "udla-source-chip" in contenido
+    assert "udla-sources-row" in contenido
+
+
+def test_evidencias_se_renderizan_como_expander_de_la_respuesta():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    at.chat_input[0].set_value("qué contenidos tiene EIN908").run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    etiquetas = [expander.label for expander in ultimo.expander]
+    assert any("Ver evidencia documental" in etiqueta for etiqueta in etiquetas)
+
+
+def test_carrera_en_session_state_filtra_la_busqueda_documental():
+    at = _iniciar()
+    assert at.session_state["carrera"] == "Ingeniería Comercial"
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    assert at.session_state["carrera"] == "Ingeniería Civil Industrial"
+
+
+def test_comercial_no_ve_documentos_de_ici():
+    """EIN908 es exclusivo de ICI: en Comercial no debe reconocerse ni citarse."""
+    at = _iniciar()
+    assert at.session_state["carrera"] == "Ingeniería Comercial"
+    at.chat_input[0].set_value("qué contenidos tiene EIN908").run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    assert not ultimo.expander
+    contenido = "\n".join(md.value for md in ultimo.markdown)
+    # Sin malla ni chunks para EIN908 en Comercial, el clasificador no detecta
+    # el ramo y pide precisarlo; no debe citarse ningún PDF de programa.
+    assert "EIN908" not in contenido.upper()
+    assert ".pdf" not in contenido.lower()
+    assert "¿Sobre qué ramo quieres que revise esa información?" in contenido
+
+
+def test_fis504_no_inventa_informacion():
+    """FIS504 (ICI) está pendiente: nunca debe fabricarse evidencia para él."""
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    at.chat_input[0].set_value("qué contenidos tiene FIS504").run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    assert not ultimo.expander
+    contenido = "\n".join(md.value for md in ultimo.markdown)
+    assert "udla-source-chip" not in contenido
+    assert "No encontré evidencia suficiente en los documentos cargados" in contenido
+
+
+def test_saludo_responde_de_inmediato_sin_evidencia():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    at.chat_input[0].set_value("hola como estas").run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    contenido = "\n".join(md.value for md in ultimo.markdown)
+    assert "Todo bien por acá" in contenido
+    assert not ultimo.expander
+    assert "udla-source-chip" not in contenido

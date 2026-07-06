@@ -7,6 +7,7 @@ from chatbot.respuestas.alumno import (
     respuesta_datos_alumno,
     respuesta_ramos,
 )
+from chatbot.respuestas.basicas import responder_basica
 from chatbot.respuestas.documental import (
     respuesta_documental,
     respuesta_sin_evidencia,
@@ -42,4 +43,5 @@ __all__ = [
     "respuesta_recomendacion",
     "respuesta_sin_evidencia",
     "respuesta_todos_prerrequisitos",
+    "responder_basica",
 ]

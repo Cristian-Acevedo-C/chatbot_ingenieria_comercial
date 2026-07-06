@@ -1,4 +1,4 @@
-"""Renderizadores reutilizables de respuestas y mensajes."""
+"""Renderizadores reutilizables de respuestas y mensajes del chat."""
 
 import html
 
@@ -9,6 +9,68 @@ from chatbot.contratos import normalizar_respuesta
 from chatbot.respuestas.render_contract import construir_bloques_render
 
 
+def render_fuentes_inline(fuentes):
+    """Fuentes documentales como chips compactos, dentro del mismo mensaje."""
+    if not fuentes:
+        return
+    chips = "".join(
+        f'<span class="udla-source-chip">📄 {html.escape(str(fuente))}</span>'
+        for fuente in fuentes
+    )
+    st.markdown(
+        '<div class="udla-sources-label">Fuentes consultadas</div>'
+        f'<div class="udla-sources-row">{chips}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def render_evidencias_inline(evidencias):
+    """Evidencia documental colapsable, asociada a la respuesta correspondiente."""
+    if not evidencias:
+        return
+    with st.expander(f"🔎 Ver evidencia documental ({len(evidencias)})"):
+        for indice, evidencia in enumerate(evidencias, start=1):
+            insignias = []
+            if evidencia.pagina:
+                insignias.append(
+                    f'<span class="udla-badge">Página {html.escape(str(evidencia.pagina))}</span>'
+                )
+            if evidencia.score is not None:
+                insignias.append(
+                    f'<span class="udla-badge">Similitud {evidencia.score:.2f}</span>'
+                )
+            st.markdown(
+                '<div class="udla-evidencia-card udla-evidence-card">'
+                '<div class="udla-evidencia-card__encabezado">'
+                f'<span class="udla-evidencia-card__titulo">Evidencia {indice}</span>'
+                f'<span>{" ".join(insignias)}</span>'
+                "</div></div>",
+                unsafe_allow_html=True,
+            )
+            st.write(evidencia.texto[:500])
+            if evidencia.fuente:
+                st.caption(f"📄 {evidencia.fuente}")
+
+
+def render_acciones_sugeridas(cierre, key, interactivo=False):
+    """Pregunta de seguimiento como acción de continuación del mismo mensaje.
+
+    Solo el turno más reciente del historial es interactivo (botón real que
+    reenvía la pregunta al chat); los turnos anteriores muestran el mismo
+    texto sin botón, para no acumular acciones obsoletas en pantalla.
+    """
+    if not cierre:
+        return
+    if interactivo:
+        if st.button(cierre, key=key, width="stretch"):
+            st.session_state["pregunta_pendiente"] = cierre
+    else:
+        st.markdown(
+            f'<div class="udla-followup-card udla-followup">{html.escape(cierre)}</div>',
+            unsafe_allow_html=True,
+        )
+
+
 def render_respuesta_academica(respuesta):
     """Renderiza cualquier respuesta compatible desde el contrato tipado.
 
@@ -17,8 +79,17 @@ def render_respuesta_academica(respuesta):
     ``metadata['payload_original']``.
     """
     contrato = normalizar_respuesta(respuesta)
+    bloques = construir_bloques_render(contrato)
 
-    for bloque in construir_bloques_render(contrato):
+    # Una respuesta conversacional simple (capa básica: saludo, agradecimiento,
+    # ayuda, etc.) solo trae un bloque de resumen. Se muestra como texto de
+    # chat liso, sin el encabezado "Respuesta breve" propio de las respuestas
+    # académicas/documentales estructuradas.
+    if len(bloques) == 1 and bloques[0]["tipo"] == "resumen":
+        st.markdown(bloques[0]["contenido"])
+        return
+
+    for bloque in bloques:
         tipo = bloque["tipo"]
         titulo = bloque["titulo"]
         contenido = bloque["contenido"]
@@ -58,55 +129,31 @@ def render_respuesta_academica(respuesta):
             st.markdown(f"### {titulo_recomendacion}")
             st.markdown(contenido)
         elif tipo == "fuentes":
-            st.markdown("### 📚 Fuentes consultadas")
-            for fuente in contenido or []:
-                st.markdown(
-                    '<div class="udla-fuente-card">'
-                    f'<span class="udla-fuente-card__nombre">📄 {html.escape(str(fuente))}</span>'
-                    "</div>",
-                    unsafe_allow_html=True,
-                )
+            render_fuentes_inline(contenido)
         elif tipo == "evidencias":
-            with st.expander(f"🔎 Ver evidencia documental ({len(contenido or [])})"):
-                for indice, evidencia in enumerate(contenido or [], start=1):
-                    insignias = []
-                    if evidencia.pagina:
-                        insignias.append(
-                            f'<span class="udla-badge">Página {html.escape(str(evidencia.pagina))}</span>'
-                        )
-                    if evidencia.score is not None:
-                        insignias.append(
-                            f'<span class="udla-badge">Similitud {evidencia.score:.2f}</span>'
-                        )
-                    st.markdown(
-                        '<div class="udla-evidencia-card">'
-                        '<div class="udla-evidencia-card__encabezado">'
-                        f'<span class="udla-evidencia-card__titulo">Evidencia {indice}</span>'
-                        f'<span>{" ".join(insignias)}</span>'
-                        "</div></div>",
-                        unsafe_allow_html=True,
-                    )
-                    st.write(evidencia.texto[:500])
-                    if evidencia.fuente:
-                        st.caption(f"📄 {evidencia.fuente}")
+            render_evidencias_inline(contenido)
 
 
-def render_mensaje(mensaje):
+def render_mensaje(mensaje, indice=0, interactivo=False):
+    """Renderiza un turno del historial dentro de ``st.chat_message``.
+
+    ``interactivo`` habilita la acción de continuación (botón) del turno más
+    reciente; el resto del historial se muestra en modo lectura.
+    """
     rol = mensaje["rol"]
     avatar = "🎓" if rol == "assistant" else None
     with st.chat_message(rol, avatar=avatar):
         if rol == "user":
-            st.markdown(mensaje["texto"])
+            st.markdown(f'<div class="udla-user-message">{html.escape(mensaje["texto"])}</div>', unsafe_allow_html=True)
             return
         if mensaje.get("apertura"):
             st.markdown(
-                f'<div class="udla-apertura">{mensaje["apertura"]}</div>',
+                f'<div class="udla-assistant-message udla-apertura">{mensaje["apertura"]}</div>',
                 unsafe_allow_html=True,
             )
         if mensaje.get("cuerpo") is not None:
             render_respuesta_academica(mensaje["cuerpo"])
         if mensaje.get("cierre"):
-            st.markdown(
-                f'<div class="udla-followup">{mensaje["cierre"]}</div>',
-                unsafe_allow_html=True,
+            render_acciones_sugeridas(
+                mensaje["cierre"], key=f"cierre_{indice}", interactivo=interactivo
             )

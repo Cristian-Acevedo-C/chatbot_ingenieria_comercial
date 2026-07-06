@@ -34,6 +34,8 @@ PREGUNTAS_GENERALES = [
     "¿Tengo prerrequisitos pendientes?",
 ]
 
+ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]
+
 CLAVES_ESTADO_CONVERSACIONAL = (
     "historial_conversacion",
     "ultimo_ramo_codigo",

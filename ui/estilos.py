@@ -335,6 +335,135 @@ def aplicar_estilos():
             white-space: nowrap;
         }
 
+        /* ---- Chat unificado ------------------------------------------------
+           .udla-chat-shell / .udla-chat-history / .udla-chat-input-zone se
+           implementan con st.container(key=...), que genera las clases reales
+           .st-key-udla_chat_shell / .st-key-udla_chat_history /
+           .st-key-udla_chat_input_zone. Se documentan ambos nombres para que
+           el mapeo conceptual quede explícito. */
+        .st-key-udla_chat_shell {
+            background: var(--udla-white);
+            border: 1px solid var(--udla-border);
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(31, 41, 51, 0.06);
+            margin-top: 0.6rem;
+            padding: 1rem 1.1rem 0.75rem;
+        }
+
+        .udla-chat-heading {
+            color: var(--udla-blue);
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
+        }
+
+        .st-key-udla_chat_history {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-bottom: 0.5rem;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 0.15rem;
+        }
+
+        .st-key-udla_chat_history [data-testid="stChatMessage"] {
+            margin-bottom: 0;
+        }
+
+        .udla-suggestions-label {
+            color: #5B6B7C;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin: 0.35rem 0 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .st-key-udla_chat_input_zone {
+            border-top: 1px solid var(--udla-border);
+            margin-top: 0.65rem;
+            padding-top: 0.65rem;
+        }
+
+        [data-testid="stChatMessage"] {
+            background: var(--udla-white);
+            border: 1px solid var(--udla-border);
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(31, 41, 51, 0.05);
+            padding: 0.7rem 0.95rem;
+        }
+
+        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
+            background: #EAF3FB;
+            border-color: #CFE3F5;
+        }
+
+        [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {
+            border-left: 4px solid var(--udla-orange);
+        }
+
+        .udla-user-message {
+            color: var(--udla-blue);
+            font-weight: 600;
+        }
+
+        .udla-assistant-message {
+            color: var(--udla-text);
+        }
+
+        .udla-sources-label {
+            color: #5B6B7C;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin: 0.6rem 0 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .udla-sources-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .udla-source-chip {
+            background: #EAF3FB;
+            border: 1px solid #CFE3F5;
+            border-radius: 999px;
+            color: var(--udla-blue);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            white-space: nowrap;
+        }
+
+        .udla-followup-card {
+            margin-top: 0.35rem;
+        }
+
+        .udla-evidence-card {
+            margin-bottom: 0.7rem;
+        }
+
+        [data-testid="stChatMessageContent"] [data-testid="stButton"] button {
+            background: #EAF3FB;
+            border: 1px solid #CFE3F5;
+            border-radius: 999px;
+            color: var(--udla-blue);
+            font-size: 0.83rem;
+            font-weight: 650;
+            min-height: auto;
+            padding: 0.35rem 0.9rem;
+        }
+
+        [data-testid="stChatMessageContent"] [data-testid="stButton"] button:hover {
+            background: var(--udla-orange);
+            border-color: var(--udla-orange);
+            color: var(--udla-white);
+        }
+
         @media (max-width: 700px) {
             .udla-hero {
                 min-height: auto;
@@ -342,6 +471,12 @@ def aplicar_estilos():
             }
             .block-container {
                 padding-top: 0.8rem;
+            }
+            .st-key-udla_chat_shell {
+                padding: 0.75rem 0.75rem 0.5rem;
+            }
+            .st-key-udla_chat_history {
+                max-height: 50vh;
             }
         }
         </style>

@@ -154,8 +154,10 @@ def main():
         render_vista_admin(etiqueta_motor)
         return
 
-    render_ficha_alumno(alumno, ramos_alumno)
-    render_prerrequisitos_alumno(prerrequisitos_carrera, prerrequisitos_alumno)
+    # El chat va inmediatamente después de las tarjetas de resumen, como un
+    # bloque único y continuo. Los paneles complementarios (ficha del alumno,
+    # prerrequisitos, mapa curricular, datos crudos) se muestran después, para
+    # no cortar el flujo de la conversación.
     consulta_usuario = render_chat(contexto["preguntas_rapidas"], carrera=carrera)
 
     if consulta_usuario and consulta_usuario.strip():
@@ -196,6 +198,10 @@ def main():
             )
         st.rerun()
 
+    st.divider()
+    st.caption("Paneles complementarios (no forman parte de la conversación)")
+    render_ficha_alumno(alumno, ramos_alumno)
+    render_prerrequisitos_alumno(prerrequisitos_carrera, prerrequisitos_alumno)
     render_mapa_prerrequisitos(
         mapa_prerrequisitos, prerrequisitos_carrera, metricas_prerrequisitos
     )
