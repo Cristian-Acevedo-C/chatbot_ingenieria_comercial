@@ -31,6 +31,7 @@ from services.prerrequisitos import (
     construir_prerrequisitos_alumno,
     preparar_mapa_prerrequisitos,
 )
+from services.resumen import calcular_resumen_documental, calcular_semaforo_academico
 from ui.estilos import aplicar_estilos
 from ui.paneles import (
     render_chat,
@@ -38,6 +39,7 @@ from ui.paneles import (
     render_encabezado,
     render_ficha_alumno,
     render_mapa_prerrequisitos,
+    render_panel_resumen,
     render_prerrequisitos_alumno,
     render_sidebar,
     seleccionar_carrera_documental,
@@ -124,9 +126,23 @@ def main():
         metricas_prerrequisitos,
         construir_preguntas_rapidas,
         etiqueta_motor=etiqueta_motor,
+        carrera=carrera,
     )
 
     rol = contexto.get("rol", "Estudiante")
+    alumno = contexto["alumno"]
+    ramos_alumno = contexto["ramos"]
+    historial_alumno = contexto["historial"]
+    prerrequisitos_alumno = construir_prerrequisitos_alumno(
+        ramos_alumno, historial_alumno, prerrequisitos_carrera
+    )
+
+    resumen_documental = calcular_resumen_documental(
+        carrera, chunks_carrera, malla_carrera, prerrequisitos_carrera
+    )
+    semaforo = calcular_semaforo_academico(historial_alumno, prerrequisitos_alumno)
+    render_panel_resumen(carrera, rol, alumno, resumen_documental, semaforo)
+
     if rol == "Coordinación demo":
         render_vista_coordinacion(
             alumnos_carrera, malla_carrera, inscritos_carrera,
@@ -138,16 +154,9 @@ def main():
         render_vista_admin(etiqueta_motor)
         return
 
-    alumno = contexto["alumno"]
-    ramos_alumno = contexto["ramos"]
-    historial_alumno = contexto["historial"]
-    prerrequisitos_alumno = construir_prerrequisitos_alumno(
-        ramos_alumno, historial_alumno, prerrequisitos_carrera
-    )
-
     render_ficha_alumno(alumno, ramos_alumno)
     render_prerrequisitos_alumno(prerrequisitos_carrera, prerrequisitos_alumno)
-    consulta_usuario = render_chat(contexto["preguntas_rapidas"])
+    consulta_usuario = render_chat(contexto["preguntas_rapidas"], carrera=carrera)
 
     if consulta_usuario and consulta_usuario.strip():
         st.session_state["historial_conversacion"].append(

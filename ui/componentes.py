@@ -1,5 +1,7 @@
 """Renderizadores reutilizables de respuestas y mensajes."""
 
+import html
+
 import pandas as pd
 import streamlit as st
 
@@ -56,15 +58,37 @@ def render_respuesta_academica(respuesta):
             st.markdown(f"### {titulo_recomendacion}")
             st.markdown(contenido)
         elif tipo == "fuentes":
-            st.markdown("### Fuente consultada")
-            st.markdown("\n\n".join(contenido))
+            st.markdown("### 📚 Fuentes consultadas")
+            for fuente in contenido or []:
+                st.markdown(
+                    '<div class="udla-fuente-card">'
+                    f'<span class="udla-fuente-card__nombre">📄 {html.escape(str(fuente))}</span>'
+                    "</div>",
+                    unsafe_allow_html=True,
+                )
         elif tipo == "evidencias":
-            with st.expander("Ver evidencia del PDF"):
-                for indice, evidencia in enumerate(contenido, start=1):
-                    st.markdown(f"**Evidencia {indice}**")
+            with st.expander(f"🔎 Ver evidencia documental ({len(contenido or [])})"):
+                for indice, evidencia in enumerate(contenido or [], start=1):
+                    insignias = []
+                    if evidencia.pagina:
+                        insignias.append(
+                            f'<span class="udla-badge">Página {html.escape(str(evidencia.pagina))}</span>'
+                        )
+                    if evidencia.score is not None:
+                        insignias.append(
+                            f'<span class="udla-badge">Similitud {evidencia.score:.2f}</span>'
+                        )
+                    st.markdown(
+                        '<div class="udla-evidencia-card">'
+                        '<div class="udla-evidencia-card__encabezado">'
+                        f'<span class="udla-evidencia-card__titulo">Evidencia {indice}</span>'
+                        f'<span>{" ".join(insignias)}</span>'
+                        "</div></div>",
+                        unsafe_allow_html=True,
+                    )
                     st.write(evidencia.texto[:500])
                     if evidencia.fuente:
-                        st.caption(evidencia.fuente)
+                        st.caption(f"📄 {evidencia.fuente}")
 
 
 def render_mensaje(mensaje):

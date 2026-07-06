@@ -117,6 +117,30 @@ def filtrar_por_carrera(df, carrera):
     )
 
 
+def obtener_programas_pendientes(carrera):
+    """Códigos con metadata registrada pero sin PDF/chunks indexados.
+
+    Recorre los mismos manifiestos de ``metadata/*programas*.csv`` que usa
+    ``construir_catalogo_documental``. No infiere nada: solo refleja lo que el
+    manifiesto de la carrera declara con ``estado == 'pendiente'``.
+    """
+    pendientes = []
+    for ruta in sorted(CARRERAS_DIR.glob("*/metadata/*programas*.csv")):
+        try:
+            metadata = pd.read_csv(ruta)
+        except Exception:
+            continue
+        requeridas = {"carrera", "codigo_asignatura", "estado"}
+        if not requeridas.issubset(metadata.columns):
+            continue
+        filas = metadata[
+            metadata["carrera"].fillna("").astype(str).eq(str(carrera))
+            & metadata["estado"].fillna("").astype(str).eq("pendiente")
+        ]
+        pendientes.extend(filas["codigo_asignatura"].astype(str).tolist())
+    return pendientes
+
+
 def construir_catalogo_documental(malla, chunks, carrera):
     """Catálogo para detectar ramos, incluidos aquellos con PDF pendiente."""
     partes = []

@@ -22,8 +22,22 @@ def limpiar_estado_conversacional():
         st.session_state.pop(clave, None)
 
 
-def construir_preguntas_rapidas(ramos, limite=7):
+def construir_preguntas_rapidas(ramos, carrera=None, limite=7):
+    """Preguntas rápidas generales más variantes según carrera y ramos inscritos.
+
+    Las variantes de carrera solo cambian el texto mostrado (mencionan la
+    carrera activa); usan las mismas palabras clave ya reconocidas por
+    ``chatbot.intenciones`` (p. ej. "ramos inscritos", "alerta"), por lo que no
+    se agrega ninguna intención nueva ni datos inventados.
+    """
     preguntas = list(PREGUNTAS_GENERALES)
+    if carrera:
+        preguntas.extend(
+            [
+                f"¿Qué ramos tengo inscritos en {carrera}?",
+                f"¿Tengo alguna alerta académica en {carrera}?",
+            ]
+        )
     if not ramos.empty:
         nombre = str(ramos.iloc[0]["nombre_ramo"])
         preguntas.extend(

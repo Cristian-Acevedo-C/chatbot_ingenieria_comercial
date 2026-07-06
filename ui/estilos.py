@@ -194,6 +194,147 @@ def aplicar_estilos():
             font-weight: 600;
         }
 
+        .udla-resumen-titulo {
+            color: var(--udla-blue);
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            margin: 1.1rem 0 0.6rem;
+            text-transform: uppercase;
+        }
+
+        .udla-card {
+            background: var(--udla-white);
+            border: 1px solid var(--udla-border);
+            border-top: 4px solid var(--udla-blue-secondary);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(31, 41, 51, 0.06);
+            height: 100%;
+            padding: 0.85rem 0.95rem;
+        }
+
+        .udla-card__icon {
+            font-size: 1.35rem;
+            line-height: 1;
+            margin-bottom: 0.35rem;
+        }
+
+        .udla-card__titulo {
+            color: #5B6B7C;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .udla-card__valor {
+            color: var(--udla-blue);
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-top: 0.2rem;
+        }
+
+        .udla-card__extra {
+            color: #5B6B7C;
+            font-size: 0.78rem;
+            margin-top: 0.3rem;
+        }
+
+        .udla-card--rojo { border-top-color: #C0392B; }
+        .udla-card--amarillo { border-top-color: #D9A400; }
+        .udla-card--verde { border-top-color: #1E8E3E; }
+
+        .udla-semaforo {
+            align-items: center;
+            border-radius: 10px;
+            display: flex;
+            font-weight: 700;
+            gap: 0.55rem;
+            margin: 0.6rem 0 1rem;
+            padding: 0.6rem 0.9rem;
+        }
+
+        .udla-semaforo__dot {
+            border-radius: 50%;
+            display: inline-block;
+            height: 0.85rem;
+            width: 0.85rem;
+        }
+
+        .udla-semaforo--verde {
+            background: #E7F5EC;
+            color: #1E8E3E;
+        }
+        .udla-semaforo--verde .udla-semaforo__dot { background: #1E8E3E; }
+
+        .udla-semaforo--amarillo {
+            background: #FDF3D9;
+            color: #8A6900;
+        }
+        .udla-semaforo--amarillo .udla-semaforo__dot { background: #D9A400; }
+
+        .udla-semaforo--rojo {
+            background: #FBE7E4;
+            color: #C0392B;
+        }
+        .udla-semaforo--rojo .udla-semaforo__dot { background: #C0392B; }
+
+        .udla-semaforo__detalle {
+            font-weight: 500;
+            opacity: 0.85;
+        }
+
+        .udla-fuente-card {
+            background: var(--udla-white);
+            border: 1px solid var(--udla-border);
+            border-left: 4px solid var(--udla-orange);
+            border-radius: 8px;
+            margin-bottom: 0.55rem;
+            padding: 0.55rem 0.85rem;
+        }
+
+        .udla-fuente-card__nombre {
+            color: var(--udla-blue);
+            font-weight: 700;
+        }
+
+        .udla-fuente-card__meta {
+            color: #5B6B7C;
+            font-size: 0.8rem;
+        }
+
+        .udla-evidencia-card {
+            background: #FAFBFD;
+            border: 1px solid var(--udla-border);
+            border-radius: 10px;
+            margin-bottom: 0.7rem;
+            padding: 0.7rem 0.9rem;
+        }
+
+        .udla-evidencia-card__encabezado {
+            align-items: center;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+            margin-bottom: 0.35rem;
+        }
+
+        .udla-evidencia-card__titulo {
+            color: var(--udla-blue);
+            font-weight: 700;
+        }
+
+        .udla-badge {
+            background: var(--udla-blue-secondary);
+            border-radius: 999px;
+            color: var(--udla-white);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.12rem 0.55rem;
+            white-space: nowrap;
+        }
+
         @media (max-width: 700px) {
             .udla-hero {
                 min-height: auto;

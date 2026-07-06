@@ -1,5 +1,7 @@
 """Paneles principales de la interfaz Streamlit."""
 
+import html
+
 import pandas as pd
 import streamlit as st
 
@@ -12,6 +14,11 @@ from ui.componentes import render_mensaje
 
 ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]
 CARRERA_COMERCIAL = "Ingeniería Comercial"
+ICONOS_ROL = {
+    "Estudiante": "🧑‍🎓",
+    "Coordinación demo": "🗂️",
+    "Admin demo": "🛠️",
+}
 
 
 def render_encabezado():
@@ -59,11 +66,13 @@ def seleccionar_carrera_documental(chunks):
     if st.session_state.get("carrera") not in carreras:
         st.session_state["carrera"] = carreras[0]
     anterior = st.session_state.get("_carrera_documental_activa")
+    st.sidebar.markdown("#### 🏫 Selecciona tu carrera")
     carrera = st.sidebar.selectbox(
         "Carrera documental",
         carreras,
         key="carrera",
         help="La búsqueda consulta únicamente los documentos de esta carrera.",
+        label_visibility="collapsed",
     )
     if anterior is not None and anterior != carrera:
         limpiar_estado_conversacional()
@@ -71,9 +80,67 @@ def seleccionar_carrera_documental(chunks):
     return carrera
 
 
+def render_panel_resumen(carrera, rol, alumno, resumen_documental, semaforo):
+    """Tarjetas visuales con el estado de la sesión: carrera, perfil, alumno,
+    estado académico y cobertura documental. Solo presenta cifras ya calculadas
+    por ``services.resumen``; no agrega ni infiere datos nuevos."""
+    st.markdown(
+        '<div class="udla-resumen-titulo">Resumen de tu sesión</div>',
+        unsafe_allow_html=True,
+    )
+
+    pendientes = resumen_documental["programas_pendientes"]
+    if pendientes:
+        doc_valor = (
+            f"{resumen_documental['programas_disponibles']} de "
+            f"{resumen_documental['total_programas']}"
+        )
+        doc_extra = f"Pendiente(s): {', '.join(pendientes)}"
+    else:
+        doc_valor = f"{resumen_documental['programas_disponibles']}"
+        doc_extra = "Todos los programas están disponibles"
+
+    tarjetas = [
+        ("🏫", "Carrera", carrera, None, ""),
+        ("🧭", "Perfil", rol, None, ""),
+        ("🧑‍🎓", "Alumno demo", str(alumno["nombre"]), f"ID {alumno['id_alumno']}", ""),
+        ("📊", "Estado académico", semaforo["etiqueta"], semaforo["detalle"], semaforo["nivel"]),
+        ("📄", "Documentos disponibles", doc_valor, doc_extra, ""),
+    ]
+    columnas = st.columns(len(tarjetas))
+    for columna, (icono, titulo, valor, extra, variante) in zip(columnas, tarjetas):
+        clase = f"udla-card udla-card--{variante}" if variante else "udla-card"
+        extra_html = (
+            f'<div class="udla-card__extra">{html.escape(extra)}</div>' if extra else ""
+        )
+        with columna:
+            st.markdown(
+                f"""
+                <div class="{clase}">
+                    <div class="udla-card__icon">{icono}</div>
+                    <div class="udla-card__titulo">{html.escape(titulo)}</div>
+                    <div class="udla-card__valor">{html.escape(str(valor))}</div>
+                    {extra_html}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.markdown(
+        f"""
+        <div class="udla-semaforo udla-semaforo--{semaforo['nivel']}">
+            <span class="udla-semaforo__dot"></span>
+            <span>{html.escape(semaforo['etiqueta'])}</span>
+            <span class="udla-semaforo__detalle">— {html.escape(semaforo['detalle'])}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
                    vectorizador, metricas_prerrequisitos, construir_preguntas_rapidas,
-                   etiqueta_motor=None):
+                   etiqueta_motor=None, carrera=None):
     with st.sidebar:
         if LOGO_UDLA_FINE.exists():
             st.image(str(LOGO_UDLA_FINE), width="stretch")
@@ -84,15 +151,19 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
             "🎓 Modo demostración · Datos sintéticos/locales · "
             "No reemplaza información oficial"
         )
+        st.markdown("#### 🧭 Selecciona tu perfil")
         rol = st.selectbox(
             "Vista (rol simulado)",
             ROLES_DEMO,
             help="Roles simulados para la demostración; no hay autenticación real.",
+            label_visibility="collapsed",
         )
+        st.markdown("#### 🧑‍🎓 Selecciona el alumno demo")
         id_alumno = st.selectbox(
             "Alumno",
             alumnos["id_alumno"].astype(str).tolist(),
             help="Los registros utilizados en este MVP son sintéticos.",
+            label_visibility="collapsed",
         )
         anterior = st.session_state.get("id_alumno_activo")
         if anterior is not None and str(anterior) != str(id_alumno):
@@ -105,7 +176,7 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
             st.stop()
         ramos_alumno = filtrar_por_alumno(inscritos, id_alumno)
         historial_alumno = filtrar_por_alumno(historial, id_alumno)
-        preguntas_rapidas = construir_preguntas_rapidas(ramos_alumno)
+        preguntas_rapidas = construir_preguntas_rapidas(ramos_alumno, carrera=carrera)
         opciones_ramos = {"Todos los ramos": None}
         for _, fila in ramos_alumno.iterrows():
             etiqueta = f"{fila['codigo_ramo']} — {fila['nombre_ramo']}"
@@ -295,7 +366,7 @@ def render_prerrequisitos_alumno(prerrequisitos, vista):
             )
 
 
-def render_chat(preguntas_rapidas):
+def render_chat(preguntas_rapidas, carrera=None):
     st.divider()
     st.subheader("Conversa con tu asistente académico")
     for clave, valor in (
@@ -305,7 +376,10 @@ def render_chat(preguntas_rapidas):
     ):
         st.session_state.setdefault(clave, valor)
 
-    st.caption("Sugerencias para empezar:")
+    etiqueta_sugerencias = (
+        f"Sugerencias para empezar en {carrera}:" if carrera else "Sugerencias para empezar:"
+    )
+    st.caption(etiqueta_sugerencias)
     columnas = st.columns(3)
     for indice, pregunta in enumerate(preguntas_rapidas):
         if columnas[indice % 3].button(pregunta, key=f"rapida_{indice}", width="stretch"):
