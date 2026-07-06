@@ -1,0 +1,53 @@
+﻿carrera,id_alumno,codigo_ramo,nombre_ramo,estado,origen_datos
+Ingeniería Civil Industrial,2001,MAT107,Introducción a la Matemática para la Ingeniería,Inscrito,sintético
+Ingeniería Civil Industrial,2001,ING102,Introducción a la Computación,Inscrito,sintético
+Ingeniería Civil Industrial,2001,ING120,Taller Fundamentos de la Ingeniería,Inscrito,sintético
+Ingeniería Civil Industrial,2001,ING110,Innovación y Tecnología,Inscrito,sintético
+Ingeniería Civil Industrial,2001,ING103,Economía Circular y Desarrollo Sostenible,Inscrito,sintético
+Ingeniería Civil Industrial,2002,MAT170,Cálculo Diferencial,Inscrito,sintético
+Ingeniería Civil Industrial,2002,MAT140,Álgebra I,Inscrito,sintético
+Ingeniería Civil Industrial,2002,AEA220,Economía,Inscrito,sintético
+Ingeniería Civil Industrial,2002,AEA240,Emprendimiento y Negocios,Inscrito,sintético
+Ingeniería Civil Industrial,2002,ING400,Tecnologías y Creación de Valor,Inscrito,sintético
+Ingeniería Civil Industrial,2003,MAT390,Cálculo Integral,Inscrito,sintético
+Ingeniería Civil Industrial,2003,MAT141,Álgebra II,Inscrito,sintético
+Ingeniería Civil Industrial,2003,FIS211,Mecánica,Inscrito,sintético
+Ingeniería Civil Industrial,2003,AEA131,Administración de Negocios,Inscrito,sintético
+Ingeniería Civil Industrial,2003,AEA214,Microeconomía I,Inscrito,sintético
+Ingeniería Civil Industrial,2004,MAT402,Cálculo Superior,Inscrito,sintético
+Ingeniería Civil Industrial,2004,MAT450,Ecuaciones Diferenciales,Inscrito,sintético
+Ingeniería Civil Industrial,2004,FIS605,Electromagnetismo y Ondas,Inscrito,sintético
+Ingeniería Civil Industrial,2004,QUI511,Química Industrial,Inscrito,sintético
+Ingeniería Civil Industrial,2004,AEA316,Macroeconomía I,Inscrito,sintético
+Ingeniería Civil Industrial,2005,FIS504,Física Experimental,Inscrito,sintético
+Ingeniería Civil Industrial,2005,AES500,Probabilidad y Estadística,Inscrito,sintético
+Ingeniería Civil Industrial,2005,EIN793,Investigación de Operaciones,Inscrito,sintético
+Ingeniería Civil Industrial,2005,EIN811,Procesos de Negocios,Inscrito,sintético
+Ingeniería Civil Industrial,2005,EIN103,Contabilidad y Control de Gestión,Inscrito,sintético
+Ingeniería Civil Industrial,2006,FIS611,Termodinámica,Inscrito,sintético
+Ingeniería Civil Industrial,2006,EIN601,Métodos Cuantitativos y Optimización,Inscrito,sintético
+Ingeniería Civil Industrial,2006,ACI777,Análisis de Datos,Inscrito,sintético
+Ingeniería Civil Industrial,2006,EIN970,Procesos Industriales,Inscrito,sintético
+Ingeniería Civil Industrial,2006,AEA504,Introducción a las Finanzas,Inscrito,sintético
+Ingeniería Civil Industrial,2007,LCE001,Inglés I,Inscrito,sintético
+Ingeniería Civil Industrial,2007,AEA555,Preparación y Evaluación de Proyectos,Inscrito,sintético
+Ingeniería Civil Industrial,2007,ACI800,Analítica de Negocios (Business Analytics),Inscrito,sintético
+Ingeniería Civil Industrial,2007,EIN990,Modelos de Simulación,Inscrito,sintético
+Ingeniería Civil Industrial,2007,EIN830,Sustentabilidad,Inscrito,sintético
+Ingeniería Civil Industrial,2007,EIN611,Organización y Planificación de la Producción,Inscrito,sintético
+Ingeniería Civil Industrial,2008,LCE002,Inglés II,Inscrito,sintético
+Ingeniería Civil Industrial,2008,AEA694,Finanzas Corporativas,Inscrito,sintético
+Ingeniería Civil Industrial,2008,EIN903,Administración de Operaciones,Inscrito,sintético
+Ingeniería Civil Industrial,2008,EIN891,Gestión de Servicios,Inscrito,sintético
+Ingeniería Civil Industrial,2008,EIN971,Gestión de Proyectos,Inscrito,sintético
+Ingeniería Civil Industrial,2008,EIN605,Práctica Operacional,Inscrito,sintético
+Ingeniería Civil Industrial,2009,LCE003,Inglés III,Inscrito,sintético
+Ingeniería Civil Industrial,2009,AEA920,Gestión de Emprendimiento y Nuevos Negocios,Inscrito,sintético
+Ingeniería Civil Industrial,2009,CAM820,Sistemas Integrados de Gestión,Inscrito,sintético
+Ingeniería Civil Industrial,2009,EIN906,Industria 4.0,Inscrito,sintético
+Ingeniería Civil Industrial,2009,EIN908,Marketing,Inscrito,sintético
+Ingeniería Civil Industrial,2009,EIN995,Proyecto de Título I,Inscrito,sintético
+Ingeniería Civil Industrial,2010,AEA325,Dirección Estratégica,Inscrito,sintético
+Ingeniería Civil Industrial,2010,EIN106,Innovación en la Industria,Inscrito,sintético
+Ingeniería Civil Industrial,2010,EIN606,Práctica Profesional,Inscrito,sintético
+Ingeniería Civil Industrial,2010,EIN996,Proyecto de Título II,Inscrito,sintético

@@ -5,6 +5,9 @@ import streamlit as st
 
 from config.settings import DATA_DIR, ESQUEMAS
 
+CARRERA_COMERCIAL = "Ingeniería Comercial"
+CARRERAS_DIR = DATA_DIR / "carreras"
+
 
 def cargar_csv(nombre, columnas_requeridas=(), permitir_vacio=False):
     ruta = DATA_DIR / nombre
@@ -46,18 +49,133 @@ def cargar_csv(nombre, columnas_requeridas=(), permitir_vacio=False):
     return df
 
 
+def cargar_chunks_documentales():
+    """Combina corpora por carrera conservando sus límites documentales."""
+    comercial = cargar_csv("document_chunks.csv", ESQUEMAS["document_chunks.csv"])
+    if "carrera" not in comercial.columns:
+        comercial = comercial.assign(carrera=CARRERA_COMERCIAL)
+
+    corpora = [comercial]
+    for ruta in sorted(CARRERAS_DIR.glob("*/indice/document_chunks.csv")):
+        try:
+            carrera = pd.read_csv(ruta)
+        except Exception as exc:
+            raise ValueError(f"No se pudo leer el índice de carrera '{ruta}': {exc}") from exc
+        requeridas = set(ESQUEMAS["document_chunks.csv"]) | {"carrera"}
+        faltantes = sorted(requeridas - set(carrera.columns))
+        if faltantes:
+            raise ValueError(
+                f"El índice de carrera '{ruta}' no contiene las columnas requeridas: "
+                f"{', '.join(faltantes)}."
+            )
+        corpora.append(carrera)
+
+    return pd.concat(corpora, ignore_index=True, sort=False)
+
+
+def cargar_dataset_academico(nombre):
+    """Combina el dataset histórico de Comercial con archivos separados por carrera."""
+    base = cargar_csv(nombre, ESQUEMAS[nombre])
+    if "carrera" not in base.columns:
+        base = base.assign(carrera=CARRERA_COMERCIAL)
+
+    datasets = [base]
+    for ruta in sorted(CARRERAS_DIR.glob(f"*/academico/{nombre}")):
+        try:
+            carrera = pd.read_csv(ruta)
+        except Exception as exc:
+            raise ValueError(
+                f"No se pudo leer el dataset académico de carrera '{ruta}': {exc}"
+            ) from exc
+        requeridas = set(ESQUEMAS[nombre]) | {"carrera"}
+        faltantes = sorted(requeridas - set(carrera.columns))
+        if faltantes:
+            raise ValueError(
+                f"El dataset académico '{ruta}' no contiene las columnas requeridas: "
+                f"{', '.join(faltantes)}."
+            )
+        datasets.append(carrera)
+
+    return pd.concat(datasets, ignore_index=True, sort=False)
+
+
+def filtrar_chunks_por_carrera(chunks, carrera):
+    """Aplica el límite de seguridad usado antes de indexar y buscar."""
+    if chunks.empty or "carrera" not in chunks.columns:
+        return pd.DataFrame(columns=chunks.columns)
+    return chunks[
+        chunks["carrera"].fillna("").astype(str).eq(str(carrera))
+    ].reset_index(drop=True)
+
+
+def filtrar_por_carrera(df, carrera):
+    """Filtra cualquier dataset académico usando la carrera seleccionada."""
+    if df.empty or "carrera" not in df.columns:
+        return pd.DataFrame(columns=df.columns)
+    return df[df["carrera"].fillna("").astype(str).eq(str(carrera))].reset_index(
+        drop=True
+    )
+
+
+def construir_catalogo_documental(malla, chunks, carrera):
+    """Catálogo para detectar ramos, incluidos aquellos con PDF pendiente."""
+    partes = []
+    if not malla.empty:
+        partes.append(malla[["codigo_ramo", "nombre_ramo", "semestre"]].copy())
+
+    chunks_carrera = filtrar_chunks_por_carrera(chunks, carrera)
+    if not chunks_carrera.empty:
+        catalogo_chunks = chunks_carrera[["codigo_ramo", "nombre_ramo"]].drop_duplicates()
+        catalogo_chunks = catalogo_chunks.assign(semestre="")
+        partes.append(catalogo_chunks)
+
+    for ruta in sorted(CARRERAS_DIR.glob("*/metadata/*programas*.csv")):
+        try:
+            metadata = pd.read_csv(ruta)
+        except Exception:
+            continue
+        requeridas = {"carrera", "codigo_asignatura", "estado"}
+        if not requeridas.issubset(metadata.columns):
+            continue
+        filas = metadata[
+            metadata["carrera"].fillna("").astype(str).eq(str(carrera))
+        ]
+        if filas.empty:
+            continue
+        catalogo_metadata = pd.DataFrame(
+            {
+                "codigo_ramo": filas["codigo_asignatura"].astype(str),
+                # Si no hay PDF, el código es la única denominación comprobable.
+                "nombre_ramo": filas["codigo_asignatura"].astype(str),
+                "semestre": "",
+            }
+        )
+        partes.append(catalogo_metadata)
+
+    if not partes:
+        return pd.DataFrame(columns=["codigo_ramo", "nombre_ramo", "semestre"])
+
+    catalogo = pd.concat(partes, ignore_index=True)
+    # Los nombres extraídos de los PDF van antes que el fallback basado en código.
+    catalogo["_es_fallback"] = catalogo["codigo_ramo"].astype(str).eq(
+        catalogo["nombre_ramo"].astype(str)
+    )
+    return (
+        catalogo.sort_values("_es_fallback")
+        .drop_duplicates("codigo_ramo", keep="first")
+        .drop(columns="_es_fallback")
+        .reset_index(drop=True)
+    )
+
+
 @st.cache_data(show_spinner=False)
 def cargar_datos():
-    alumnos = cargar_csv("alumnos.csv", ESQUEMAS["alumnos.csv"])
-    malla = cargar_csv("malla.csv", ESQUEMAS["malla.csv"])
-    inscritos = cargar_csv("ramos_inscritos.csv", ESQUEMAS["ramos_inscritos.csv"])
-    historial = cargar_csv("historial_academico.csv", ESQUEMAS["historial_academico.csv"])
-    chunks = cargar_csv("document_chunks.csv", ESQUEMAS["document_chunks.csv"])
-    prerrequisitos = cargar_csv(
-        "prerrequisitos.csv",
-        ESQUEMAS["prerrequisitos.csv"],
-        permitir_vacio=True,
-    )
+    alumnos = cargar_dataset_academico("alumnos.csv")
+    malla = cargar_dataset_academico("malla.csv")
+    inscritos = cargar_dataset_academico("ramos_inscritos.csv")
+    historial = cargar_dataset_academico("historial_academico.csv")
+    chunks = cargar_chunks_documentales()
+    prerrequisitos = cargar_dataset_academico("prerrequisitos.csv")
     return alumnos, malla, inscritos, historial, chunks, prerrequisitos
 
 

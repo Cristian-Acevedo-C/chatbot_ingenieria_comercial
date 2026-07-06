@@ -6,7 +6,7 @@ from utils.texto import normalizar
 from chatbot.respuestas.academicas import construir_respuesta_academica
 from chatbot.respuestas.alertas import respuesta_alertas
 from chatbot.respuestas.alumno import respuesta_avance_curricular, respuesta_datos_alumno, respuesta_ramos
-from chatbot.respuestas.documental import respuesta_documental
+from chatbot.respuestas.documental import respuesta_documental, respuesta_sin_evidencia
 from chatbot.respuestas.prerrequisitos import (
     respuesta_prerrequisitos_pendientes,
     respuesta_prerrequisitos_ramo,
@@ -30,6 +30,7 @@ def _responder_sin_normalizar(
     matriz,
     ramo_contexto=None,
     clasificacion=None,
+    carrera=None,
 ):
     clasificacion = clasificacion or clasificar_consulta(
         pregunta, malla=malla, ramo_contexto=ramo_contexto
@@ -41,6 +42,7 @@ def _responder_sin_normalizar(
     prerrequisitos_alumno = construir_prerrequisitos_alumno(
         ramos, historial, prerrequisitos
     )
+    carrera_seleccionada = str(carrera) if carrera else ""
 
     if intencion == "ramos_inscritos":
         return respuesta_ramos(ramos)
@@ -98,6 +100,7 @@ def _responder_sin_normalizar(
         vectorizador,
         matriz,
         codigo_ramo=codigo,
+        carrera=carrera_seleccionada or None,
     )
     tipo_pregunta = intencion
     if codigo and tipo_pregunta in {
@@ -105,7 +108,13 @@ def _responder_sin_normalizar(
         "contenidos",
         "bibliografia",
         "evaluaciones",
+        "aprendizajes",
     }:
+        filas_ramo = chunks[
+            chunks["codigo_ramo"].astype(str).eq(str(codigo))
+        ]
+        if filas_ramo.empty:
+            return respuesta_sin_evidencia(nombre)
         return construir_respuesta_academica(
             tipo_pregunta,
             codigo,
@@ -130,6 +139,7 @@ def responder(
     matriz,
     ramo_contexto=None,
     clasificacion=None,
+    carrera=None,
 ):
     """Único límite de normalización del motor de respuestas."""
     clasificacion = clasificacion or clasificar_consulta(
@@ -147,5 +157,6 @@ def responder(
         matriz,
         ramo_contexto=ramo_contexto,
         clasificacion=clasificacion,
+        carrera=carrera,
     )
     return normalizar_respuesta(respuesta, tipo=clasificacion.intencion)

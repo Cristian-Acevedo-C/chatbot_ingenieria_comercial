@@ -1,0 +1,284 @@
+﻿carrera,id_alumno,codigo_ramo,nombre_ramo,estado,nota,origen_datos
+Ingeniería Civil Industrial,2001,MAT107,Introducción a la Matemática para la Ingeniería,Cursando,,sintético
+Ingeniería Civil Industrial,2001,ING102,Introducción a la Computación,Cursando,,sintético
+Ingeniería Civil Industrial,2001,ING120,Taller Fundamentos de la Ingeniería,Cursando,,sintético
+Ingeniería Civil Industrial,2001,ING110,Innovación y Tecnología,Cursando,,sintético
+Ingeniería Civil Industrial,2001,ING103,Economía Circular y Desarrollo Sostenible,Cursando,,sintético
+Ingeniería Civil Industrial,2002,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2002,ING102,Introducción a la Computación,Aprobado,4.8,sintético
+Ingeniería Civil Industrial,2002,ING120,Taller Fundamentos de la Ingeniería,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2002,ING110,Innovación y Tecnología,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2002,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2002,MAT170,Cálculo Diferencial,Cursando,,sintético
+Ingeniería Civil Industrial,2002,MAT140,Álgebra I,Cursando,,sintético
+Ingeniería Civil Industrial,2002,AEA220,Economía,Cursando,,sintético
+Ingeniería Civil Industrial,2002,AEA240,Emprendimiento y Negocios,Cursando,,sintético
+Ingeniería Civil Industrial,2002,ING400,Tecnologías y Creación de Valor,Cursando,,sintético
+Ingeniería Civil Industrial,2003,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,4.8,sintético
+Ingeniería Civil Industrial,2003,ING102,Introducción a la Computación,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2003,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2003,ING110,Innovación y Tecnología,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2003,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2003,MAT170,Cálculo Diferencial,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2003,MAT140,Álgebra I,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2003,AEA220,Economía,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2003,AEA240,Emprendimiento y Negocios,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2003,ING400,Tecnologías y Creación de Valor,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2003,MAT390,Cálculo Integral,Cursando,,sintético
+Ingeniería Civil Industrial,2003,MAT141,Álgebra II,Cursando,,sintético
+Ingeniería Civil Industrial,2003,FIS211,Mecánica,Cursando,,sintético
+Ingeniería Civil Industrial,2003,AEA131,Administración de Negocios,Cursando,,sintético
+Ingeniería Civil Industrial,2003,AEA214,Microeconomía I,Cursando,,sintético
+Ingeniería Civil Industrial,2004,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2004,ING102,Introducción a la Computación,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2004,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2004,ING110,Innovación y Tecnología,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2004,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2004,MAT170,Cálculo Diferencial,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2004,MAT140,Álgebra I,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2004,AEA220,Economía,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2004,AEA240,Emprendimiento y Negocios,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2004,ING400,Tecnologías y Creación de Valor,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2004,MAT390,Cálculo Integral,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2004,MAT141,Álgebra II,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2004,FIS211,Mecánica,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2004,AEA131,Administración de Negocios,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2004,AEA214,Microeconomía I,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2004,MAT402,Cálculo Superior,Cursando,,sintético
+Ingeniería Civil Industrial,2004,MAT450,Ecuaciones Diferenciales,Cursando,,sintético
+Ingeniería Civil Industrial,2004,FIS605,Electromagnetismo y Ondas,Cursando,,sintético
+Ingeniería Civil Industrial,2004,QUI511,Química Industrial,Cursando,,sintético
+Ingeniería Civil Industrial,2004,AEA316,Macroeconomía I,Cursando,,sintético
+Ingeniería Civil Industrial,2005,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2005,ING102,Introducción a la Computación,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2005,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2005,ING110,Innovación y Tecnología,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2005,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2005,MAT170,Cálculo Diferencial,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2005,MAT140,Álgebra I,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2005,AEA220,Economía,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2005,AEA240,Emprendimiento y Negocios,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2005,ING400,Tecnologías y Creación de Valor,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2005,MAT390,Cálculo Integral,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2005,MAT141,Álgebra II,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2005,FIS211,Mecánica,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2005,AEA131,Administración de Negocios,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2005,AEA214,Microeconomía I,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2005,MAT402,Cálculo Superior,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2005,MAT450,Ecuaciones Diferenciales,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2005,FIS605,Electromagnetismo y Ondas,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2005,QUI511,Química Industrial,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2005,AEA316,Macroeconomía I,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2005,FIS504,Física Experimental,Cursando,,sintético
+Ingeniería Civil Industrial,2005,AES500,Probabilidad y Estadística,Cursando,,sintético
+Ingeniería Civil Industrial,2005,EIN793,Investigación de Operaciones,Cursando,,sintético
+Ingeniería Civil Industrial,2005,EIN811,Procesos de Negocios,Cursando,,sintético
+Ingeniería Civil Industrial,2005,EIN103,Contabilidad y Control de Gestión,Cursando,,sintético
+Ingeniería Civil Industrial,2006,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2006,ING102,Introducción a la Computación,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2006,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2006,ING110,Innovación y Tecnología,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2006,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2006,MAT170,Cálculo Diferencial,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2006,MAT140,Álgebra I,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2006,AEA220,Economía,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2006,AEA240,Emprendimiento y Negocios,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2006,ING400,Tecnologías y Creación de Valor,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2006,MAT390,Cálculo Integral,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2006,MAT141,Álgebra II,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2006,FIS211,Mecánica,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2006,AEA131,Administración de Negocios,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2006,AEA214,Microeconomía I,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2006,MAT402,Cálculo Superior,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2006,MAT450,Ecuaciones Diferenciales,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2006,FIS605,Electromagnetismo y Ondas,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2006,QUI511,Química Industrial,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2006,AEA316,Macroeconomía I,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2006,FIS504,Física Experimental,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2006,AES500,Probabilidad y Estadística,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2006,EIN793,Investigación de Operaciones,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2006,EIN811,Procesos de Negocios,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2006,EIN103,Contabilidad y Control de Gestión,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2006,FIS611,Termodinámica,Cursando,,sintético
+Ingeniería Civil Industrial,2006,EIN601,Métodos Cuantitativos y Optimización,Cursando,,sintético
+Ingeniería Civil Industrial,2006,ACI777,Análisis de Datos,Cursando,,sintético
+Ingeniería Civil Industrial,2006,EIN970,Procesos Industriales,Cursando,,sintético
+Ingeniería Civil Industrial,2006,AEA504,Introducción a las Finanzas,Cursando,,sintético
+Ingeniería Civil Industrial,2007,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,5.2,sintético
+Ingeniería Civil Industrial,2007,ING102,Introducción a la Computación,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2007,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2007,ING110,Innovación y Tecnología,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2007,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2007,MAT170,Cálculo Diferencial,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2007,MAT140,Álgebra I,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2007,AEA220,Economía,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2007,AEA240,Emprendimiento y Negocios,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2007,ING400,Tecnologías y Creación de Valor,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2007,MAT390,Cálculo Integral,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2007,MAT141,Álgebra II,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2007,FIS211,Mecánica,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2007,AEA131,Administración de Negocios,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2007,AEA214,Microeconomía I,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2007,MAT402,Cálculo Superior,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2007,MAT450,Ecuaciones Diferenciales,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2007,FIS605,Electromagnetismo y Ondas,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2007,QUI511,Química Industrial,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2007,AEA316,Macroeconomía I,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2007,FIS504,Física Experimental,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2007,AES500,Probabilidad y Estadística,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2007,EIN793,Investigación de Operaciones,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2007,EIN811,Procesos de Negocios,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2007,EIN103,Contabilidad y Control de Gestión,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2007,FIS611,Termodinámica,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2007,EIN601,Métodos Cuantitativos y Optimización,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2007,ACI777,Análisis de Datos,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2007,EIN970,Procesos Industriales,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2007,AEA504,Introducción a las Finanzas,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2007,LCE001,Inglés I,Cursando,,sintético
+Ingeniería Civil Industrial,2007,AEA555,Preparación y Evaluación de Proyectos,Cursando,,sintético
+Ingeniería Civil Industrial,2007,ACI800,Analítica de Negocios (Business Analytics),Cursando,,sintético
+Ingeniería Civil Industrial,2007,EIN990,Modelos de Simulación,Cursando,,sintético
+Ingeniería Civil Industrial,2007,EIN830,Sustentabilidad,Cursando,,sintético
+Ingeniería Civil Industrial,2007,EIN611,Organización y Planificación de la Producción,Cursando,,sintético
+Ingeniería Civil Industrial,2008,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,5.3,sintético
+Ingeniería Civil Industrial,2008,ING102,Introducción a la Computación,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2008,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2008,ING110,Innovación y Tecnología,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2008,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2008,MAT170,Cálculo Diferencial,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2008,MAT140,Álgebra I,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2008,AEA220,Economía,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2008,AEA240,Emprendimiento y Negocios,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2008,ING400,Tecnologías y Creación de Valor,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2008,MAT390,Cálculo Integral,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2008,MAT141,Álgebra II,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2008,FIS211,Mecánica,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2008,AEA131,Administración de Negocios,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2008,AEA214,Microeconomía I,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2008,MAT402,Cálculo Superior,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2008,MAT450,Ecuaciones Diferenciales,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2008,FIS605,Electromagnetismo y Ondas,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2008,QUI511,Química Industrial,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2008,AEA316,Macroeconomía I,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2008,FIS504,Física Experimental,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2008,AES500,Probabilidad y Estadística,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2008,EIN793,Investigación de Operaciones,Reprobado,3.4,sintético
+Ingeniería Civil Industrial,2008,EIN811,Procesos de Negocios,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2008,EIN103,Contabilidad y Control de Gestión,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2008,FIS611,Termodinámica,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2008,EIN601,Métodos Cuantitativos y Optimización,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2008,ACI777,Análisis de Datos,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2008,EIN970,Procesos Industriales,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2008,AEA504,Introducción a las Finanzas,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2008,LCE001,Inglés I,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2008,AEA555,Preparación y Evaluación de Proyectos,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2008,ACI800,Analítica de Negocios (Business Analytics),Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2008,EIN990,Modelos de Simulación,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2008,EIN830,Sustentabilidad,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2008,EIN611,Organización y Planificación de la Producción,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2008,LCE002,Inglés II,Cursando,,sintético
+Ingeniería Civil Industrial,2008,AEA694,Finanzas Corporativas,Cursando,,sintético
+Ingeniería Civil Industrial,2008,EIN903,Administración de Operaciones,Cursando,,sintético
+Ingeniería Civil Industrial,2008,EIN891,Gestión de Servicios,Cursando,,sintético
+Ingeniería Civil Industrial,2008,EIN971,Gestión de Proyectos,Cursando,,sintético
+Ingeniería Civil Industrial,2008,EIN605,Práctica Operacional,Cursando,,sintético
+Ingeniería Civil Industrial,2009,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,5.4,sintético
+Ingeniería Civil Industrial,2009,ING102,Introducción a la Computación,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2009,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2009,ING110,Innovación y Tecnología,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2009,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2009,MAT170,Cálculo Diferencial,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2009,MAT140,Álgebra I,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2009,AEA220,Economía,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2009,AEA240,Emprendimiento y Negocios,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2009,ING400,Tecnologías y Creación de Valor,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2009,MAT390,Cálculo Integral,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2009,MAT141,Álgebra II,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2009,FIS211,Mecánica,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2009,AEA131,Administración de Negocios,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2009,AEA214,Microeconomía I,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2009,MAT402,Cálculo Superior,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2009,MAT450,Ecuaciones Diferenciales,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2009,FIS605,Electromagnetismo y Ondas,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2009,QUI511,Química Industrial,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2009,AEA316,Macroeconomía I,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2009,FIS504,Física Experimental,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2009,AES500,Probabilidad y Estadística,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2009,EIN793,Investigación de Operaciones,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2009,EIN811,Procesos de Negocios,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2009,EIN103,Contabilidad y Control de Gestión,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2009,FIS611,Termodinámica,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2009,EIN601,Métodos Cuantitativos y Optimización,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2009,ACI777,Análisis de Datos,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2009,EIN970,Procesos Industriales,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2009,AEA504,Introducción a las Finanzas,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2009,LCE001,Inglés I,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2009,AEA555,Preparación y Evaluación de Proyectos,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2009,ACI800,Analítica de Negocios (Business Analytics),Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2009,EIN990,Modelos de Simulación,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2009,EIN830,Sustentabilidad,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2009,EIN611,Organización y Planificación de la Producción,Aprobado,4.8,sintético
+Ingeniería Civil Industrial,2009,LCE002,Inglés II,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2009,AEA694,Finanzas Corporativas,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2009,EIN903,Administración de Operaciones,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2009,EIN891,Gestión de Servicios,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2009,EIN971,Gestión de Proyectos,Aprobado,4.8,sintético
+Ingeniería Civil Industrial,2009,EIN605,Práctica Operacional,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2009,LCE003,Inglés III,Cursando,,sintético
+Ingeniería Civil Industrial,2009,AEA920,Gestión de Emprendimiento y Nuevos Negocios,Cursando,,sintético
+Ingeniería Civil Industrial,2009,CAM820,Sistemas Integrados de Gestión,Cursando,,sintético
+Ingeniería Civil Industrial,2009,EIN906,Industria 4.0,Cursando,,sintético
+Ingeniería Civil Industrial,2009,EIN908,Marketing,Cursando,,sintético
+Ingeniería Civil Industrial,2009,EIN995,Proyecto de Título I,Cursando,,sintético
+Ingeniería Civil Industrial,2010,MAT107,Introducción a la Matemática para la Ingeniería,Aprobado,5.5,sintético
+Ingeniería Civil Industrial,2010,ING102,Introducción a la Computación,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2010,ING120,Taller Fundamentos de la Ingeniería,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2010,ING110,Innovación y Tecnología,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2010,ING103,Economía Circular y Desarrollo Sostenible,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2010,MAT170,Cálculo Diferencial,Aprobado,5.6,sintético
+Ingeniería Civil Industrial,2010,MAT140,Álgebra I,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2010,AEA220,Economía,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2010,AEA240,Emprendimiento y Negocios,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2010,ING400,Tecnologías y Creación de Valor,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2010,MAT390,Cálculo Integral,Aprobado,5.7,sintético
+Ingeniería Civil Industrial,2010,MAT141,Álgebra II,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2010,FIS211,Mecánica,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2010,AEA131,Administración de Negocios,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2010,AEA214,Microeconomía I,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2010,MAT402,Cálculo Superior,Aprobado,5.8,sintético
+Ingeniería Civil Industrial,2010,MAT450,Ecuaciones Diferenciales,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2010,FIS605,Electromagnetismo y Ondas,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2010,QUI511,Química Industrial,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2010,AEA316,Macroeconomía I,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2010,FIS504,Física Experimental,Aprobado,5.9,sintético
+Ingeniería Civil Industrial,2010,AES500,Probabilidad y Estadística,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2010,EIN793,Investigación de Operaciones,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2010,EIN811,Procesos de Negocios,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2010,EIN103,Contabilidad y Control de Gestión,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2010,FIS611,Termodinámica,Aprobado,6.0,sintético
+Ingeniería Civil Industrial,2010,EIN601,Métodos Cuantitativos y Optimización,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2010,ACI777,Análisis de Datos,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2010,EIN970,Procesos Industriales,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2010,AEA504,Introducción a las Finanzas,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2010,LCE001,Inglés I,Aprobado,6.1,sintético
+Ingeniería Civil Industrial,2010,AEA555,Preparación y Evaluación de Proyectos,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2010,ACI800,Analítica de Negocios (Business Analytics),Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2010,EIN990,Modelos de Simulación,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2010,EIN830,Sustentabilidad,Aprobado,4.8,sintético
+Ingeniería Civil Industrial,2010,EIN611,Organización y Planificación de la Producción,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2010,LCE002,Inglés II,Aprobado,4.5,sintético
+Ingeniería Civil Industrial,2010,AEA694,Finanzas Corporativas,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2010,EIN903,Administración de Operaciones,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2010,EIN891,Gestión de Servicios,Aprobado,4.8,sintético
+Ingeniería Civil Industrial,2010,EIN971,Gestión de Proyectos,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2010,EIN605,Práctica Operacional,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2010,LCE003,Inglés III,Aprobado,4.6,sintético
+Ingeniería Civil Industrial,2010,AEA920,Gestión de Emprendimiento y Nuevos Negocios,Aprobado,4.7,sintético
+Ingeniería Civil Industrial,2010,CAM820,Sistemas Integrados de Gestión,Aprobado,4.8,sintético
+Ingeniería Civil Industrial,2010,EIN906,Industria 4.0,Aprobado,4.9,sintético
+Ingeniería Civil Industrial,2010,EIN908,Marketing,Aprobado,5.0,sintético
+Ingeniería Civil Industrial,2010,EIN995,Proyecto de Título I,Aprobado,5.1,sintético
+Ingeniería Civil Industrial,2010,AEA325,Dirección Estratégica,Cursando,,sintético
+Ingeniería Civil Industrial,2010,EIN106,Innovación en la Industria,Cursando,,sintético
+Ingeniería Civil Industrial,2010,EIN606,Práctica Profesional,Cursando,,sintético
+Ingeniería Civil Industrial,2010,EIN996,Proyecto de Título II,Cursando,,sintético

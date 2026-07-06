@@ -1,6 +1,6 @@
-# Asistente Académico de Ingeniería Comercial
+# Asistente Académico Multicarrera
 
-MVP local desarrollado con Streamlit para consultar información académica sintética y recuperar evidencia desde programas oficiales de asignatura de Ingeniería Comercial (UDLA).
+MVP local desarrollado con Streamlit para consultar información académica sintética y recuperar evidencia desde programas oficiales de asignatura de Ingeniería Comercial e Ingeniería Civil Industrial (UDLA).
 
 El proyecto funciona completamente en el equipo local. La búsqueda documental utiliza TF-IDF y similitud coseno; no se conecta con OpenAI, Claude, LangChain, otros modelos de lenguaje ni una base vectorial externa.
 
@@ -21,28 +21,24 @@ Los datos personales del MVP son sintéticos. La información académica es **ex
 ## Arquitectura
 
 ```text
-Manifiestos CSV + PDFs
-          |
-          v
-      ingest.py  ------------------>  data/document_chunks.csv
+Comercial: manifiestos + PDFs ------> data/document_chunks.csv
+Otras carreras: metadata + PDFs ---> data/carreras/<slug>/indice/document_chunks.csv
                                               |
                                               v
-                           scripts/extract_prerrequisitos.py
+                           carga y filtro por carrera
                                               |
                                               v
-                                   data/prerrequisitos.csv
-                                              |
-          +-----------------------------------+
-          v
-   app.py / Streamlit
+                                  app.py / Streamlit
    - Índice TF-IDF en memoria (similitud coseno)
+   - Un índice solo para st.session_state["carrera"]
+   - Alumnos, malla, historial y prerrequisitos aislados por carrera
    - Clasificación del tipo de pregunta
    - Respuesta académica estructurada + evidencia en expander
 ```
 
-- `ingest.py` valida los manifiestos, extrae texto con `pypdf`, divide el contenido en fragmentos con solapamiento y genera el CSV documental.
+- `ingest.py` valida los manifiestos, extrae texto con `pypdf`, divide el contenido en fragmentos con solapamiento y genera un CSV documental independiente por carrera.
 - `scripts/extract_prerrequisitos.py` recorre los fragmentos y genera `data/prerrequisitos.csv`. Es deliberadamente conservador: solo crea relaciones hacia ramos que existen en `data/malla.csv`, ya sea por código oficial (confianza alta) o por nombre oficial (confianza media). Nunca infiere prerrequisitos por semestre, posición en la malla ni parecido.
-- `app.py` carga los datos, construye una vez el índice TF-IDF mediante la caché de Streamlit, clasifica la pregunta y arma una respuesta académica. La evidencia textual del PDF se muestra en un expander, recortada, como respaldo de la respuesta (no como respuesta principal).
+- `app.py` carga los corpora, conserva la columna `carrera`, filtra por `st.session_state["carrera"]` antes de construir el índice y vuelve a aplicar el filtro al buscar. La evidencia textual del PDF se muestra con el nombre de archivo usado, por ejemplo, `Fuente: EIN908.pdf`.
 
 ## Estructura del proyecto
 
@@ -65,6 +61,7 @@ chatbot_ingenieria_comercial/
 |-- tests/                          # Suite de pytest
 |-- scripts/
 |   |-- extract_prerrequisitos.py   # Genera data/prerrequisitos.csv desde los fragmentos
+|   |-- generar_datos_sinteticos_ici.py # Genera la capa académica demo ICI
 |   |-- smoke_streamlit.py          # Script de humo manual de Streamlit
 |   `-- download_programas_udla.ps1 # Descarga auxiliar de programas (opcional)
 |-- data/
@@ -75,7 +72,14 @@ chatbot_ingenieria_comercial/
 |   |-- prerrequisitos.csv          # Generado desde los PDFs (ver más abajo)
 |   |-- documentos_malla.csv        # Manifiesto de PDFs de malla
 |   |-- documentos_ramos.csv        # Manifiesto de PDFs de programas
-|   `-- document_chunks.csv         # Base documental fragmentada
+|   |-- document_chunks.csv         # Corpus histórico de Ingeniería Comercial
+|   `-- carreras/
+|       `-- ingenieria_civil_industrial/
+|           |-- academico/          # Alumnos, malla, inscripciones, historial y prerrequisitos
+|           |-- pdf/programas/      # 51 programas disponibles
+|           |-- pdf/malla/          # Malla oficial UDLA 2025
+|           |-- metadata/           # 52 registros: 51 disponibles y 1 pendiente
+|           `-- indice/document_chunks.csv
 |-- documentos/
 |   |-- malla/
 |   `-- semestre_01/ ... semestre_10/
@@ -87,16 +91,21 @@ chatbot_ingenieria_comercial/
 
 El estado actual del MVP contiene:
 
-- 8 alumnos sintéticos;
-- 52 ramos en la malla curricular;
+- 18 alumnos sintéticos: 8 de Ingeniería Comercial y 10 de Ingeniería Civil Industrial;
+- 52 ramos por cada malla curricular;
 - 52 programas de asignatura en PDF;
 - 2 documentos PDF de malla;
 - 870 fragmentos en `data/document_chunks.csv`;
+- 51 programas PDF y 875 fragmentos de Ingeniería Civil Industrial;
+- 1 programa pendiente de Ingeniería Civil Industrial (`FIS504`), registrado sin contenido inventado;
 - 74 filas en `data/prerrequisitos.csv`.
+- 79 filas de prerrequisitos ICI extraídas de sus programas: 70 relaciones, 8 ramos sin prerrequisito explícito y `FIS504` como no detectado.
+
+La malla ICI usada por esta demo corresponde a la versión oficial UDLA 2025 que coincide con los 52 códigos descargados; se conserva localmente como `pdf/malla/malla_ici_2025.pdf`. No debe confundirse con versiones posteriores del plan de estudios.
 
 ### Prerrequisitos
 
-`data/prerrequisitos.csv` está **generado automáticamente** desde los programas indexados mediante `scripts/extract_prerrequisitos.py`. El estado actual reporta:
+Los prerrequisitos están **generados automáticamente** desde los programas indexados mediante `scripts/extract_prerrequisitos.py`. Comercial conserva `data/prerrequisitos.csv`; Civil Industrial usa su archivo separado bajo `data/carreras/ingenieria_civil_industrial/academico/`.
 
 - 39 ramos con prerrequisito detectado;
 - 10 ramos sin prerrequisito explícito en el programa;
@@ -170,11 +179,54 @@ Las bases ya están incluidas en `data/`. Para regenerarlas voluntariamente:
 # 1) Base documental desde los PDFs
 python -u ingest.py
 
-# 2) Prerrequisitos desde los fragmentos indexados
+# 1b) Corpus separado de Ingeniería Civil Industrial
+python -u ingest.py --carrera ingenieria_civil_industrial
+
+# 2) Capa académica sintética ICI desde la malla oficial y el índice
+python -u scripts/generar_datos_sinteticos_ici.py
+
+# 3) Prerrequisitos desde los fragmentos indexados
 python -u scripts/extract_prerrequisitos.py
+python -u scripts/extract_prerrequisitos.py --carrera ingenieria_civil_industrial
 ```
 
 Ambos scripts validan sus insumos y **no sobrescriben** el CSV existente si no logran generar registros.
+
+## Agregar documentos de una nueva carrera
+
+Cada carrera adicional vive bajo un `slug` propio y genera un corpus independiente. Por ejemplo, para `ingenieria_en_informatica`:
+
+```text
+data/carreras/ingenieria_en_informatica/
+|-- pdf/programas/
+|   |-- INF100.pdf
+|   `-- INF200.pdf
+`-- metadata/
+    `-- metadata_programas.csv
+```
+
+El manifiesto debe usar exactamente estas columnas:
+
+```csv
+carrera,codigo_asignatura,nombre_archivo,ruta_archivo,tipo_documento,estado
+Ingeniería en Informática,INF100,INF100.pdf,data/carreras/ingenieria_en_informatica/pdf/programas/INF100.pdf,programa_asignatura,disponible
+Ingeniería en Informática,INF200,INF200.pdf,data/carreras/ingenieria_en_informatica/pdf/programas/INF200.pdf,programa_asignatura,pendiente
+```
+
+- `estado` solo admite `disponible` o `pendiente`.
+- Un ramo pendiente se registra en metadata, pero no se crea un PDF ni un fragmento ficticio.
+- El nombre del ramo se extrae del texto declarado en el PDF; si no hay PDF, se conserva únicamente el código comprobable.
+- `ruta_archivo` debe ser relativa a la raíz del proyecto.
+
+Luego reconstruye solo esa carrera:
+
+```powershell
+python -u ingest.py --carrera ingenieria_en_informatica
+```
+
+El resultado queda en `data/carreras/ingenieria_en_informatica/indice/document_chunks.csv`. Al reiniciar Streamlit, el selector **Carrera documental** la descubre automáticamente y mantiene el valor activo en `st.session_state["carrera"]`.
+
+Para habilitar también la ficha estudiantil de una nueva carrera, agrega bajo `academico/` los cinco CSV (`alumnos.csv`, `malla.csv`, `ramos_inscritos.csv`, `historial_academico.csv` y `prerrequisitos.csv`) con una columna `carrera` consistente. La aplicación los descubre, combina y filtra automáticamente.
 
 ## Ejecutar la aplicación
 
@@ -182,7 +234,7 @@ Ambos scripts validan sus insumos y **no sobrescriben** el CSV existente si no l
 python -m streamlit run app.py --server.fileWatcherType none
 ```
 
-Luego abre [http://localhost:8501](http://localhost:8501). La barra lateral debe mostrar 8 alumnos, 52 ramos y 870 fragmentos, además del estado de los prerrequisitos cargados.
+Luego abre [http://localhost:8501](http://localhost:8501). En la barra lateral, el selector **Carrera documental** determina de forma excluyente qué corpus se indexa y consulta.
 
 ## Preguntas de prueba
 
@@ -196,6 +248,13 @@ Luego abre [http://localhost:8501](http://localhost:8501). La barra lateral debe
 - ¿Qué prerrequisitos tiene Microeconomía II?
 - ¿Puedo cursar Econometría?
 - Muéstrame todos los prerrequisitos
+- ¿Cuáles son los aprendizajes esperados de EIN908?
+- ¿Qué unidades tiene Organización y Planificación de la Producción?
+- ¿Qué bibliografía recomienda EIN971?
+- ¿Cómo se evalúa EIN908?
+- ¿Qué contenidos tiene FIS504? (debe informar que no hay evidencia suficiente)
+- ¿Qué ramos tengo inscritos? (seleccionando un alumno ICI)
+- ¿Tengo alguna alerta académica? (prueba con Martín Sepúlveda)
 
 La selección opcional de un ramo inscrito en la barra lateral sirve como contexto cuando la pregunta no menciona explícitamente una asignatura.
 

@@ -53,6 +53,8 @@ def responder_conversacional(
     matriz,
     ramo_contexto,
     opciones_ramos,
+    carrera=None,
+    malla_consulta=None,
 ):
     contexto_previo = None
     if st.session_state.get("ultimo_ramo_codigo"):
@@ -62,7 +64,7 @@ def responder_conversacional(
         }
     clasificacion = clasificar_consulta(
         pregunta,
-        malla=malla,
+        malla=malla_consulta if malla_consulta is not None else malla,
         ramo_contexto=contexto_previo or ramo_contexto,
     )
 
@@ -115,6 +117,7 @@ def responder_conversacional(
         matriz,
         ramo_contexto,
         clasificacion,
+        carrera,
     )
 
     if clasificacion.codigo_ramo:

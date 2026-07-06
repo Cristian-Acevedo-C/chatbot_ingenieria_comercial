@@ -1,11 +1,14 @@
 """Respuestas estructuradas de estudio, contenidos y evaluación."""
 
+from pathlib import Path
+
 import pandas as pd
 
 from chatbot.contratos import Evidencia, RespuestaChatbot, SeccionRespuesta
 from rag.busqueda import seleccionar_evidencias
 from rag.extractores import (
     construir_plan_estudio,
+    extraer_aprendizajes_desde_texto,
     extraer_bibliografia_desde_texto,
     extraer_contenidos_desde_texto,
     extraer_evaluaciones_desde_texto,
@@ -25,6 +28,7 @@ def construir_respuesta_academica(
 ):
     texto_programa = reconstruir_texto_ramo(chunks, codigo)
     contenidos = extraer_contenidos_desde_texto(texto_programa)
+    aprendizajes = extraer_aprendizajes_desde_texto(texto_programa)
     bibliografia = extraer_bibliografia_desde_texto(texto_programa)
     evaluaciones = extraer_evaluaciones_desde_texto(texto_programa)
     evidencias = seleccionar_evidencias(chunks, codigo, tipo, resultados)
@@ -58,12 +62,19 @@ def construir_respuesta_academica(
             if bibliografia
             else f"No pude extraer referencias bibliográficas estructuradas para **{codigo} — {nombre}**."
         )
-    else:
+    elif tipo == "evaluaciones":
         resumen = (
             f"Detecté **{len(evaluaciones)} componentes de evaluación** en el programa de "
             f"**{codigo} — {nombre}**."
             if evaluaciones
             else f"No pude extraer una tabla limpia de evaluaciones para **{codigo} — {nombre}**."
+        )
+    else:
+        resumen = (
+            f"Detecté **{len(aprendizajes)} resultados de aprendizaje** declarados "
+            f"en el programa de **{codigo} — {nombre}**."
+            if aprendizajes
+            else f"No pude extraer resultados de aprendizaje estructurados para **{codigo} — {nombre}**."
         )
 
     vista_prerrequisitos = []
@@ -103,6 +114,16 @@ def construir_respuesta_academica(
         bibliografia if tipo in {"estudio", "bibliografia"} else []
     )
     evaluaciones_visibles = evaluaciones if tipo == "evaluaciones" else []
+    aprendizajes_visibles = aprendizajes if tipo == "aprendizajes" else []
+    fuentes = [
+        f"Fuente: {nombre_archivo}"
+        for nombre_archivo in dict.fromkeys(
+            Path(str(ruta)).name
+            for ruta in chunks.loc[
+                chunks["codigo_ramo"].astype(str).eq(str(codigo)), "ruta_archivo"
+            ].dropna()
+        )
+    ]
     secciones = []
     if contenidos_visibles:
         secciones.append(
@@ -148,6 +169,14 @@ def construir_respuesta_academica(
                 formato="tabla",
             )
         )
+    if aprendizajes_visibles:
+        secciones.append(
+            SeccionRespuesta(
+                titulo="Resultados de aprendizaje",
+                contenido=aprendizajes_visibles,
+                formato="tabla",
+            )
+        )
 
     return RespuestaChatbot(
         tipo=tipo,
@@ -160,6 +189,7 @@ def construir_respuesta_academica(
             )
             for evidencia in evidencias
         ],
+        fuentes=fuentes,
         metadata={
             "codigo": codigo,
             "nombre": nombre,

@@ -11,6 +11,7 @@ from services.diagnostico import diagnosticar_assets, diagnosticar_datos
 from ui.componentes import render_mensaje
 
 ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]
+CARRERA_COMERCIAL = "Ingeniería Comercial"
 
 
 def render_encabezado():
@@ -26,7 +27,7 @@ def render_encabezado():
             """
             <section class="udla-hero">
                 <div class="udla-hero__eyebrow">Facultad de Ingeniería y Negocios</div>
-                <h1>Asistente Académico de Ingeniería Comercial</h1>
+                <h1>Asistente Académico Multicarrera</h1>
                 <p>
                     Consulta antecedentes académicos sintéticos y encuentra evidencia en programas
                     de asignatura mediante búsqueda documental local con TF-IDF.
@@ -40,6 +41,34 @@ def render_encabezado():
         "Sus respuestas son orientativas y no reemplazan la información oficial de "
         "Registro Académico, coordinación de carrera o reglamentos institucionales."
     )
+
+
+def seleccionar_carrera_documental(chunks):
+    """Mantiene la carrera documental activa en la clave exigida de sesión."""
+    carreras = (
+        sorted(chunks["carrera"].dropna().astype(str).unique())
+        if "carrera" in chunks.columns
+        else [CARRERA_COMERCIAL]
+    )
+    if CARRERA_COMERCIAL in carreras:
+        carreras.remove(CARRERA_COMERCIAL)
+        carreras.insert(0, CARRERA_COMERCIAL)
+    if not carreras:
+        carreras = [CARRERA_COMERCIAL]
+
+    if st.session_state.get("carrera") not in carreras:
+        st.session_state["carrera"] = carreras[0]
+    anterior = st.session_state.get("_carrera_documental_activa")
+    carrera = st.sidebar.selectbox(
+        "Carrera documental",
+        carreras,
+        key="carrera",
+        help="La búsqueda consulta únicamente los documentos de esta carrera.",
+    )
+    if anterior is not None and anterior != carrera:
+        limpiar_estado_conversacional()
+    st.session_state["_carrera_documental_activa"] = carrera
+    return carrera
 
 
 def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,

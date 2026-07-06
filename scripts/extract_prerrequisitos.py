@@ -1,10 +1,11 @@
 """Extrae prerrequisitos curriculares desde los fragmentos de programas PDF.
 
 El extractor es deliberadamente conservador: solo genera relaciones hacia ramos
-que existen en data/malla.csv y nunca infiere dependencias por semestre, nombre
-parecido o posición en la malla.
+que existen en la malla seleccionada y nunca infiere dependencias por semestre,
+nombre parecido o posición en la malla.
 """
 
+import argparse
 import re
 import unicodedata
 from pathlib import Path
@@ -271,7 +272,7 @@ def extraer_prerrequisitos(chunks, malla):
     return pd.DataFrame(registros, columns=COLUMNAS_SALIDA)
 
 
-def imprimir_resumen(resultado, total_ramos):
+def imprimir_resumen(resultado, total_ramos, output_path=OUTPUT_PATH):
     con_prerrequisito = resultado.loc[
         resultado["tipo"] == "Prerrequisito", "codigo_ramo"
     ].nunique()
@@ -296,32 +297,63 @@ def imprimir_resumen(resultado, total_ramos):
     print(f"Ramos no detectados: {no_detectados}")
     print(f"Candidatos de baja confianza: {baja_confianza}")
     print(f"Filas generadas: {len(resultado)}")
-    print(f"Archivo generado: {OUTPUT_PATH}")
+    print(f"Archivo generado: {output_path}")
 
 
-def main():
+def resolver_rutas(slug_carrera=None):
+    if not slug_carrera:
+        return CHUNKS_PATH, MALLA_PATH, OUTPUT_PATH
+    base_carrera = BASE_DIR / "data" / "carreras" / slug_carrera
+    return (
+        base_carrera / "indice" / "document_chunks.csv",
+        base_carrera / "academico" / "malla.csv",
+        base_carrera / "academico" / "prerrequisitos.csv",
+    )
+
+
+def main(slug_carrera=None):
+    chunks_path, malla_path, output_path = resolver_rutas(slug_carrera)
     try:
         chunks = leer_csv_validado(
-            CHUNKS_PATH, COLUMNAS_CHUNKS, "data/document_chunks.csv"
+            chunks_path, COLUMNAS_CHUNKS, str(chunks_path.relative_to(BASE_DIR))
         )
-        malla = leer_csv_validado(MALLA_PATH, COLUMNAS_MALLA, "data/malla.csv")
+        malla = leer_csv_validado(
+            malla_path, COLUMNAS_MALLA, str(malla_path.relative_to(BASE_DIR))
+        )
     except (FileNotFoundError, ValueError) as exc:
         print(f"ERROR | {exc}")
         return 1
 
+    carreras = (
+        malla["carrera"].dropna().astype(str).unique()
+        if "carrera" in malla.columns
+        else []
+    )
     malla = malla[["codigo_ramo", "nombre_ramo"]].drop_duplicates("codigo_ramo")
     resultado = extraer_prerrequisitos(chunks, malla)
+
+    if len(carreras) == 1:
+        resultado.insert(0, "carrera", carreras[0])
 
     if resultado.empty:
         print("ERROR | No se generaron resultados; el archivo existente no será sobrescrito.")
         return 1
 
-    temporal = OUTPUT_PATH.with_suffix(".csv.tmp")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    temporal = output_path.with_suffix(".csv.tmp")
     resultado.to_csv(temporal, index=False, encoding="utf-8-sig")
-    temporal.replace(OUTPUT_PATH)
-    imprimir_resumen(resultado, len(malla))
+    temporal.replace(output_path)
+    imprimir_resumen(resultado, len(malla), output_path)
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser(
+        description="Extrae prerrequisitos de Comercial o de una carrera separada."
+    )
+    parser.add_argument(
+        "--carrera",
+        help="Slug bajo data/carreras/, por ejemplo ingenieria_civil_industrial.",
+    )
+    argumentos = parser.parse_args()
+    raise SystemExit(main(argumentos.carrera))

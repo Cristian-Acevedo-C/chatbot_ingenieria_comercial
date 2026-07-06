@@ -1,6 +1,7 @@
 """Búsqueda y selección de evidencia documental."""
 
 import re
+from pathlib import Path
 
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
@@ -15,19 +16,21 @@ def buscar_documentos(
     vectorizador,
     matriz,
     codigo_ramo=None,
+    carrera=None,
     top_k=TOP_K,
     umbral=UMBRAL_SIMILITUD,
 ):
     if chunks.empty or vectorizador is None or matriz is None or not pregunta.strip():
         return pd.DataFrame()
 
+    mascara = pd.Series(True, index=chunks.index)
+    if carrera:
+        if "carrera" not in chunks.columns:
+            return pd.DataFrame()
+        mascara &= chunks["carrera"].fillna("").astype(str).eq(str(carrera))
     if codigo_ramo:
-        mascara = (
-            chunks["codigo_ramo"].astype(str).eq(str(codigo_ramo)).to_numpy()
-        )
-        posiciones = mascara.nonzero()[0]
-    else:
-        posiciones = pd.RangeIndex(len(chunks)).to_numpy()
+        mascara &= chunks["codigo_ramo"].astype(str).eq(str(codigo_ramo))
+    posiciones = mascara.to_numpy().nonzero()[0]
 
     if len(posiciones) == 0:
         return pd.DataFrame()
@@ -65,10 +68,8 @@ def pagina_fragmento(fila):
 
 
 def fuente_fragmento(fila):
-    if "fuente_legible" in fila.index and pd.notna(fila["fuente_legible"]):
-        fuente = str(fila["fuente_legible"])
-    else:
-        fuente = f"{fila['nombre_ramo']} — {fila['ruta_archivo']}"
+    archivo = Path(str(fila["ruta_archivo"])).name
+    fuente = f"Fuente: {archivo}"
     pagina = pagina_fragmento(fila)
     return f"{fuente}, página aproximada {pagina}" if pagina else fuente
 
@@ -88,6 +89,11 @@ def seleccionar_evidencias(chunks, codigo_ramo, tipo, resultados=None):
             "7.2. estrategia evaluativa",
             "7.3. descripción de la estrategia evaluativa",
             "evaluación de la asignatura",
+        ),
+        "aprendizajes": (
+            "3. resultados de aprendizaje",
+            "resultados de aprendizaje",
+            "aprendizajes esperados",
         ),
     }.get(tipo, ())
     seleccionadas = []

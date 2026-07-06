@@ -18,6 +18,7 @@ def malla():
     ("estoy perdido", "confusion"),
     ("¿qué pre-requisito tiene AEA315?", "prerrequisitos"),
     ("¿cuánto vale AEA315?", "evaluaciones"),
+    ("¿cuáles son los aprendizajes esperados de AEA315?", "aprendizajes"),
 ])
 def test_clasificacion_por_dominio(malla, texto, intencion):
     assert clasificar_consulta(texto, malla=malla).intencion == intencion

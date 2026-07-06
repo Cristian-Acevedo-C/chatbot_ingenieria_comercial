@@ -114,6 +114,8 @@ def detectar_tipo_pregunta(pregunta):
         return "prerrequisitos"
     if "bibliograf" in texto or "libros" in texto or "lecturas" in texto:
         return "bibliografia"
+    if "aprendiz" in texto or "resultados de aprendizaje" in texto:
+        return "aprendizajes"
     if es_consulta_evaluaciones(texto):
         return "evaluaciones"
     if any(frase in texto for frase in ("que deberia estudiar", "que estudiar", "como estudiar")):
@@ -212,6 +214,7 @@ def clasificar_consulta(pregunta, malla=None, ramo_contexto=None):
         "bibliografia",
         "evaluaciones",
         "estudio",
+        "aprendizajes",
     }
     if intencion == "prerrequisitos":
         consulta_global = any(

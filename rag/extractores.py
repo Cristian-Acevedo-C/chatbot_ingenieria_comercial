@@ -279,6 +279,41 @@ def extraer_bibliografia_desde_texto(texto):
     return entradas[:15]
 
 
+def extraer_aprendizajes_desde_texto(texto):
+    """Extrae resultados de aprendizaje declarados, sin completar los ausentes."""
+    texto_limpio = limpiar_texto_programa(texto)
+    seccion = extraer_seccion(
+        texto_limpio,
+        r"3\.\s*(?:RESULTADOS|APRENDIZAJES)\s+DE\s+APRENDIZAJE",
+        r"4\.\s+[A-ZÁÉÍÓÚÑ]",
+    )
+    if not seccion:
+        return []
+
+    seccion = re.sub(
+        r"^\s*Resultados?\s+de\s+Aprendizaje\s+Descripci[oó]n\s*",
+        "",
+        seccion,
+        flags=re.IGNORECASE,
+    )
+    marcadores = list(
+        re.finditer(r"\b(RAA?\s*-?\s*\d{1,2})\b", seccion, flags=re.IGNORECASE)
+    )
+    aprendizajes = []
+    for indice, marcador in enumerate(marcadores):
+        fin = marcadores[indice + 1].start() if indice + 1 < len(marcadores) else len(seccion)
+        descripcion = normalizar_espacios_academicos(seccion[marcador.end() : fin])
+        if not descripcion:
+            continue
+        aprendizajes.append(
+            {
+                "Resultado": re.sub(r"\s|-", "", marcador.group(1)).upper(),
+                "Descripción": descripcion[:700],
+            }
+        )
+    return aprendizajes
+
+
 def extraer_evaluaciones_desde_texto(texto):
     texto_limpio = limpiar_texto_programa(texto)
     seccion = extraer_seccion(

@@ -86,3 +86,33 @@ def test_busqueda_densa_embeddings_respeta_indice_reindexado():
     assert not resultado.empty
     assert resultado.iloc[0]["codigo_ramo"] == "AAA100"
 
+
+def test_busqueda_aisla_resultados_por_carrera_aun_con_codigo_compartido():
+    chunks = pd.DataFrame([
+        {
+            "carrera": "Ingeniería Comercial",
+            "codigo_ramo": "AEA220",
+            "texto": "economía comercial consumidores",
+        },
+        {
+            "carrera": "Ingeniería Civil Industrial",
+            "codigo_ramo": "AEA220",
+            "texto": "economía industrial producción",
+        },
+    ])
+    vectorizador = TfidfVectorizer()
+    matriz = vectorizador.fit_transform(chunks["texto"])
+
+    resultado = buscar_documentos(
+        chunks,
+        "economía producción",
+        vectorizador,
+        matriz,
+        codigo_ramo="AEA220",
+        carrera="Ingeniería Civil Industrial",
+        umbral=0,
+    )
+
+    assert len(resultado) == 1
+    assert resultado.iloc[0]["carrera"] == "Ingeniería Civil Industrial"
+

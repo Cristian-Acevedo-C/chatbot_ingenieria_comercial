@@ -99,6 +99,7 @@ PREGUNTAS_CIERRE = {
     "contenidos": "¿Quieres que revise las evaluaciones o los prerrequisitos de este ramo?",
     "bibliografia": "¿Quieres que también te sugiera qué contenidos estudiar primero?",
     "evaluaciones": "¿Quieres que veamos qué contenidos conviene priorizar para esas evaluaciones?",
+    "aprendizajes": "¿Quieres que revise las unidades o la evaluación de este ramo?",
     "prerrequisitos": "¿Quieres que revise si tienes alguno pendiente según tu historial?",
     "puede_cursar": "¿Quieres que revise si tienes algún prerrequisito pendiente según tu historial?",
     "alertas": "¿Quieres que te muestre qué acción podrías tomar primero?",

@@ -1,4 +1,5 @@
 from rag.extractores import (
+    extraer_aprendizajes_desde_texto,
     extraer_bibliografia_desde_texto,
     extraer_contenidos_desde_texto,
     extraer_evaluaciones_desde_texto,
@@ -43,3 +44,19 @@ def test_extrae_evaluaciones():
     )
     componentes = {fila["Componente"] for fila in extraer_evaluaciones_desde_texto(texto)}
     assert {"Cátedras", "Ejercicios", "Examen final"} <= componentes
+
+
+def test_extrae_resultados_de_aprendizaje_sin_inferir():
+    texto = (
+        "3. RESULTADOS DE APRENDIZAJE Resultados de Aprendizaje Descripción "
+        "RAA1 Aplicar herramientas de análisis de datos. "
+        "RAA2 Proponer soluciones sustentables. "
+        "4. APORTES AL PERFIL DE EGRESO"
+    )
+
+    aprendizajes = extraer_aprendizajes_desde_texto(texto)
+
+    assert aprendizajes == [
+        {"Resultado": "RAA1", "Descripción": "Aplicar herramientas de análisis de datos"},
+        {"Resultado": "RAA2", "Descripción": "Proponer soluciones sustentables"},
+    ]

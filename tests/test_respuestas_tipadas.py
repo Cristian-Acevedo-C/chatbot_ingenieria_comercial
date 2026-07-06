@@ -49,7 +49,12 @@ def test_respuesta_documental_sin_evidencia_es_contrato():
     respuesta = respuesta_sin_evidencia("Econometría")
     afirmar_contrato(respuesta, "documental")
     assert not respuesta.evidencias
-    assert respuesta.fuentes
+    assert respuesta.resumen == (
+        "No encontré evidencia suficiente en los documentos cargados. "
+        "Verifica esta información en la fuente oficial UDLA o con coordinación "
+        "académica."
+    )
+    assert not respuesta.fuentes
 
 
 def test_respuesta_documental_tipifica_evidencia_score_y_pagina():
@@ -65,6 +70,7 @@ def test_respuesta_documental_tipifica_evidencia_score_y_pagina():
     afirmar_contrato(respuesta, "documental")
     assert respuesta.evidencias[0].score == pytest.approx(0.72)
     assert respuesta.evidencias[0].pagina == "4"
+    assert respuesta.evidencias[0].fuente.startswith("Fuente: econometria.pdf")
 
 
 def _prerrequisito(tipo="Prerrequisito"):

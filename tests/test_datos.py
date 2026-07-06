@@ -1,6 +1,7 @@
 """Carga de CSV: mensajes de error accionables y validación de columnas."""
 
 import pytest
+import pandas as pd
 
 from services import datos
 
@@ -43,3 +44,28 @@ def test_cargar_csv_ok_devuelve_registros(tmp_path, monkeypatch):
     df = datos.cargar_csv("ok.csv", columnas_requeridas={"a", "b"})
     assert len(df) == 1
     assert list(df.columns) == ["a", "b"]
+
+
+def test_filtrar_chunks_por_carrera_no_mezcla_documentos():
+    chunks = pd.DataFrame([
+        {"carrera": "Ingeniería Comercial", "codigo_ramo": "AEA220"},
+        {"carrera": "Ingeniería Civil Industrial", "codigo_ramo": "AEA220"},
+    ])
+
+    filtrados = datos.filtrar_chunks_por_carrera(
+        chunks, "Ingeniería Civil Industrial"
+    )
+
+    assert len(filtrados) == 1
+    assert set(filtrados["carrera"]) == {"Ingeniería Civil Industrial"}
+
+
+def test_filtrar_dataset_academico_por_carrera():
+    alumnos = pd.DataFrame([
+        {"carrera": "Ingeniería Comercial", "id_alumno": "1001"},
+        {"carrera": "Ingeniería Civil Industrial", "id_alumno": "2001"},
+    ])
+
+    filtrados = datos.filtrar_por_carrera(alumnos, "Ingeniería Civil Industrial")
+
+    assert filtrados["id_alumno"].tolist() == ["2001"]

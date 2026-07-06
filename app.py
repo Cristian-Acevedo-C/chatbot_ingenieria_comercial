@@ -20,7 +20,12 @@ from chatbot.contratos import RespuestaChatbot
 from chatbot.respuestas import responder
 from rag.busqueda import buscar_documentos
 from rag.indice import construir_indice_documental, construir_indice_tfidf
-from services.datos import cargar_datos
+from services.datos import (
+    cargar_datos,
+    construir_catalogo_documental,
+    filtrar_chunks_por_carrera,
+    filtrar_por_carrera,
+)
 from services.prerrequisitos import (
     calcular_metricas_prerrequisitos,
     construir_prerrequisitos_alumno,
@@ -35,6 +40,7 @@ from ui.paneles import (
     render_mapa_prerrequisitos,
     render_prerrequisitos_alumno,
     render_sidebar,
+    seleccionar_carrera_documental,
     render_vista_admin,
     render_vista_coordinacion,
 )
@@ -50,7 +56,7 @@ except ImportError:
 
 def main():
     st.set_page_config(
-        page_title="Asistente Académico | Ingeniería Comercial",
+        page_title="Asistente Académico Multicarrera",
         page_icon="🎓",
         layout="wide",
     )
@@ -69,14 +75,29 @@ def main():
         )
         st.stop()
 
-    if chunks.empty:
+    carrera = seleccionar_carrera_documental(chunks)
+    alumnos_carrera = filtrar_por_carrera(alumnos, carrera)
+    malla_carrera = filtrar_por_carrera(malla, carrera)
+    inscritos_carrera = filtrar_por_carrera(inscritos, carrera)
+    historial_carrera = filtrar_por_carrera(historial, carrera)
+    prerrequisitos_carrera = filtrar_por_carrera(prerrequisitos, carrera)
+    chunks_carrera = filtrar_chunks_por_carrera(chunks, carrera)
+    malla_consulta = construir_catalogo_documental(
+        malla_carrera, chunks_carrera, carrera
+    )
+
+    if alumnos_carrera.empty:
+        st.error(f"No hay alumnos disponibles para la carrera {carrera}.")
+        st.stop()
+
+    if chunks_carrera.empty:
         st.warning(
-            "La base documental (document_chunks.csv) no tiene registros: la "
-            "búsqueda en programas quedará deshabilitada. Puedes regenerarla con "
-            "`python ingest.py`."
+            f"La base documental de {carrera} no tiene registros: la búsqueda en "
+            "programas quedará deshabilitada. Revisa el comando de reconstrucción "
+            "indicado en README.md."
         )
 
-    textos_indice = tuple(chunks["texto"].fillna("").astype(str))
+    textos_indice = tuple(chunks_carrera["texto"].fillna("").astype(str))
     metodo_indice, vectorizador, matriz_tfidf = construir_indice_documental(
         textos_indice, metodo=METODO_BUSQUEDA
     )
@@ -85,16 +106,20 @@ def main():
         if metodo_indice == "embeddings"
         else "Modo compatibilidad TF-IDF"
     )
-    mapa_prerrequisitos = preparar_mapa_prerrequisitos(prerrequisitos, malla)
-    metricas_prerrequisitos = calcular_metricas_prerrequisitos(prerrequisitos)
+    mapa_prerrequisitos = preparar_mapa_prerrequisitos(
+        prerrequisitos_carrera, malla_carrera
+    )
+    metricas_prerrequisitos = calcular_metricas_prerrequisitos(
+        prerrequisitos_carrera
+    )
 
     contexto = render_sidebar(
-        alumnos,
-        malla,
-        inscritos,
-        historial,
-        chunks,
-        prerrequisitos,
+        alumnos_carrera,
+        malla_carrera,
+        inscritos_carrera,
+        historial_carrera,
+        chunks_carrera,
+        prerrequisitos_carrera,
         vectorizador,
         metricas_prerrequisitos,
         construir_preguntas_rapidas,
@@ -104,8 +129,9 @@ def main():
     rol = contexto.get("rol", "Estudiante")
     if rol == "Coordinación demo":
         render_vista_coordinacion(
-            alumnos, malla, inscritos, historial, chunks,
-            prerrequisitos, metricas_prerrequisitos,
+            alumnos_carrera, malla_carrera, inscritos_carrera,
+            historial_carrera, chunks_carrera,
+            prerrequisitos_carrera, metricas_prerrequisitos,
         )
         return
     if rol == "Admin demo":
@@ -116,11 +142,11 @@ def main():
     ramos_alumno = contexto["ramos"]
     historial_alumno = contexto["historial"]
     prerrequisitos_alumno = construir_prerrequisitos_alumno(
-        ramos_alumno, historial_alumno, prerrequisitos
+        ramos_alumno, historial_alumno, prerrequisitos_carrera
     )
 
     render_ficha_alumno(alumno, ramos_alumno)
-    render_prerrequisitos_alumno(prerrequisitos, prerrequisitos_alumno)
+    render_prerrequisitos_alumno(prerrequisitos_carrera, prerrequisitos_alumno)
     consulta_usuario = render_chat(contexto["preguntas_rapidas"])
 
     if consulta_usuario and consulta_usuario.strip():
@@ -133,14 +159,16 @@ def main():
                 alumno,
                 ramos_alumno,
                 historial_alumno,
-                prerrequisitos,
+                prerrequisitos_carrera,
                 prerrequisitos_alumno,
-                malla,
-                chunks,
+                malla_carrera,
+                chunks_carrera,
                 vectorizador,
                 matriz_tfidf,
                 contexto["ramo_contexto"],
                 contexto["opciones_ramos"],
+                carrera=carrera,
+                malla_consulta=malla_consulta,
             )
         mensaje_asistente["rol"] = "assistant"
         st.session_state["historial_conversacion"].append(mensaje_asistente)
@@ -160,9 +188,9 @@ def main():
         st.rerun()
 
     render_mapa_prerrequisitos(
-        mapa_prerrequisitos, prerrequisitos, metricas_prerrequisitos
+        mapa_prerrequisitos, prerrequisitos_carrera, metricas_prerrequisitos
     )
-    render_datos_expandibles(historial_alumno, malla, chunks)
+    render_datos_expandibles(historial_alumno, malla_carrera, chunks_carrera)
 
 
 if __name__ == "__main__":
