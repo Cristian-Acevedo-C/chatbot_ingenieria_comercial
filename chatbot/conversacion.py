@@ -61,6 +61,57 @@ def elegir_apertura():
     return random.choice(APERTURAS)
 
 
+_FRASES_DERIVACION = (
+    "coordinacion",
+    "secretaria academica",
+    "no tengo informacion validada",
+    "no encontre evidencia",
+    "pendiente",
+    "registro academico",
+)
+
+
+def resumen_para_registro(mensaje_asistente):
+    """Extrae ``(texto_plano, fuente, requiere_derivacion)`` de un turno.
+
+    Aplana el mensaje del asistente (apertura + cuerpo + cierre) a texto para el
+    registro anónimo, sin acoplar la capa de almacenamiento al contrato
+    ``RespuestaChatbot``. ``fuente`` es ``"conversacional"`` cuando no hay cuerpo
+    tipado (mensaje social) o el ``tipo`` de la respuesta en caso contrario.
+    ``requiere_derivacion`` es una heurística de texto: la respuesta sugiere
+    validar con canales oficiales o admite que no hay evidencia suficiente.
+    """
+    partes = []
+    fuente = "conversacional"
+
+    apertura = mensaje_asistente.get("apertura")
+    if apertura:
+        partes.append(str(apertura))
+
+    cuerpo = mensaje_asistente.get("cuerpo")
+    if cuerpo is not None:
+        fuente = getattr(cuerpo, "tipo", None) or "documental"
+        resumen = getattr(cuerpo, "resumen", "") or ""
+        if resumen:
+            partes.append(str(resumen))
+        for seccion in getattr(cuerpo, "secciones", []) or []:
+            titulo = getattr(seccion, "titulo", "")
+            if titulo:
+                partes.append(str(titulo))
+        if getattr(cuerpo, "recomendacion", None):
+            partes.append(str(cuerpo.recomendacion))
+
+    cierre = mensaje_asistente.get("cierre")
+    if cierre:
+        partes.append(str(cierre))
+
+    texto_plano = "\n".join(partes).strip()
+    requiere_derivacion = any(
+        frase in normalizar(texto_plano) for frase in _FRASES_DERIVACION
+    )
+    return texto_plano, str(fuente), requiere_derivacion
+
+
 def responder_conversacional(
     pregunta,
     alumno,

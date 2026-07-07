@@ -228,3 +228,50 @@ def test_metricas_sistema_se_muestran_en_admin_demo():
     assert any("Documentos disponibles" in md.value for md in at.markdown)
     assert any("Ramos en malla" in md.value for md in at.markdown)
     assert any("51" in md.value for md in at.markdown if "Documentos disponibles" in md.value)
+
+
+def test_nota_privacidad_visible_junto_al_input():
+    at = _iniciar()
+    captions = [c.value for c in at.caption]
+    assert any("No ingreses datos personales sensibles" in texto for texto in captions)
+
+
+def test_feedback_aparece_tras_una_respuesta():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    at.chat_input[0].set_value("hola como estas").run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    etiquetas = [b.label for b in ultimo.button]
+    assert "👍 Sí" in etiquetas
+    assert "👎 No" in etiquetas
+
+
+def test_feedback_positivo_se_registra_y_agradece():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    at.chat_input[0].set_value("hola como estas").run()
+
+    boton_si = next(b for b in at.chat_message[-1].button if b.label == "👍 Sí")
+    boton_si.click().run()
+    assert not at.exception
+
+    contenido = "\n".join(c.value for c in at.chat_message[-1].caption)
+    assert "Gracias por tu feedback" in contenido
+
+
+def test_panel_interacciones_visible_en_coordinacion_demo():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    # Genera una interacción antes de cambiar de vista.
+    at.chat_input[0].set_value("hola como estas").run()
+    _cambiar_rol(at, "Coordinación demo")
+    assert not at.exception
+    assert any(
+        sub.value == "Registro de interacciones (demo)" for sub in at.subheader
+    )
+    etiquetas_metrica = [m.label for m in at.metric]
+    assert "Total interacciones" in etiquetas_metrica
+    total = next(m for m in at.metric if m.label == "Total interacciones")
+    assert int(total.value) >= 1

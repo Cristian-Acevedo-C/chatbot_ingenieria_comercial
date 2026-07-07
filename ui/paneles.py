@@ -12,11 +12,13 @@ from config.settings import (
     LOGO_UDLA_FINE,
     MENSAJES_SOCIALES,
     NOTA_DEMO,
+    NOTA_PRIVACIDAD,
     ROLES_DEMO,
 )
 from services.cobertura import calcular_cobertura_documental
 from services.datos import buscar_alumno, filtrar_por_alumno, listar_carreras_disponibles
 from services.diagnostico import diagnosticar_assets, diagnosticar_datos
+from services.interacciones import calcular_metricas
 from ui.componentes import render_mensaje
 
 
@@ -243,6 +245,11 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
                 f"**Consultas realizadas:** "
                 f"{st.session_state.get('consultas_realizadas', 0)}"
             )
+            try:
+                total_registradas = calcular_metricas()["total"]
+            except Exception:  # noqa: BLE001 - métrica informativa, nunca crítica
+                total_registradas = "—"
+            st.write(f"**Interacciones registradas (demo):** {total_registradas}")
             st.write(
                 f"**Última intención:** "
                 f"{st.session_state.get('ultima_intencion') or '—'}"
@@ -295,6 +302,65 @@ def render_vista_coordinacion(alumnos, malla, inscritos, historial, chunks,
             st.dataframe(
                 cobertura["chunks_por_ramo"], width="stretch", hide_index=True
             )
+
+    render_panel_interacciones(calcular_metricas())
+
+
+def render_panel_interacciones(metricas):
+    """Panel demo de métricas del registro anónimo de interacciones.
+
+    Solo presenta cifras ya agregadas por ``services.interacciones``; no calcula
+    ni infiere nada aquí. Sobre una base vacía muestra ceros sin romper.
+    """
+    st.divider()
+    st.subheader("Registro de interacciones (demo)")
+    st.caption(
+        "Interacciones anónimas guardadas localmente en SQLite. No incluye datos "
+        "personales (nombre, RUT, correo o teléfono)."
+    )
+
+    fila = st.columns(4)
+    fila[0].metric("Total interacciones", metricas["total"])
+    fila[1].metric("Feedback positivo", metricas["feedback_positivo"])
+    fila[2].metric("Feedback negativo", metricas["feedback_negativo"])
+    fila[3].metric("Requieren derivación", metricas["derivaciones"])
+
+    if metricas["total"] == 0:
+        st.info(
+            "Aún no hay interacciones registradas en esta base. Haz una consulta "
+            "en la vista Estudiante para poblar el registro."
+        )
+        return
+
+    col_intencion, col_carrera = st.columns(2)
+    with col_intencion:
+        st.markdown("**Preguntas por intención**")
+        st.dataframe(
+            pd.DataFrame(metricas["por_intencion"], columns=["Intención", "Consultas"]),
+            width="stretch",
+            hide_index=True,
+        )
+    with col_carrera:
+        st.markdown("**Consultas por carrera**")
+        st.dataframe(
+            pd.DataFrame(metricas["por_carrera"], columns=["Carrera", "Consultas"]),
+            width="stretch",
+            hide_index=True,
+        )
+
+    st.markdown("**Últimas 5 preguntas (anonimizadas)**")
+    ultimas = pd.DataFrame(metricas["ultimas"])
+    if not ultimas.empty:
+        ultimas = ultimas.rename(
+            columns={
+                "timestamp": "Fecha (UTC)",
+                "pregunta": "Pregunta",
+                "intencion": "Intención",
+                "carrera": "Carrera",
+                "requiere_derivacion": "Derivación",
+            }
+        )
+    st.dataframe(ultimas, width="stretch", hide_index=True)
 
 
 def render_metricas_sistema(metricas):
@@ -465,6 +531,7 @@ def render_chat(preguntas_rapidas, carrera=None):
         with st.container(key="udla_chat_input_zone"):
             entrada = st.chat_input("Escribe tu consulta académica...")
             st.caption(NOTA_DEMO)
+            st.caption(f"🔒 {NOTA_PRIVACIDAD}")
 
     return entrada or st.session_state.pop("pregunta_pendiente", None)
 

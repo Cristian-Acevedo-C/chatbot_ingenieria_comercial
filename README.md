@@ -303,7 +303,56 @@ La barra lateral incluye un selector de **rol simulado** (no hay autenticación 
 Además, el sidebar muestra un indicador de **modo demostración**, un expander
 **«Estado de la sesión»** con métricas locales (consultas realizadas, última
 intención/ramo, motor activo, consultas sin evidencia) y un expander
-**«Cobertura documental»**. Ninguna métrica se persiste: viven solo en la sesión.
+**«Cobertura documental»**.
+
+## Registro de interacciones (demo)
+
+La aplicación guarda un **registro anónimo** de cada turno de conversación en una
+base **SQLite local**: `data/interacciones_demo.db` (ignorada por git; se crea
+sola en la primera interacción). Sirve para responder de forma concreta *«¿dónde
+quedan guardadas las interacciones?»* sin depender de servicios externos.
+
+**Qué se guarda** (tabla `interacciones`):
+
+| Campo | Descripción |
+| --- | --- |
+| `id` | Identificador autoincremental de la fila. |
+| `timestamp` | Fecha/hora UTC del registro (ISO 8601). |
+| `session_id` | UUID anónimo generado en `st.session_state` (no identifica a nadie). |
+| `pregunta_usuario` | Texto de la consulta. |
+| `respuesta_bot` | Texto plano de la respuesta entregada. |
+| `intencion_detectada` | Intención clasificada (p. ej. `ramos_inscritos`, `documental`). |
+| `carrera_contexto` | Carrera activa al momento de la consulta. |
+| `fuente_respuesta` | Origen de la respuesta (conversacional, documental, etc.). |
+| `requiere_derivacion` | `1` si la respuesta sugiere validar con canales oficiales. |
+| `feedback_utilidad` | `positivo` / `negativo` / vacío, según el feedback del usuario. |
+| `comentario_feedback` | Comentario opcional («¿qué faltó?»). |
+
+**Qué NO se guarda:** nombre real, RUT, correo, teléfono ni ningún dato personal
+sensible. No existen columnas para esa información. Bajo el chat se muestra un
+aviso pidiendo no ingresar datos personales sensibles, ya que el texto de la
+consulta es lo único que podría contenerlos por escrito.
+
+**Feedback:** debajo de cada respuesta aparece *«¿Te sirvió esta respuesta?»* con
+botones 👍/👎 y un campo opcional; el feedback actualiza la fila correspondiente.
+
+**Panel de métricas:** la vista **Coordinación demo** muestra el total de
+interacciones, feedback positivo/negativo, consultas que requieren derivación,
+preguntas por intención y por carrera, y las últimas 5 preguntas anonimizadas.
+El sidebar también incluye un contador rápido en «Estado de la sesión».
+
+> **Persistencia en Streamlit Community Cloud:** el sistema de archivos es
+> **efímero**. La base persiste durante la ejecución, pero puede reiniciarse en
+> cada reinicio o redeploy del contenedor. Para una versión institucional
+> conviene migrar el registro a una **base externa segura** (PostgreSQL,
+> Supabase, una hoja de cálculo institucional gobernada, o similar) con control
+> de acceso y retención definida. El módulo `services/interacciones.py` aísla el
+> almacenamiento para facilitar esa migración.
+
+El guardado es **defensivo**: si la escritura falla, la aplicación sigue
+funcionando y la conversación no se interrumpe. La ruta puede sobrescribirse con
+la variable de entorno `CHATBOT_INTERACCIONES_DB` (los tests la usan para no
+tocar `data/`).
 
 ## Despliegue en Streamlit Community Cloud
 
@@ -325,7 +374,8 @@ La demo usa exclusivamente datos sintéticos incluidos en `data/`. **No subas da
 - No hay OCR para PDFs escaneados o compuestos solo por imágenes.
 - Los prerrequisitos "No detectado" no se completan automáticamente: requieren revisión manual contra el programa oficial.
 - Las alertas son orientativas y no reemplazan los sistemas ni reglamentos oficiales de la universidad.
-- No existe persistencia de conversaciones ni autenticación.
+- No hay autenticación real (los roles son simulados).
+- La persistencia de interacciones usa SQLite local y es **efímera** en Streamlit Community Cloud; no sustituye a una base institucional gobernada (ver [Registro de interacciones](#registro-de-interacciones-demo)).
 
 ## Mejoras futuras
 

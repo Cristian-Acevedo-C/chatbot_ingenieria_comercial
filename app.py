@@ -1,5 +1,7 @@
 """Orquestador Streamlit del Asistente Académico."""
 
+import uuid
+
 import streamlit as st
 
 # Reexportaciones de compatibilidad para integraciones y tests existentes.
@@ -7,6 +9,7 @@ from chatbot.conversacion import (
     construir_preguntas_rapidas,
     limpiar_estado_conversacional,
     responder_conversacional,
+    resumen_para_registro,
 )
 from chatbot.intenciones import (
     ClasificacionConsulta,
@@ -27,6 +30,7 @@ from services.datos import (
     filtrar_por_carrera,
     listar_carreras_disponibles,
 )
+from services.interacciones import registrar_interaccion
 from services.prerrequisitos import (
     calcular_metricas_prerrequisitos,
     construir_prerrequisitos_alumno,
@@ -70,6 +74,9 @@ def main():
         layout="wide",
     )
     aplicar_estilos()
+    # Identificador de sesión anónimo (UUID): permite agrupar interacciones sin
+    # asociarlas a ninguna persona real. Se genera una sola vez por sesión.
+    st.session_state.setdefault("session_id", uuid.uuid4().hex)
     render_encabezado()
 
     try:
@@ -198,6 +205,28 @@ def main():
                 malla_consulta=malla_consulta,
             )
         mensaje_asistente["rol"] = "assistant"
+
+        # Registro anónimo de la interacción (demo). Defensivo: cualquier fallo
+        # de escritura no debe interrumpir la conversación. El id devuelto se
+        # adjunta al mensaje para enlazar el feedback con esta fila exacta.
+        try:
+            texto_respuesta, fuente_respuesta, requiere_derivacion = (
+                resumen_para_registro(mensaje_asistente)
+            )
+            interaccion_id = registrar_interaccion(
+                consulta_usuario,
+                texto_respuesta,
+                intencion=st.session_state.get("ultima_intencion"),
+                carrera=carrera,
+                fuente=fuente_respuesta,
+                requiere_derivacion=requiere_derivacion,
+                session_id=st.session_state.get("session_id"),
+            )
+            if interaccion_id is not None:
+                mensaje_asistente["interaccion_id"] = interaccion_id
+        except Exception:  # noqa: BLE001 - el registro nunca debe caer la app
+            pass
+
         st.session_state["historial_conversacion"].append(mensaje_asistente)
 
         st.session_state["consultas_realizadas"] = (

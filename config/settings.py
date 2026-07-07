@@ -12,6 +12,12 @@ LOGO_UDLA_FINE = ASSETS_DIR / "logo_udla_fine.png"
 UMBRAL_SIMILITUD = 0.05
 TOP_K = 4
 
+# Base SQLite local para el registro anónimo de interacciones (demo). La ruta
+# efectiva se resuelve en services.interacciones.ruta_db(), que además permite
+# sobrescribirla con la variable de entorno CHATBOT_INTERACCIONES_DB (usada por
+# los tests para no escribir en este data/).
+INTERACCIONES_DB_DEFECTO = DATA_DIR / "interacciones_demo.db"
+
 # Motor de búsqueda documental: "auto" (embeddings si están disponibles, TF-IDF
 # en caso contrario), "tfidf" (forzar disperso) o "embeddings" (forzar semántico
 # con fallback a TF-IDF). Configurable por variable de entorno CHATBOT_BUSQUEDA.
@@ -51,6 +57,11 @@ CHIPS_EXPLORAR = [
 NOTA_DEMO = (
     "Demo académico en desarrollo. Las respuestas son orientativas y deben "
     "validarse por canales oficiales cuando corresponda."
+)
+
+NOTA_PRIVACIDAD = (
+    "Demo académico: las interacciones pueden registrarse de forma anónima para "
+    "mejorar el prototipo. No ingreses datos personales sensibles."
 )
 
 ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]

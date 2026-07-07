@@ -7,6 +7,7 @@ import streamlit as st
 
 from chatbot.contratos import normalizar_respuesta
 from chatbot.respuestas.render_contract import construir_bloques_render
+from services.interacciones import actualizar_feedback
 
 
 def render_fuentes_inline(fuentes):
@@ -134,6 +135,36 @@ def render_respuesta_academica(respuesta):
             render_evidencias_inline(contenido)
 
 
+def render_feedback(interaccion_id):
+    """Feedback simple de utilidad bajo una respuesta del asistente.
+
+    Enlaza con la fila exacta de ``services.interacciones`` mediante su id. Una
+    vez enviado, se reemplazan los botones por un agradecimiento. Cualquier
+    fallo de escritura se maneja dentro de ``actualizar_feedback`` (no lanza).
+    """
+    clave_dado = f"feedback_dado_{interaccion_id}"
+    if st.session_state.get(clave_dado):
+        st.caption("Gracias por tu feedback 🙌")
+        return
+
+    st.caption("¿Te sirvió esta respuesta?")
+    comentario = st.text_input(
+        "¿Qué faltó? (opcional)",
+        key=f"feedback_comentario_{interaccion_id}",
+        label_visibility="collapsed",
+        placeholder="¿Qué faltó? (opcional)",
+    )
+    col_si, col_no, _ = st.columns([1, 1, 4])
+    if col_si.button("👍 Sí", key=f"feedback_si_{interaccion_id}"):
+        actualizar_feedback(interaccion_id, "positivo", comentario)
+        st.session_state[clave_dado] = True
+        st.rerun()
+    if col_no.button("👎 No", key=f"feedback_no_{interaccion_id}"):
+        actualizar_feedback(interaccion_id, "negativo", comentario)
+        st.session_state[clave_dado] = True
+        st.rerun()
+
+
 def render_mensaje(mensaje, indice=0, interactivo=False):
     """Renderiza un turno del historial dentro de ``st.chat_message``.
 
@@ -157,3 +188,5 @@ def render_mensaje(mensaje, indice=0, interactivo=False):
             render_acciones_sugeridas(
                 mensaje["cierre"], key=f"cierre_{indice}", interactivo=interactivo
             )
+        if mensaje.get("interaccion_id") is not None:
+            render_feedback(mensaje["interaccion_id"])
