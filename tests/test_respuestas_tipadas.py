@@ -51,9 +51,10 @@ def test_respuesta_documental_sin_evidencia_sin_contexto_es_compatible():
     afirmar_contrato(respuesta, "documental")
     assert not respuesta.evidencias
     assert respuesta.resumen == (
-        "No encontré evidencia suficiente en los documentos cargados. "
-        "Verifica esta información en la fuente oficial UDLA o con coordinación "
-        "académica."
+        "No tengo información validada para responder eso en esta demo. "
+        "Puedo orientarte de forma general sobre malla, ramos, prerrequisitos, "
+        "práctica o titulación; para una respuesta oficial, confírmalo con "
+        "coordinación o secretaría académica."
     )
     assert not respuesta.fuentes
 

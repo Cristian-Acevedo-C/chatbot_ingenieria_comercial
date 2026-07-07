@@ -31,6 +31,20 @@ CONTEXTO_DEMO = {
         ("que carreras tienes", "carreras_disponibles"),
         ("que perfiles hay", "perfiles_disponibles"),
         ("que significa el semaforo", "semaforo_explicacion"),
+        ("chao", "despedida"),
+        ("hasta luego", "despedida"),
+        ("cuales son tus limitaciones", "limitaciones_demo"),
+        (
+            "cual es la diferencia entre las carreras",
+            "diferencia_carreras",
+        ),
+        ("soy estudiante nuevo", "estudiante_nuevo"),
+        ("soy estudiante antiguo", "estudiante_antiguo"),
+        ("quiero convalidar", "convalidacion"),
+        ("continuidad academica", "continuidad_estudios"),
+        ("practica profesional", "practica_titulacion"),
+        ("como me titulo", "practica_titulacion"),
+        ("a quien consulto", "a_quien_consultar"),
     ],
 )
 def test_responde_desde_capa_basica(mensaje, tipo_esperado):
@@ -38,6 +52,20 @@ def test_responde_desde_capa_basica(mensaje, tipo_esperado):
     assert isinstance(respuesta, RespuestaChatbot)
     assert respuesta.tipo == tipo_esperado
     assert respuesta.resumen
+
+
+@pytest.mark.parametrize(
+    "mensaje",
+    ["hola", "cuales son tus limitaciones", "soy estudiante nuevo"],
+)
+def test_respuesta_basica_incluye_cierre_de_seguimiento(mensaje):
+    respuesta = responder_basica(mensaje, contexto=CONTEXTO_DEMO)
+    assert respuesta.metadata.get("cierre_sugerido")
+
+
+def test_despedida_no_fuerza_pregunta_de_seguimiento():
+    respuesta = responder_basica("chao", contexto=CONTEXTO_DEMO)
+    assert respuesta.metadata.get("cierre_sugerido") is None
 
 
 def test_saludo_usa_carrera_del_contexto():

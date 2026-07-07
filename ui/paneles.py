@@ -6,7 +6,14 @@ import pandas as pd
 import streamlit as st
 
 from chatbot.conversacion import limpiar_estado_conversacional
-from config.settings import LOGO_UDLA, LOGO_UDLA_FINE, MENSAJES_SOCIALES, ROLES_DEMO
+from config.settings import (
+    CHIPS_EXPLORAR,
+    LOGO_UDLA,
+    LOGO_UDLA_FINE,
+    MENSAJES_SOCIALES,
+    NOTA_DEMO,
+    ROLES_DEMO,
+)
 from services.cobertura import calcular_cobertura_documental
 from services.datos import buscar_alumno, filtrar_por_alumno, listar_carreras_disponibles
 from services.diagnostico import diagnosticar_assets, diagnosticar_datos
@@ -36,9 +43,10 @@ def render_encabezado():
             unsafe_allow_html=True,
         )
     st.info(
-        "Este asistente es un prototipo académico con datos sintéticos o locales. "
-        "Sus respuestas son orientativas y no reemplazan la información oficial de "
-        "Registro Académico, coordinación de carrera o reglamentos institucionales."
+        "Este es un asistente académico en etapa demo/piloto, con datos sintéticos o "
+        "locales. Sus respuestas son orientativas y no reemplazan la información "
+        "oficial de Registro Académico, coordinación de carrera o reglamentos "
+        "institucionales."
     )
 
 
@@ -134,6 +142,18 @@ def render_sidebar(alumnos, malla, inscritos, historial, chunks, prerrequisitos,
             "🎓 Modo demostración · Datos sintéticos/locales · "
             "No reemplaza información oficial"
         )
+        with st.expander("❓ Ayuda rápida", expanded=False):
+            st.markdown(
+                "- **Qué es esto:** una demo académica de orientación, no un "
+                "sistema oficial.\n"
+                "- **Qué puede responder:** malla, ramos, prerrequisitos, avance, "
+                "alertas y dudas frecuentes de Ingeniería Comercial e Ingeniería "
+                "Civil Industrial.\n"
+                "- **Qué no hace todavía:** no usa modelos de lenguaje reales, no "
+                "se conecta a WhatsApp ni a sistemas institucionales.\n"
+                "- **Para trámites oficiales:** confirma siempre con coordinación "
+                "de carrera o secretaría académica."
+            )
         st.markdown("#### 🧭 Selecciona tu perfil")
         rol = st.selectbox(
             "Vista (rol simulado)",
@@ -433,8 +453,18 @@ def render_chat(preguntas_rapidas, carrera=None):
             if columnas[indice % 3].button(pregunta, key=f"rapida_{indice}", width="stretch"):
                 st.session_state["pregunta_pendiente"] = pregunta
 
+        st.markdown(
+            '<div class="udla-suggestions-label">Explora por categoría:</div>',
+            unsafe_allow_html=True,
+        )
+        columnas_chips = st.columns(3)
+        for indice, (etiqueta, disparador) in enumerate(CHIPS_EXPLORAR):
+            if columnas_chips[indice % 3].button(etiqueta, key=f"chip_{indice}", width="stretch"):
+                st.session_state["pregunta_pendiente"] = disparador
+
         with st.container(key="udla_chat_input_zone"):
             entrada = st.chat_input("Escribe tu consulta académica...")
+            st.caption(NOTA_DEMO)
 
     return entrada or st.session_state.pop("pregunta_pendiente", None)
 

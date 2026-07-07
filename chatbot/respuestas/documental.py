@@ -22,13 +22,15 @@ def respuesta_sin_evidencia(nombre_ramo=None, codigo_ramo=None, carrera=None):
         identificador = None
 
     if identificador is None:
-        # Compatibilidad con llamadas heredadas sin ningún contexto adicional.
+        # Catch-all también para consultas ambiguas o fuera de alcance: sin
+        # ramo/código detectado, no tiene sentido devolver un bloque largo.
         return RespuestaChatbot(
             tipo="documental",
             resumen=(
-                "No encontré evidencia suficiente en los documentos cargados. "
-                "Verifica esta información en la fuente oficial UDLA o con coordinación "
-                "académica."
+                "No tengo información validada para responder eso en esta demo. "
+                "Puedo orientarte de forma general sobre malla, ramos, prerrequisitos, "
+                "práctica o titulación; para una respuesta oficial, confírmalo con "
+                "coordinación o secretaría académica."
             ),
         )
 

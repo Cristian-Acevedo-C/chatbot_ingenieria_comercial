@@ -25,6 +25,7 @@ COLUMNAS = (
     "prioridad",
     "usar_carrera",
     "pasar_a_rag",
+    "cierre",
 )
 _PATRON_CODIGO_RAMO = re.compile(r"\b[a-zñ]{2,4}\d{3}\b")
 
@@ -110,4 +111,15 @@ def responder_basica(mensaje, contexto=None):
     if not texto:
         return None
 
-    return RespuestaChatbot(tipo=str(fila["intencion"]), resumen=texto)
+    valor_cierre = fila.get("cierre")
+    cierre = (
+        _formatear_respuesta(str(valor_cierre), contexto)
+        if isinstance(valor_cierre, str) and valor_cierre.strip()
+        else None
+    )
+
+    return RespuestaChatbot(
+        tipo=str(fila["intencion"]),
+        resumen=texto,
+        metadata={"cierre_sugerido": cierre} if cierre else {},
+    )

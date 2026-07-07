@@ -9,9 +9,10 @@ from chatbot.respuestas.documental import respuesta_documental, respuesta_sin_ev
 def test_sin_contexto_conserva_mensaje_generico():
     respuesta = respuesta_sin_evidencia()
     assert respuesta.resumen == (
-        "No encontré evidencia suficiente en los documentos cargados. "
-        "Verifica esta información en la fuente oficial UDLA o con coordinación "
-        "académica."
+        "No tengo información validada para responder eso en esta demo. "
+        "Puedo orientarte de forma general sobre malla, ramos, prerrequisitos, "
+        "práctica o titulación; para una respuesta oficial, confírmalo con "
+        "coordinación o secretaría académica."
     )
     assert not respuesta.secciones
     assert not respuesta.fuentes

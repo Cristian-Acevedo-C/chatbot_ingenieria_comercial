@@ -90,7 +90,7 @@ def responder_conversacional(
         return {
             "apertura": None,
             "cuerpo": respuesta_basica,
-            "cierre": None,
+            "cierre": respuesta_basica.metadata.get("cierre_sugerido"),
         }
 
     contexto_previo = None

@@ -34,6 +34,25 @@ PREGUNTAS_GENERALES = [
     "¿Tengo prerrequisitos pendientes?",
 ]
 
+# Chips curados de "más instancias de interacción": cada etiqueta visible
+# dispara un texto ya reconocido por el motor (intención existente o fila
+# nueva de data/respuestas/respuestas_basicas.csv), reutilizando el mismo
+# mecanismo de preguntas rápidas (nunca bloquean el chat libre).
+CHIPS_EXPLORAR = [
+    ("Ver orientación general", "No sé qué preguntar"),
+    ("¿Qué puede hacer este asistente?", "¿Qué puedes hacer?"),
+    ("Consultar por malla", "¿Cómo voy en la malla?"),
+    ("Dudas de ramos", "¿Qué ramos tengo inscritos?"),
+    ("Diferencia entre carreras", "¿Cuál es la diferencia entre Ingeniería Comercial e Ingeniería Civil Industrial?"),
+    ("Soy estudiante nuevo", "Soy estudiante nuevo"),
+    ("¿Cuándo consultar con coordinación?", "¿Cuándo debo consultar con coordinación?"),
+]
+
+NOTA_DEMO = (
+    "Demo académico en desarrollo. Las respuestas son orientativas y deben "
+    "validarse por canales oficiales cuando corresponda."
+)
+
 ROLES_DEMO = ["Estudiante", "Coordinación demo", "Admin demo"]
 
 CLAVES_ESTADO_CONVERSACIONAL = (
@@ -81,9 +100,9 @@ APERTURAS = (
 
 MENSAJES_SOCIALES = {
     "saludo": (
-        "Hola, qué bueno verte por acá. Soy tu asistente académico. Puedo ayudarte a "
-        "revisar tus ramos, qué estudiar, prerrequisitos, bibliografía o alertas "
-        "académicas. ¿Qué quieres revisar primero?"
+        "Hola, soy tu asistente académico en etapa demo. Puedo orientarte sobre dudas "
+        "frecuentes, malla, ramos, continuidad académica y procesos generales de "
+        "Ingeniería Comercial e Ingeniería Civil Industrial. ¿Por dónde quieres partir?"
     ),
     "agradecimiento": (
         "De nada. Me alegra que te sirva. ¿Quieres revisar otro ramo o prefieres ver "

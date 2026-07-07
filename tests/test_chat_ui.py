@@ -139,6 +139,41 @@ def test_saludo_responde_de_inmediato_sin_evidencia():
     assert "udla-source-chip" not in contenido
 
 
+def test_chips_explorar_por_categoria_presentes_y_funcionan():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    etiquetas = [b.label for b in at.button]
+    assert "Soy estudiante nuevo" in etiquetas
+    assert "Diferencia entre carreras" in etiquetas
+    assert "¿Cuándo consultar con coordinación?" in etiquetas
+
+    boton = next(b for b in at.button if b.label == "Soy estudiante nuevo")
+    boton.click().run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    contenido = "\n".join(md.value for md in ultimo.markdown)
+    assert "estudiante" in contenido.lower() or "bienvenido" in contenido.lower()
+
+
+def test_pregunta_rara_no_rompe_y_usa_fallback_responsable():
+    at = _iniciar()
+    _seleccionar_carrera(at, "Ingeniería Civil Industrial")
+    at.chat_input[0].set_value("asdf qwerty zxcvb lorem ipsum").run()
+    assert not at.exception
+
+    ultimo = at.chat_message[-1]
+    contenido = "\n".join(md.value for md in ultimo.markdown)
+    assert "No tengo información validada" in contenido
+    assert "coordinación" in contenido.lower()
+
+
+def test_nota_demo_visible_junto_al_input():
+    at = _iniciar()
+    captions = [c.value for c in at.caption]
+    assert any("Demo académico en desarrollo" in texto for texto in captions)
+
+
 def _cambiar_rol(at, rol):
     for selectbox in at.sidebar.selectbox:
         if selectbox.label == "Vista (rol simulado)":
