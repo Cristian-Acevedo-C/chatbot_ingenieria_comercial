@@ -69,7 +69,7 @@ except ImportError:
 
 def main():
     st.set_page_config(
-        page_title="Asistente Académico Multicarrera",
+        page_title="Asistente Académico Demo",
         page_icon="🎓",
         layout="wide",
     )

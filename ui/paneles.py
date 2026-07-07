@@ -34,11 +34,12 @@ def render_encabezado():
         st.markdown(
             """
             <section class="udla-hero">
-                <div class="udla-hero__eyebrow">Facultad de Ingeniería y Negocios</div>
-                <h1>Asistente Académico Multicarrera</h1>
+                <div class="udla-hero__eyebrow">Facultad de Ingeniería y Negocios · Demo/piloto</div>
+                <h1>Asistente Académico Demo</h1>
                 <p>
-                    Consulta antecedentes académicos sintéticos y encuentra evidencia en programas
-                    de asignatura mediante búsqueda documental local con TF-IDF.
+                    Orientación sobre Ingeniería Comercial e Ingeniería Civil Industrial: consulta
+                    antecedentes académicos sintéticos y encuentra evidencia en programas de
+                    asignatura mediante búsqueda documental local.
                 </p>
             </section>
             """,
