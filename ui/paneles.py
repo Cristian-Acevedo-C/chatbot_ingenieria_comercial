@@ -7,6 +7,7 @@ import streamlit as st
 
 from chatbot.conversacion import limpiar_estado_conversacional
 from config.settings import (
+    CHIPS_CORPUS_UDLA,
     CHIPS_EXPLORAR,
     LOGO_UDLA,
     LOGO_UDLA_FINE,
@@ -527,6 +528,17 @@ def render_chat(preguntas_rapidas, carrera=None):
         columnas_chips = st.columns(3)
         for indice, (etiqueta, disparador) in enumerate(CHIPS_EXPLORAR):
             if columnas_chips[indice % 3].button(etiqueta, key=f"chip_{indice}", width="stretch"):
+                st.session_state["pregunta_pendiente"] = disparador
+
+        st.markdown(
+            '<div class="udla-suggestions-label">Corpus UDLA ampliado:</div>',
+            unsafe_allow_html=True,
+        )
+        columnas_corpus = st.columns(3)
+        for indice, (etiqueta, disparador) in enumerate(CHIPS_CORPUS_UDLA):
+            if columnas_corpus[indice % 3].button(
+                etiqueta, key=f"chip_corpus_{indice}", width="stretch"
+            ):
                 st.session_state["pregunta_pendiente"] = disparador
 
         with st.container(key="udla_chat_input_zone"):

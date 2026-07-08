@@ -719,7 +719,6 @@ def aplicar_estilos():
         section[data-testid="stSidebar"] label * {
             color: #ffffff !important;
             fill: #ffffff !important;
-            stroke: #ffffff !important;
             opacity: 1 !important;
             -webkit-text-fill-color: #ffffff !important;
         }
@@ -741,7 +740,6 @@ def aplicar_estilos():
         section[data-testid="stSidebar"] button:disabled * {
             color: #0b2545 !important;
             fill: #0b2545 !important;
-            stroke: #0b2545 !important;
             -webkit-text-fill-color: #0b2545 !important;
         }
 
@@ -787,7 +785,6 @@ def aplicar_estilos():
             border-color: #f58220 !important;
             color: #ffffff !important;
             fill: #ffffff !important;
-            stroke: #ffffff !important;
             -webkit-text-fill-color: #ffffff !important;
         }
 

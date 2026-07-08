@@ -54,6 +54,14 @@ CHIPS_EXPLORAR = [
     ("¿Cuándo consultar con coordinación?", "¿Cuándo debo consultar con coordinación?"),
 ]
 
+CHIPS_CORPUS_UDLA = [
+    ("Apoyo y bienestar", "Donde pido apoyo psicologico o de bienestar estudiantil?"),
+    ("Tramites y certificados", "Como pido un certificado de alumno regular?"),
+    ("Becas y pagos", "Como pago la matricula y en que plazos?"),
+    ("Tutorias y reforzamiento", "Hay tutorias o reforzamiento academico?"),
+    ("Hablar con una persona", "Necesito hablar con una persona, no con un bot, a quien me mandas?"),
+]
+
 NOTA_DEMO = (
     "Demo académico en desarrollo. Las respuestas son orientativas y deben "
     "validarse por canales oficiales cuando corresponda."

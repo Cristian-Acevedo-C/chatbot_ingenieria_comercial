@@ -8,6 +8,7 @@ from chatbot.respuestas.basicas import (
     es_consulta_academica_o_documental,
     responder_basica,
 )
+from chatbot.respuestas.corpus import cargar_corpus_chatbot
 
 CONTEXTO_DEMO = {
     "carrera": "Ingeniería Civil Industrial",
@@ -131,6 +132,24 @@ def test_csv_filas_marcadas_pasar_a_rag_nunca_responden():
     for _, fila in negativas.iterrows():
         for ejemplo in str(fila["ejemplos_usuario"]).split("|"):
             assert responder_basica(ejemplo, contexto=CONTEXTO_DEMO) is None
+
+
+def test_corpus_chatbot_udla_v5_disponible():
+    corpus = cargar_corpus_chatbot()
+    assert not corpus.empty
+    assert "P101" in set(corpus["id"])
+    assert "recurso_verificado" in set(corpus["tipo_registro"])
+
+
+def test_responde_desde_corpus_ampliado():
+    respuesta = responder_basica(
+        "Donde pido apoyo psicologico o de bienestar estudiantil?",
+        contexto=CONTEXTO_DEMO,
+    )
+    assert isinstance(respuesta, RespuestaChatbot)
+    assert respuesta.tipo == "corpus_udla"
+    assert respuesta.metadata["corpus_id"] == "P101"
+    assert "corpus_chatbot_udla_v5.csv:P101" in respuesta.fuentes
 
 
 def test_cargar_respuestas_basicas_devuelve_columnas_esperadas():

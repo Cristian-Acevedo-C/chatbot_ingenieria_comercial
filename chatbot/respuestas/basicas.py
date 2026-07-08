@@ -14,6 +14,7 @@ import re
 import pandas as pd
 
 from chatbot.contratos import RespuestaChatbot
+from chatbot.respuestas.corpus import responder_desde_corpus
 from config.settings import DATA_DIR, HINTS_ACADEMICOS
 from utils.texto import normalizar
 
@@ -100,11 +101,16 @@ def responder_basica(mensaje, contexto=None):
     """Responde de inmediato saludos/identidad/ayuda; ``None`` si debe pasar a RAG."""
     if not mensaje or not str(mensaje).strip():
         return None
-    if es_consulta_academica_o_documental(mensaje):
-        return None
 
     fila = detectar_fila_basica(mensaje)
     if fila is None:
+        if _PATRON_CODIGO_RAMO.search(normalizar(mensaje)):
+            return None
+        respuesta_corpus = responder_desde_corpus(mensaje, contexto=contexto)
+        if respuesta_corpus is not None:
+            return respuesta_corpus
+        if es_consulta_academica_o_documental(mensaje):
+            return None
         return None
 
     texto = _formatear_respuesta(str(fila.get("respuesta", "")), contexto)

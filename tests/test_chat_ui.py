@@ -145,6 +145,8 @@ def test_chips_explorar_por_categoria_presentes_y_funcionan():
     etiquetas = [b.label for b in at.button]
     assert "Soy estudiante nuevo" in etiquetas
     assert "Diferencia entre carreras" in etiquetas
+    assert "Apoyo y bienestar" in etiquetas
+    assert "Tramites y certificados" in etiquetas
     assert "¿Cuándo consultar con coordinación?" in etiquetas
 
     boton = next(b for b in at.button if b.label == "Soy estudiante nuevo")
