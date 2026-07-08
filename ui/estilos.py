@@ -701,6 +701,104 @@ def aplicar_estilos():
             color: #40566d !important;
             opacity: 1 !important;
         }
+
+        /* FIX FINAL: prioridad real para contraste en sidebar Streamlit */
+        section[data-testid="stSidebar"],
+        section[data-testid="stSidebar"] > div {
+            background: linear-gradient(180deg, #003a70 0%, #002b54 100%) !important;
+            color: #ffffff !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
+        section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] *,
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
+        section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] *,
+        section[data-testid="stSidebar"] [data-testid="stTooltipHoverTarget"],
+        section[data-testid="stSidebar"] [data-testid="stTooltipHoverTarget"] *,
+        section[data-testid="stSidebar"] label,
+        section[data-testid="stSidebar"] label * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+            opacity: 1 !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        section[data-testid="stSidebar"] div[data-baseweb="select"],
+        section[data-testid="stSidebar"] div[data-baseweb="select"] > div,
+        section[data-testid="stSidebar"] div[data-baseweb="select"] *,
+        section[data-testid="stSidebar"] [data-testid="stExpander"],
+        section[data-testid="stSidebar"] [data-testid="stExpander"] *,
+        section[data-testid="stSidebar"] details,
+        section[data-testid="stSidebar"] details *,
+        section[data-testid="stSidebar"] [data-testid="stMetric"],
+        section[data-testid="stSidebar"] [data-testid="stMetric"] *,
+        section[data-testid="stSidebar"] [data-testid="stAlert"],
+        section[data-testid="stSidebar"] [data-testid="stAlert"] *,
+        section[data-testid="stSidebar"] [data-testid="stButton"] button,
+        section[data-testid="stSidebar"] [data-testid="stButton"] button *,
+        section[data-testid="stSidebar"] button:disabled,
+        section[data-testid="stSidebar"] button:disabled * {
+            color: #0b2545 !important;
+            fill: #0b2545 !important;
+            stroke: #0b2545 !important;
+            -webkit-text-fill-color: #0b2545 !important;
+        }
+
+        section[data-testid="stSidebar"] div[data-baseweb="select"] > div,
+        section[data-testid="stSidebar"] [data-testid="stExpander"],
+        section[data-testid="stSidebar"] details,
+        section[data-testid="stSidebar"] [data-testid="stMetric"],
+        section[data-testid="stSidebar"] [data-testid="stAlert"],
+        section[data-testid="stSidebar"] [data-testid="stButton"] button {
+            background-color: #ffffff !important;
+        }
+
+        section[data-testid="stSidebar"] div[data-baseweb="select"] > div {
+            border: 1px solid #d9dee7 !important;
+            border-radius: 10px !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stMetric"] {
+            border-top: 4px solid #f58220 !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stMetricValue"],
+        section[data-testid="stSidebar"] [data-testid="stMetricValue"] * {
+            color: #003a70 !important;
+            -webkit-text-fill-color: #003a70 !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stExpander"],
+        section[data-testid="stSidebar"] details {
+            border: 1px solid #d9dee7 !important;
+            border-left: 4px solid #f58220 !important;
+            border-radius: 10px !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stButton"] button {
+            border: 1px solid #f58220 !important;
+            font-weight: 700 !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stButton"] button:hover:not(:disabled),
+        section[data-testid="stSidebar"] [data-testid="stButton"] button:hover:not(:disabled) * {
+            background-color: #f58220 !important;
+            border-color: #f58220 !important;
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        section[data-testid="stSidebar"] [data-testid="stButton"] button:disabled,
+        section[data-testid="stSidebar"] button:disabled {
+            background-color: #e7ecf3 !important;
+            border-color: #aab6c5 !important;
+            color: #40566d !important;
+            opacity: 1 !important;
+            -webkit-text-fill-color: #40566d !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
