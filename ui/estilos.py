@@ -40,9 +40,7 @@ def aplicar_estilos():
 
         [data-testid="stSidebar"] h1,
         [data-testid="stSidebar"] h2,
-        [data-testid="stSidebar"] h3,
-        [data-testid="stSidebar"] label,
-        [data-testid="stSidebar"] p {
+        [data-testid="stSidebar"] h3 {
             color: var(--udla-white);
         }
 
@@ -462,122 +460,6 @@ def aplicar_estilos():
             background: var(--udla-orange);
             border-color: var(--udla-orange);
             color: var(--udla-white);
-        }
-
-        /* Ajustes de contraste acotados a la barra lateral. */
-        section[data-testid="stSidebar"],
-        [data-testid="stSidebar"] {
-            color: var(--udla-white);
-        }
-
-        section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"],
-        section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] p,
-        section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] li,
-        section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] strong,
-        section[data-testid="stSidebar"] h1,
-        section[data-testid="stSidebar"] h2,
-        section[data-testid="stSidebar"] h3,
-        section[data-testid="stSidebar"] h4,
-        section[data-testid="stSidebar"] label {
-            color: var(--udla-white);
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stMetric"],
-        section[data-testid="stSidebar"] .stMetric {
-            background: var(--udla-white);
-            border: 1px solid var(--udla-border);
-            border-top: 4px solid var(--udla-orange);
-            color: var(--udla-text);
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stMetric"] *,
-        section[data-testid="stSidebar"] .stMetric *,
-        section[data-testid="stSidebar"] [data-testid="stMetricLabel"] p,
-        section[data-testid="stSidebar"] [data-testid="stMetricValue"],
-        section[data-testid="stSidebar"] [data-testid="stMetricValue"] *,
-        section[data-testid="stSidebar"] [data-testid="stMetricDelta"],
-        section[data-testid="stSidebar"] [data-testid="stMetricDelta"] * {
-            color: var(--udla-blue) !important;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stMetricLabel"] p {
-            color: #40566D !important;
-            font-weight: 700;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stExpander"] {
-            background: var(--udla-white);
-            border: 1px solid var(--udla-border);
-            border-left: 4px solid var(--udla-orange);
-            color: var(--udla-text);
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stExpander"] *,
-        section[data-testid="stSidebar"] [data-testid="stExpander"] div[data-testid="stMarkdownContainer"],
-        section[data-testid="stSidebar"] [data-testid="stExpander"] div[data-testid="stMarkdownContainer"] p,
-        section[data-testid="stSidebar"] [data-testid="stExpander"] div[data-testid="stMarkdownContainer"] li,
-        section[data-testid="stSidebar"] [data-testid="stExpander"] div[data-testid="stMarkdownContainer"] strong {
-            color: var(--udla-text) !important;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stExpander"] summary,
-        section[data-testid="stSidebar"] [data-testid="stExpander"] summary * {
-            color: var(--udla-blue) !important;
-            font-weight: 700;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stAlert"],
-        section[data-testid="stSidebar"] [data-testid="stAlert"] *,
-        section[data-testid="stSidebar"] .udla-card,
-        section[data-testid="stSidebar"] .udla-card * {
-            color: var(--udla-text) !important;
-        }
-
-        section[data-testid="stSidebar"] .udla-card__titulo,
-        section[data-testid="stSidebar"] .udla-card__extra {
-            color: #40566D !important;
-        }
-
-        section[data-testid="stSidebar"] .udla-card__valor {
-            color: var(--udla-blue) !important;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stButton"] button,
-        section[data-testid="stSidebar"] button {
-            background: var(--udla-white);
-            border: 1px solid var(--udla-orange);
-            color: var(--udla-blue) !important;
-            font-weight: 700;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stButton"] button:hover:not(:disabled),
-        section[data-testid="stSidebar"] button:hover:not(:disabled) {
-            background: var(--udla-orange);
-            border-color: var(--udla-orange);
-            color: var(--udla-white) !important;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stButton"] button:hover:not(:disabled) *,
-        section[data-testid="stSidebar"] button:hover:not(:disabled) * {
-            color: var(--udla-white) !important;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stButton"] button:disabled,
-        section[data-testid="stSidebar"] button:disabled {
-            background: #E7ECF3 !important;
-            border-color: #AAB6C5 !important;
-            color: #40566D !important;
-            opacity: 1 !important;
-        }
-
-        section[data-testid="stSidebar"] [data-testid="stButton"] button:disabled *,
-        section[data-testid="stSidebar"] button:disabled * {
-            color: #40566D !important;
-        }
-
-        section[data-testid="stSidebar"] div[data-baseweb="select"] *,
-        section[data-testid="stSidebar"] div[data-baseweb="popover"] * {
-            color: var(--udla-text) !important;
         }
 
         @media (max-width: 700px) {
